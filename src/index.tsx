@@ -1,14 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
-import { darkTheme } from './theme';
+import { theme } from './theme';
 import { ThemeProvider, createGlobalStyle } from 'styled-components';
 import { RecoilRoot } from 'recoil';
 
 const GlobalStyle = createGlobalStyle`
-
-@import url('https://fonts.googleapis.com/css2?family=Dosis:wght@300&family=Inconsolata&family=Quicksand&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400&display=swap');
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -56,26 +54,26 @@ table {
   border-collapse: collapse;
   border-spacing: 0;
 }
-*{
+* {
   box-sizing: border-box;
 }
-
-body{
-  font-family: 'Dosis', sans-serif;
-  color : black;
+body {
+  font-weight: 300;
+  font-family: 'Source Sans Pro', sans-serif;
+  color:black;
   line-height: 1.2;
-  //background:linear-gradient(135deg,rgb(213, 6, 141),rgb(221, 0, 238));
+  
 }
 a {
-  text-decoration: none;
-  color: inherit;
+  text-decoration:none;
+  color:inherit;
 }
 `;
 
 ReactDOM.render(
   <React.StrictMode>
     <RecoilRoot>
-      <ThemeProvider theme={darkTheme}>
+      <ThemeProvider theme={theme}>
         <GlobalStyle />
         <App />
       </ThemeProvider>
