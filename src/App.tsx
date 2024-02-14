@@ -12,9 +12,9 @@ function App() {
       <Router>
         <Header />
         <Routes>
-          <Route path="/" element={<Home />}/>
           <Route path="/tv" element={<Tv />}/>
           <Route path="/serch" element={<Serch />}/>
+          <Route path="/" element={<Home />}/>
         </Routes>
       </Router>
 
