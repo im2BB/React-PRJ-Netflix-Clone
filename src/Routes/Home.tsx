@@ -6,6 +6,7 @@ import { makeImagePath } from "./utils";
 import { motion,AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import useWindowDimensions from "./useWidowDimensions";
+import { PathMatch, useMatch, useNavigate } from "react-router-dom";
 
 
 
@@ -63,15 +64,57 @@ const Box = styled(motion.div)<{$bgPhoto:string}>`
     height: 200px;
     color :pink;
     font-size:64px;
+    &:first-child{
+        transform-origin: center left;
+    }
+    &:last-child{
+        transform-origin: center right;
+    }
 `;
 
+const Info = styled(motion.div)`
+    padding: 10px;
+    background-color: ${(props) => props.theme.black.lighter};
+    opacity: 0;
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    h4{
+        text-align: center;
+        font-size: 15px;
+    }
+`;
 
+const boxVariants = {
+    normal: {
+        scale:1,
+    },
+    hover: {
+        scale:1.3,
+        y: -50,
+        transition: {
+            delay:0.1,
+            type:"tween",
+        },
+    },
+};
 
-
+const infoVariants = {
+    hover: {
+        opacity:1,
+        transition: {
+            delay:0.1,
+            type:"tween",
+        },
+    }
+}
 
 const offset = 6;
 
 function Home() {
+    const history = useNavigate()
+    const bigMovieMatch: PathMatch< string> | null = useMatch("/movies/:id");
+    console.log(bigMovieMatch);
     const { data, isLoading } = useQuery<IGetMoviesResult>(
         ["movies", "nowPlaying"],
         getMovies
@@ -88,6 +131,9 @@ function Home() {
         }
     };
     const toggleLeaving = () => setLeaving((prev) => !prev);
+    const onBoxClicked = (movieId:number) => {
+        history(`/movies/${movieId}`)
+    };
     const width = useWindowDimensions();
 
 
@@ -115,13 +161,34 @@ function Home() {
                     .slice(offset * index, offset * index + offset)
                     .map((movie) => (
                         <Box
+                        layoutId={movie.id + ""}
                         key={movie.id}
+                        whileHover="hover"
+                        initial="normal"
+                        variants={boxVariants}
+                        onClick={() => onBoxClicked(movie.id)}
+                        transition={{type:"tween",}}
                         $bgPhoto={makeImagePath(movie.backdrop_path, "w500")}
-                        />
+                        >
+                        <img></img>
+                        <Info variants={infoVariants}>
+                        <h4>{movie.title}</h4>
+                        </Info>
+
+                        </Box>
                     ))}
                         </Row>
                     </AnimatePresence>
                 </Slider>
+                <AnimatePresence>
+                    {bigMovieMatch ? (<motion.div
+                    layoutId={bigMovieMatch.params.movieId}
+                    style={{
+                        position:"absolute", width:"40vw",
+                        height:"80vw", backgroundColor:"pink",
+                        top:50, left:0, right:0, margin: "0 auto", }}
+                        />): null}
+                </AnimatePresence>
                 </>
             )}
             </Wrapper>;
