@@ -3,7 +3,7 @@ import { useQuery } from "react-query";
 import { IGetMoviesResult, getMovies } from "../api";
 import styled from "styled-components";
 import { makeImagePath } from "./utils";
-import { motion,AnimatePresence } from "framer-motion";
+import { motion,AnimatePresence, useScroll } from "framer-motion";
 import { useState } from "react";
 import useWindowDimensions from "./useWidowDimensions";
 import { PathMatch, useMatch, useNavigate } from "react-router-dom";
@@ -109,12 +109,72 @@ const infoVariants = {
     }
 }
 
+const BigMovie = styled(motion.div)`
+    position: absolute;
+    width: 40vw;
+    height: 80vh;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    background-color: ${props => props.theme.black.lighter};
+    border-radius: 15px;
+    overflow: hidden;
+`;
+
+const OverLay = styled(motion.div)`
+    position: fixed;
+    top: 0;
+    width:  100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    opacity:0;
+`;
+
+const BigCover = styled.div`
+    width: 100%;
+    background-size: cover;
+    background-position: center center;
+    height: 600px;
+`;
+
+
+const BigTitle = styled.h3`
+    color: ${props => props.theme.white.lighter};
+    font-size: 41px;
+    position:  relative;
+    top:-85px;
+    padding: 20px;
+`;
+
+const BigOverview = styled.p`
+    padding: 20px;
+    position:  relative;
+    top:-85px;
+    color: ${props => props.theme.white.lighter};
+    
+`;
+
+const Bigrelease_date = styled.p`
+    padding: 20px;  
+    position:  relative;
+    top:-85px;
+    color: ${props => props.theme.white.lighter};
+`;
+
+const Bigpopularity = styled.p`
+    padding-left: 20px;
+    padding-bottom: 20px;  
+    position:  relative;
+    top:-85px;
+    color: ${props => props.theme.white.lighter};
+`
+
 const offset = 6;
 
 function Home() {
     const history = useNavigate()
-    const bigMovieMatch: PathMatch< string> | null = useMatch("/movies/:id");
-    console.log(bigMovieMatch);
+    const bigMovieMatch: PathMatch<string> | null = useMatch("/movies/:movieId");
+    const { scrollY } = useScroll ();
     const { data, isLoading } = useQuery<IGetMoviesResult>(
         ["movies", "nowPlaying"],
         getMovies
@@ -134,9 +194,16 @@ function Home() {
     const onBoxClicked = (movieId:number) => {
         history(`/movies/${movieId}`)
     };
+    const onOverLayClicked = () => history(`/`)  
+    
+    const clickedMovie = 
+    bigMovieMatch?.params.movieId && 
+    data?.results.find((movie) => movie.id+"" === bigMovieMatch.params.movieId);
+    console.log(clickedMovie)
+    
     const width = useWindowDimensions();
-
-
+    
+    
     return <Wrapper>
             {isLoading ? (<Loder>Loding....</Loder>
             ) : (
@@ -181,13 +248,32 @@ function Home() {
                     </AnimatePresence>
                 </Slider>
                 <AnimatePresence>
-                    {bigMovieMatch ? (<motion.div
-                    layoutId={bigMovieMatch.params.movieId}
-                    style={{
-                        position:"absolute", width:"40vw",
-                        height:"80vw", backgroundColor:"pink",
-                        top:50, left:0, right:0, margin: "0 auto", }}
-                        />): null}
+                {bigMovieMatch ? (
+                    <>
+                        <OverLay 
+                        onClick={onOverLayClicked}
+                        exit={{opacity:0}}
+                        animate={{opacity:2}}
+                        />
+                        <BigMovie
+                        style={{ top : scrollY.get()+100}} 
+                        layoutId={bigMovieMatch.params.movieId}>
+                        
+                        {clickedMovie && 
+                        <>
+                        <BigCover 
+                        style={{backgroundImage:`linear-gradient(to top, black,transparent),
+                        url( ${makeImagePath (clickedMovie.backdrop_path,"w500") 
+                        })`}}/>
+                        <BigTitle>{clickedMovie.title}</BigTitle>
+                        <Bigrelease_date> date: {clickedMovie.release_date}</Bigrelease_date>
+                        <Bigpopularity> ⭐: {clickedMovie.popularity}</Bigpopularity>
+                        <BigOverview>{clickedMovie.overview}</BigOverview>
+                        </>}
+
+                        </BigMovie>
+                    </>  
+                    ): null}
                 </AnimatePresence>
                 </>
             )}
