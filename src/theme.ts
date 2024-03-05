@@ -5,6 +5,7 @@ export const theme: DefaultTheme = {
     black: {
     veryDark: "#141414",
     darker: "#181818",
+    mediumdark: "#2f2f2f87",
     lighter: "#2F2F2F",
 },
 

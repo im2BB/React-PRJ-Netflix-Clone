@@ -4,9 +4,12 @@ import { IGetMoviesResult, getMovies } from "../api";
 import styled from "styled-components";
 import { makeImagePath } from "./utils";
 import { motion,AnimatePresence, useScroll } from "framer-motion";
-import { useState } from "react";
-import useWindowDimensions from "./useWidowDimensions";
 import { PathMatch, useMatch, useNavigate } from "react-router-dom";
+import { BsStarFill, BsStarHalf } from "react-icons/bs";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/swiper.min.css";
+import "swiper/components/navigation/navigation.min.css";
+import SwiperCore, { Autoplay, Navigation, Pagination } from "swiper";
 
 
 
@@ -31,50 +34,179 @@ const Banner = styled.div<{ $bgPhoto: string }>`
     background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)),
     url(${(props) => props.$bgPhoto });
     background-size: cover;
+    pointer-events: none;
 `;
 
 const Title = styled.h2`
-    font-size: 68px;
-    margin-bottom: 20px;
+    font-size: 105px;
+    margin-bottom: 15px;
 `;
 
-const OverView = styled.p`
-    font-size: 28px;
+const LilTitle = styled.h2`
+    font-size: 20px;
+    margin-bottom: 40px;
+    padding-left: 45px;
+`;
+
+const Date = styled.h2`
+    font-size: 22px;
+    margin-left: 150px;
+    margin-bottom: 20px;
     width: 50%;
 `;
 
-const Slider = styled.div`
-    position: relative;
-    top: -100px;
+const OverView = styled.p`
+    font-size: 18px;
+    margin-left: 40px;
+    width: 50%;
 `;
 
-const Row = styled(motion.div)`
-    display: grid;
-    gap: 5px;
-    grid-template-columns: repeat(6, 1fr);
-    position: absolute;
-    width: 100%;
-    `;
+
+
+const Slider1 = styled(motion.div)`
+    position: relative;
+    top: -260px;
+    
+`
 
 const Box = styled(motion.div)<{$bgPhoto:string}>`
+    color: ${props => props.theme.white.lighter}; 
     background-color: white;
     background-image: url(${props => props.$bgPhoto});
     background-size: cover;
     background-position: center center;
-    height: 200px;
-    color :pink;
-    font-size:64px;
-    &:first-child{
-        transform-origin: center left;
+    transform: translate(-10%, -10%);
+    height: 250px;
+    font-size: 35px;
+    z-index: 1000;
+    border-radius: 2px;
+    
+`;    
+
+
+
+const boxVariants = {
+    
+    normal: {
+        scale:1,
+    },
+    hover: {
+        scale:1.05,
+        y: -5,
+        transition: {
+            delay:0.1,
+            type:"tween",
+        },
+    },
+};
+
+
+
+const BigMovie = styled(motion.div)`
+    position: absolute;
+    width: 60vw;
+    height: 80vh;
+    top: 40px;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    background-color: ${props => props.theme.black.lighter};
+    border-radius: 15px;
+    overflow: auto;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+    &::-webkit-scrollbar {
+        display: none; /* Chrome, Safari, Opera */
     }
-    &:last-child{
-        transform-origin: center right;
+    z-index: 1000;
+    
+`;
+
+const OverLay = styled(motion.div)`
+    position: fixed;
+    top: 0;
+    width:  100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    opacity:0;
+    ::-webkit-scrollbar {
+    display: none;
     }
 `;
 
+const BigCover = styled.div`
+    width: 100%;
+    background-size: cover;
+    background-position: center center;
+    height: 400px;
+    color: ${props => props.theme.white.lighter};
+
+`;
+
+
+const BigTitle = styled.h3`
+    color: ${props => props.theme.white.lighter};
+    font-size: 41px;
+    position:  relative;
+    top:-185px;
+    padding-left: 35px;
+`;
+
+const LlilTitle = styled.h3`
+    color: ${props => props.theme.white.lighter};
+    font-size: 15px;
+    position:  relative;
+    top:-165px;
+    padding-left: 120px;
+`;
+
+const BigOverview = styled.p`
+    padding: 20px;
+    position:  relative;
+    top:-85px;
+    color: ${props => props.theme.white.lighter};
+    overflow: auto;
+`;
+
+const Bigrelease_date = styled.p`
+    padding: 20px;  
+    position:  relative;
+    top:-115px;
+    color: ${props => props.theme.white.lighter};
+    
+`;
+
+const Biggenres = styled.p`
+    padding: 20px;  
+    position:  relative;
+    top:-115px;
+    color: ${props => props.theme.white.lighter};
+    
+`;
+
+const Bigpopularity = styled.p`
+    padding-left: 20px;
+    padding-bottom: 20px;  
+    position:  relative;
+    top:-115px;
+    color: ${props => props.theme.white.lighter};
+`;
+
+const Bigposter = styled.div`
+    width: 300px;
+    height: 450px;
+    background-size: cover;
+    margin: 30px;
+    position: relative;
+    top:-160px;
+    float: left;
+    border-radius: 10px;
+    box-shadow : 3px 3px 1px black;
+
+`;
+
 const Info = styled(motion.div)`
-    padding: 10px;
-    background-color: ${(props) => props.theme.black.lighter};
+    background-color: ${(props) => props.theme.black.mediumdark};
     opacity: 0;
     position: absolute;
     width: 100%;
@@ -85,23 +217,10 @@ const Info = styled(motion.div)`
     }
 `;
 
-const boxVariants = {
-    normal: {
-        scale:1,
-    },
-    hover: {
-        scale:1.3,
-        y: -50,
-        transition: {
-            delay:0.1,
-            type:"tween",
-        },
-    },
-};
 
 const infoVariants = {
     hover: {
-        opacity:1,
+        opacity:1.05,
         transition: {
             delay:0.1,
             type:"tween",
@@ -109,144 +228,87 @@ const infoVariants = {
     }
 }
 
-const BigMovie = styled(motion.div)`
-    position: absolute;
-    width: 40vw;
-    height: 80vh;
-    left: 0;
-    right: 0;
-    margin: 0 auto;
-    background-color: ${props => props.theme.black.lighter};
-    border-radius: 15px;
-    overflow: hidden;
-`;
+const renderStars = (rating:number, color = "#f1f169") => {  //별점 출력 함수
+    const integerPart = Math.floor(rating / 2); // 평점을 2로 나눈 정수 부분을 계산
+    const hasHalfStar = rating % 2 !== 0; // 반 별표가 있는지 확인
 
-const OverLay = styled(motion.div)`
-    position: fixed;
-    top: 0;
-    width:  100%;
-    height: 100%;
-    background-color: rgba(0,0,0,0.5);
-    opacity:0;
-`;
+    const filledStars = Array(integerPart).fill(2); // 평점에 해당하는 별표 배열 생성
+    const emptyStars = Array(Math.max(0, 4 - integerPart)).fill(2); // 남은 빈 별표 배열 생성
 
-const BigCover = styled.div`
-    width: 100%;
-    background-size: cover;
-    background-position: center center;
-    height: 600px;
-`;
-
-
-const BigTitle = styled.h3`
-    color: ${props => props.theme.white.lighter};
-    font-size: 41px;
-    position:  relative;
-    top:-85px;
-    padding: 20px;
-`;
-
-const BigOverview = styled.p`
-    padding: 20px;
-    position:  relative;
-    top:-85px;
-    color: ${props => props.theme.white.lighter};
-    
-`;
-
-const Bigrelease_date = styled.p`
-    padding: 20px;  
-    position:  relative;
-    top:-85px;
-    color: ${props => props.theme.white.lighter};
-`;
-
-const Bigpopularity = styled.p`
-    padding-left: 20px;
-    padding-bottom: 20px;  
-    position:  relative;
-    top:-85px;
-    color: ${props => props.theme.white.lighter};
-`
-
-const offset = 6;
+    return (
+        <>
+            {filledStars.map((_, i) => (
+                <BsStarFill key={i} size="13" color={color} />
+            ))}
+            {hasHalfStar && <BsStarHalf key="half" size="13" color={color} />}
+            {emptyStars.map((_, i) => (
+                <BsStarFill key={i + integerPart} size="13" color="#E3E3E3" />
+            ))}
+        </>
+    );
+};
 
 function Home() {
     const history = useNavigate()
     const bigMovieMatch: PathMatch<string> | null = useMatch("/movies/:movieId");
-    const { scrollY } = useScroll ();
     const { data, isLoading } = useQuery<IGetMoviesResult>(
         ["movies", "nowPlaying"],
         getMovies
     );
-    const [index, setIndex] = useState(0);
-    const [leaving, setLeaving] = useState(false);
-    const incraseIndex = () => {
-        if (data) {
-            if (leaving) return;
-            toggleLeaving();
-            const totalMovies = data.results.length - 1;
-            const maxIndex = Math.floor(totalMovies / offset) - 1;
-            setIndex((prev) => (prev === maxIndex ? 0 : prev + 1));
-        }
-    };
-    const toggleLeaving = () => setLeaving((prev) => !prev);
+
     const onBoxClicked = (movieId:number) => {
         history(`/movies/${movieId}`)
     };
     const onOverLayClicked = () => history(`/`)  
     
-    const clickedMovie = 
+    const clickedMovie =      //클릭한 div에 해당값 들어있는지 확인
     bigMovieMatch?.params.movieId && 
     data?.results.find((movie) => movie.id+"" === bigMovieMatch.params.movieId);
-    console.log(clickedMovie)
-    
-    const width = useWindowDimensions();
-    
+    console.log(clickedMovie);
+
+    SwiperCore.use([Navigation,Pagination, Autoplay]);
     
     return <Wrapper>
             {isLoading ? (<Loder>Loding....</Loder>
             ) : (
                 <>
-                <Banner onClick={incraseIndex} 
+                <Banner  
                 $bgPhoto = {makeImagePath(data?.results[0].backdrop_path || "")}
                 >
                     <Title>{data?.results[0].title}</Title>
+                    <LilTitle>{data?.results[0].original_title}</LilTitle>
+                    <Date>개봉일 : {data?.results[0].release_date}</Date>
                     <OverView>{data?.results[0].overview}</OverView>
                 </Banner>
-                <Slider>
-                    <AnimatePresence initial={false} onExitComplete={toggleLeaving}>
-                        <Row 
-                        initial={{ x: width + 10 }}
-                        animate={{ x: 0 }}
-                        exit={{ x: -width - 10 }}
-                        transition={{type:"tween", duration: 2}}
-                        key={index}
-                        >
-                            {data?.results
-                    .slice(1)
-                    .slice(offset * index, offset * index + offset)
-                    .map((movie) => (
+                <Slider1>
+                    <h1 style={{ margin: "20px", fontSize: "25px" }}>The 10</h1>
+                    <Swiper
+                    slidesPerView={5}
+                    navigation={true} 
+                    spaceBetween= {10}
+                    >
+                        {data?.results.map((movie) => (
+                        <SwiperSlide 
+                        key={movie.id}>
                         <Box
-                        layoutId={movie.id + ""}
-                        key={movie.id}
-                        whileHover="hover"
-                        initial="normal"
-                        variants={boxVariants}
-                        onClick={() => onBoxClicked(movie.id)}
-                        transition={{type:"tween",}}
-                        $bgPhoto={makeImagePath(movie.backdrop_path, "w500")}
+                            layoutId={movie.id + ""}
+                            whileHover="hover"
+                            initial="normal"
+                            variants={boxVariants}
+                            onClick={() => onBoxClicked(movie.id)}
+                            transition={{ type: "tween" }}
+                            $bgPhoto={makeImagePath(movie.backdrop_path)}
                         >
-                        <img></img>
-                        <Info variants={infoVariants}>
-                        <h4>{movie.title}</h4>
-                        </Info>
-
+                            <img />
+                            <Info variants={infoVariants}>
+                            <h4 style={{fontSize:"26px",padding:"10px"}}>{movie.title}</h4>
+                            </Info>
                         </Box>
-                    ))}
-                        </Row>
-                    </AnimatePresence>
-                </Slider>
+                        </SwiperSlide>
+                        ))}
+                    </Swiper>
+                    </Slider1>
+                            
                 <AnimatePresence>
                 {bigMovieMatch ? (
                     <>
@@ -256,18 +318,22 @@ function Home() {
                         animate={{opacity:2}}
                         />
                         <BigMovie
-                        style={{ top : scrollY.get()+100}} 
+                        style={{ position: "fixed"} } 
                         layoutId={bigMovieMatch.params.movieId}>
                         
                         {clickedMovie && 
                         <>
                         <BigCover 
                         style={{backgroundImage:`linear-gradient(to top, black,transparent),
-                        url( ${makeImagePath (clickedMovie.backdrop_path,"w500") 
+                        url( ${makeImagePath (clickedMovie.backdrop_path) 
                         })`}}/>
                         <BigTitle>{clickedMovie.title}</BigTitle>
-                        <Bigrelease_date> date: {clickedMovie.release_date}</Bigrelease_date>
-                        <Bigpopularity> ⭐: {clickedMovie.popularity}</Bigpopularity>
+                        <LlilTitle>{data?.results[0].original_title}</LlilTitle> 
+                        <Bigposter 
+                        style={{backgroundImage :`url(${makeImagePath(clickedMovie.poster_path)})`}}/>
+                        <Biggenres>장르:{clickedMovie.without_genres}</Biggenres>
+                        <Bigrelease_date> 개봉일 : {clickedMovie.release_date}</Bigrelease_date>
+                        <Bigpopularity> 평점 : {clickedMovie ? renderStars(clickedMovie.vote_average) : null} / {(clickedMovie.vote_average).toFixed(1)} </Bigpopularity>                        
                         <BigOverview>{clickedMovie.overview}</BigOverview>
                         </>}
 
