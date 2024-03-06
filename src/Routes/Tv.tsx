@@ -1,6 +1,6 @@
 
 import { useQuery } from "react-query";
-import { IGetTvResult, getTvs } from "../api";
+import { IGetTvResult, getTvs, getPopulars, getTodaysTvs, getTopRated } from "../api";
 import styled from "styled-components";
 import { makeImagePath } from "./utils";
 import { motion,AnimatePresence, useScroll } from "framer-motion";
@@ -110,7 +110,7 @@ const boxVariants = {
 const Bigtv = styled(motion.div)`
     position: absolute;
     width: 60vw;
-    height: 80vh;
+    height: 90vh;
     top: 40px;
     left: 0;
     right: 0;
@@ -249,6 +249,21 @@ function Tv() {
         ["tv", "onTheAir"],
         getTvs
     );
+
+    const { data: Populars } = useQuery<IGetTvResult>(
+        ["getPopulars"],
+        getPopulars
+    );
+
+    const { data: TodaysTvs } = useQuery<IGetTvResult>(
+        ["getTodaysTvs"],
+        getTodaysTvs
+    );
+
+    const { data: TopRated } = useQuery<IGetTvResult>(
+        ["getTopRated"],
+        getTopRated
+    );
         
     const onBoxClicked = (tvid:number) => {
         history(`/tv/${tvid}`)
@@ -256,8 +271,15 @@ function Tv() {
     const onOverLayClicked = () => history(`/tv`)  
     
     const clickedtv =      //클릭한 div에 해당값 들어있는지 확인
-    bigTvMatch?.params.tvid && 
-    data?.results.find((tv) => tv.id+"" === bigTvMatch.params.tvid);
+    
+    bigTvMatch?.params.tvid &&
+    ( 
+    data?.results.find((tv) => tv.id+"" === bigTvMatch.params.tvid) ||
+    Populars?.results.find((tv) => tv.id+"" === bigTvMatch.params.tvid) ||
+    TodaysTvs?.results.find((tv) => tv.id+"" === bigTvMatch.params.tvid) ||
+    TopRated?.results.find((tv) => tv.id+"" === bigTvMatch.params.tvid) 
+    );
+    
     console.log(clickedtv);
 
     SwiperCore.use([Navigation,Pagination, Autoplay]);
@@ -278,7 +300,7 @@ function Tv() {
             
                 
                 <StyledSwiper>
-                <FrontTitle style={{margin:"20px", fontSize:"25px"}}>On Air</FrontTitle>
+                <FrontTitle style={{margin:"20px", fontSize:"25px"}}>On the Air</FrontTitle>
                 <Swiper 
                     slidesPerView={5}
                     navigation={true}
@@ -303,6 +325,88 @@ function Tv() {
                         </Box>
                         </SwiperSlide>
                     ))}
+                    </Swiper>
+                </StyledSwiper>
+                
+                <StyledSwiper>
+                <FrontTitle style={{margin:"20px", fontSize:"25px"}}>Top 10</FrontTitle>
+                <Swiper slidesPerView={5} navigation={true} spaceBetween= {10} >
+                    {Populars?.results.map((tv) =>{
+                    if (data?.results.some((dataTv)=> dataTv.id === tv.id)) return null;
+                    return (
+                        <SwiperSlide 
+                        key={tv.id}> 
+                        <Box
+                            layoutId={tv.id + ""}
+                            whileHover="hover"
+                            initial="normal"
+                            variants={boxVariants}
+                            onClick={() => onBoxClicked(tv.id)}
+                            transition={{ type: "tween" }}
+                            $bgPhoto={makeImagePath(tv.backdrop_path)}
+                        >
+                            <img /> 
+                            <Info variants={infoVariants}>
+                            <h4 style={{fontSize:"26px",padding:"10px"}}>{tv.name}</h4>
+                            </Info>
+                        </Box>
+                        </SwiperSlide>
+                    );
+                    })}
+                    </Swiper>
+                    </StyledSwiper>
+                    <StyledSwiper>
+                <FrontTitle style={{margin:"20px", fontSize:"25px"}}>최근 인기 프로그램</FrontTitle>
+                <Swiper slidesPerView={5} navigation={true} spaceBetween= {10} >
+                    {TodaysTvs?.results.map((tv) =>{
+                    if (data?.results.some((dataTv)=> dataTv.id === tv.id)) return null;
+                    return (
+                        <SwiperSlide 
+                        key={tv.id}> 
+                        <Box
+                            layoutId={tv.id + ""}
+                            whileHover="hover"
+                            initial="normal"
+                            variants={boxVariants}
+                            onClick={() => onBoxClicked(tv.id)}
+                            transition={{ type: "tween" }}
+                            $bgPhoto={makeImagePath(tv.backdrop_path)}
+                        >
+                            <img /> 
+                            <Info variants={infoVariants}>
+                            <h4 style={{fontSize:"26px",padding:"10px"}}>{tv.name}</h4>
+                            </Info>
+                        </Box>
+                        </SwiperSlide>
+                    );
+                    })}
+                    </Swiper>
+                    </StyledSwiper>
+                    <StyledSwiper>
+                <FrontTitle style={{margin:"20px", fontSize:"25px"}}>죽기전에 봐야할 Tv 프로그램</FrontTitle>
+                <Swiper slidesPerView={5} navigation={true} spaceBetween= {10} >
+                    {TopRated?.results.map((tv) =>{
+                    if (data?.results.some((dataTv)=> dataTv.id === tv.id)) return null;
+                    return (
+                        <SwiperSlide 
+                        key={tv.id}> 
+                        <Box
+                            layoutId={tv.id + ""}
+                            whileHover="hover"
+                            initial="normal"
+                            variants={boxVariants}
+                            onClick={() => onBoxClicked(tv.id)}
+                            transition={{ type: "tween" }}
+                            $bgPhoto={makeImagePath(tv.backdrop_path)}
+                        >
+                            <img /> 
+                            <Info variants={infoVariants}>
+                            <h4 style={{fontSize:"26px",padding:"10px"}}>{tv.name}</h4>
+                            </Info>
+                        </Box>
+                        </SwiperSlide>
+                    );
+                    })}
                     </Swiper>
                     </StyledSwiper>
                     

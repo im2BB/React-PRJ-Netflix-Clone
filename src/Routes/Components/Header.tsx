@@ -165,7 +165,7 @@ function Header() {
                 <Items>
                     <Item>
                         <Link to="/">
-                            Home  {homeMatch &&<Circle layoutId="circle "/>}
+                            Movie  {homeMatch &&<Circle layoutId="circle "/>}
                         </Link>
                     </Item>
                     <Item>

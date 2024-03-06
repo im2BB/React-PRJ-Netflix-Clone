@@ -14,7 +14,8 @@ interface IMovie {
     release_date:number;
     popularity:number;
     vote_average:number;
-    without_genres:string;
+    genre :string;
+    videos:string;
 }
 
 
@@ -64,8 +65,46 @@ export interface IGetMoviesResult {
         );
     }
 
+    export function getPopular() {    
+        return fetch(`${BASE_PATH}/movie/popular?api_key=${API_KEY}&language=ko-KR`).then(
+            (response) => response.json()
+        );
+    }
+    
+    export function getRatedMovies() {    
+        return fetch(`${BASE_PATH}/movie/top_rated?api_key=${API_KEY}&language=ko-KR`).then(
+            (response) => response.json()
+        );
+    }
+
+    export function getUpcoming() {    
+        return fetch(`${BASE_PATH}/movie/upcoming?api_key=${API_KEY}&language=ko-KR`).then(
+            (response) => response.json()
+        );
+    }
+
+
+
     export function getTvs() {        
         return fetch(`${BASE_PATH}/tv/on_the_air?api_key=${API_KEY}&language=ko-KR`).then(
+            (response) => response.json()
+        );
+    }
+    
+    export function getPopulars() {        
+        return fetch(`${BASE_PATH}/tv/popular?api_key=${API_KEY}&language=ko-KR`).then(
+            (response) => response.json()
+        );
+    }
+    
+    export function getTodaysTvs() {        
+        return fetch(`${BASE_PATH}/tv/airing_today?api_key=${API_KEY}&language=ko-KR`).then(
+            (response) => response.json()
+        );
+    }
+    
+    export function getTopRated() {        
+        return fetch(`${BASE_PATH}/tv/top_rated?api_key=${API_KEY}&language=ko-KR`).then(
             (response) => response.json()
         );
     }
