@@ -3,7 +3,7 @@ import { useQuery } from "react-query";
 import { IGetMoviesResult, getMovies, getPopular, getRatedMovies, getUpcoming } from "../api";
 import styled from "styled-components";
 import { makeImagePath } from "./utils";
-import { motion,AnimatePresence, useScroll } from "framer-motion";
+import { motion,AnimatePresence } from "framer-motion";
 import { PathMatch, useMatch, useNavigate } from "react-router-dom";
 import { BsStarFill, BsStarHalf } from "react-icons/bs";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -271,6 +271,8 @@ function Home() {
         getUpcoming
     );
 
+    
+
     const onBoxClicked = (movieId:number) => {
         history(`/movies/${movieId}`)
     };
@@ -282,7 +284,8 @@ function Home() {
         data?.results.find((movie) => movie.id+"" === bigMovieMatch.params.movieId) ||
         RatedMovie?.results.find((movie) => movie.id+"" === bigMovieMatch.params.movieId) ||
         PopularMovie?.results.find((movie) => movie.id+"" === bigMovieMatch.params.movieId)||
-        Upcoming?.results.find((movie) => movie.id+"" === bigMovieMatch.params.movieId)
+        Upcoming?.results.find((movie) => movie.id+"" === bigMovieMatch.params.movieId
+        )
     );
     console.log(clickedMovie);
 

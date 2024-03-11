@@ -3,7 +3,7 @@ import { useQuery } from "react-query";
 import { IGetTvResult, getTvs, getPopulars, getTodaysTvs, getTopRated } from "../api";
 import styled from "styled-components";
 import { makeImagePath } from "./utils";
-import { motion,AnimatePresence, useScroll } from "framer-motion";
+import { motion,AnimatePresence } from "framer-motion";
 import { PathMatch, useMatch, useNavigate } from "react-router-dom";
 import { BsStarFill, BsStarHalf } from "react-icons/bs";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -271,9 +271,7 @@ function Tv() {
     const onOverLayClicked = () => history(`/tv`)  
     
     const clickedtv =      //클릭한 div에 해당값 들어있는지 확인
-    
-    bigTvMatch?.params.tvid &&
-    ( 
+    bigTvMatch?.params.tvid &&( 
     data?.results.find((tv) => tv.id+"" === bigTvMatch.params.tvid) ||
     Populars?.results.find((tv) => tv.id+"" === bigTvMatch.params.tvid) ||
     TodaysTvs?.results.find((tv) => tv.id+"" === bigTvMatch.params.tvid) ||
