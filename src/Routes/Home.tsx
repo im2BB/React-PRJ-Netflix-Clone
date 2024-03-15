@@ -56,8 +56,9 @@ const Date = styled.h2`
 `;
 
 const OverView = styled.p`
-    font-size: 18px;
+    font-size: 15px;
     margin-left: 40px;
+    padding-bottom: 200px;
     width: 50%;
 `;
 
@@ -432,7 +433,7 @@ function Home() {
                         <LlilTitle>{data?.results[0].original_title}</LlilTitle> 
                         <Bigposter 
                         style={{backgroundImage :`url(${makeImagePath(clickedMovie.poster_path)})`}}/>
-                        <Biggenres>장르:{clickedMovie.videos}</Biggenres>
+                        <Biggenres>{clickedMovie.videos}</Biggenres>
                         <Bigrelease_date> 개봉일 : {clickedMovie.release_date}</Bigrelease_date>
                         <Bigpopularity> 평점 : {clickedMovie ? renderStars(clickedMovie.vote_average) : null} / {(clickedMovie.vote_average).toFixed(1)} </Bigpopularity>                        
                         <BigOverview>{clickedMovie.overview}</BigOverview>
