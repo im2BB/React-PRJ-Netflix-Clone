@@ -35,22 +35,22 @@ interface ITv {
 }
 
 
-interface ISearch {
+export interface ISearch {
     id: number;
     backdrop_path: string;
     poster_path: string;
     title: string;
-    name:string;
+    name: string;
     original_title: string;
     original_name: string;
     overview: string;
-    release_date:number;
-    first_air_date:number;
-    popularity:number;
-    vote_average:number;
-    genre :string;
-    videos:string;
-    media_type:string;
+    release_date: number;
+    first_air_date: number;
+    popularity: number;
+    vote_average: number;
+    genre: string;
+    videos: string;
+    media_type: string;
 }
 
 export interface IGetTvResult {
@@ -65,18 +65,17 @@ export interface IGetTvResult {
     vote_average:number;
     } 
 
-export interface IGetSearchResult {
-    dates: {
-        maximum: string;
-        minimum: string;
-    };
-    page: number;
-    results: ISearch[];
-    total_pages: number;
-    total_results: number;
-    vote_average:number;
+    export interface IGetSearchResult {
+        dates: {
+            maximum: string;
+            minimum: string;
+        };
+        page: number;
+        results: ISearch[]; 
+        total_pages: number;
+        total_results: number;
+        vote_average: number;
     }
-
 
 
 export interface IGetMoviesResult {
@@ -143,7 +142,7 @@ export interface IGetMoviesResult {
     }
 
 
-    export function getSearchMuti(
+    export function getSearchMulti(
         keyword: string,
         page : number
         ){

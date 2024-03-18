@@ -1,9 +1,10 @@
-import { PathMatch, useLocation, useMatch } from "react-router-dom";
+import { PathMatch, useLocation, useMatch, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { IGetSearchResult, getSearchMuti } from "../api";
+import { IGetSearchResult, ISearch, getSearchMulti  } from "../api";
 import { useQuery } from "react-query";
 import { makeImagePath } from "./utils";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
+import { useState } from "react";
 
 const Wrapper = styled.div`
     background-color: black;
@@ -50,19 +51,30 @@ const OverView = styled.p`
     margin-left: 40px;
 `;
 
-
-
 const Box = styled.div`
     display: flex;
     margin-left:50px;
-    
-    
+`;
+
+const BoxTwo = styled(motion.div)`
+    display: flex;
+    height: 300px;
+    width: 350px;
+    border-radius: 10px;
+    margin: 5px;
+    background-color: #555555;
+    border-style:solid;
+    border-width:0.1px;
+    border-color: black;
+    flex-wrap: wrap;
+
 `;
 
 const LilBox = styled.div`
     margin-top: 300px;
     display: column;
     width: 480px;
+    
 `;
 const BigBox = styled.div`
     margin-top: -200px;
@@ -72,22 +84,16 @@ const BigBox = styled.div`
     padding: 30px;
 `;
 
-const BoxTwo = styled(motion.div)`
-    display: flex;
-    height: 300px;
-    width: 350px;
-    border-radius: 10px ;
-    margin: 5px;
-    background-color: #555555;
-    flex-wrap: wrap
-`;
-
 const Text = styled.p`
     height: 250px;
     margin-top:-160px;
     padding-left: 50px;
     font-size: 20px;
 `;
+
+const MainBox = styled.div`
+    margin-left: 50px;
+`
 
 const BigPhoto = styled.div<{ $bgPhoto: string }>`
     color: ${props => props.theme.white.lighter}; 
@@ -96,8 +102,8 @@ const BigPhoto = styled.div<{ $bgPhoto: string }>`
     background-size: cover;
     background-position: center center;
     border-radius: 5px;
-    height: 60vh;
-    width: 20vw;
+    height: 450px;
+    width: 315px;
     margin: 10px;
     `;
 
@@ -138,20 +144,55 @@ const LilOverView = styled.p`
         -webkit-box-orient: vertical;
 `;
 
+const OverLay = styled(motion.div)`
+    position: fixed;
+    top: 0;
+    width:  100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    opacity:0;
+    ::-webkit-scrollbar {
+    display: none;
+    }
+`;
+
+const SmallBox = styled(motion.div)`
+    position: absolute;
+    width: 60vw;
+    height: 60vh;
+    background-color: darkgray;
+    top: 320;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+`;
+
+
 function Serch() {
+    const [clickedInfo, setClickedInfo] = useState(null);
+    console.log(clickedInfo);
+    const [showMotionDiv, setShowMotionDiv] = useState(false);
+    
     const location = useLocation();
     const keyword = new URLSearchParams(location.search).get("keyword");
-    console.log(keyword);
-    const page = 2;
+    const page = 1;
 
     const { data, isLoading } = useQuery<IGetSearchResult>(
         ["getSearch", keyword, page], 
-        () => keyword ? getSearchMuti(keyword, page) : Promise.resolve(),
+        () => keyword ? getSearchMulti(keyword, page) : Promise.resolve(),
         { enabled: !!keyword }
     );
-    console.log(data);
+    
 
+    const onBoxClicked = (clickedKeywords:any) => {
+        setClickedInfo(clickedKeywords);
+        setShowMotionDiv(true);
+    }
 
+    const boxVariants = {
+        normal: { scale: 1 },
+        hover: { scale: 1.2, transition: { delay: 0.2 } }
+    };
 
     return (
         <Wrapper>
@@ -159,52 +200,70 @@ function Serch() {
                 <Loader>Loading....</Loader>
             ) : (
                 <>
-                
                     {data && data.total_results === 0 ? (
                         <Banner $bgPhoto="">
                             <p>"{keyword}" 에 관련된 정보가 존재하지 않습니다.</p>
                         </Banner>
                     ) : (
-                        
                         <Banner $bgPhoto={makeImagePath(data?.results[0]?.backdrop_path || "")}>
-                            
-                        <Box>
-                        <BigPhoto $bgPhoto={makeImagePath(data?.results[0].poster_path || "")}/>
-                        <LilBox>
-                                <Title>
-                                {data?.results[0]?.title || data?.results[0]?.name}
-                                </Title>
-                                <OiginTitle>{data?.results[0]?.original_title || data?.results[0]?.original_name}</OiginTitle>
-                                <Date>{data?.results[0].release_date || data?.results[0].first_air_date} / {data?.results[0].media_type && (
-                                <span>{data.results[0].media_type.charAt(0).toUpperCase() + data.results[0].media_type.slice(1)}</span>
-                                )}</Date>
-                                <OverView>{data?.results[0]?.overview}</OverView>
-                            </LilBox>
-                        </Box>
+                            <Box>
+                                <BigPhoto $bgPhoto={makeImagePath(data?.results[0].poster_path || "")}/>
+                                <LilBox>
+                                    <Title>{data?.results[0]?.title || data?.results[0]?.name}</Title>
+                                    <OiginTitle>{data?.results[0]?.original_title || data?.results[0]?.original_name}</OiginTitle>
+                                    <Date>{data?.results[0].release_date || data?.results[0].first_air_date} / {data?.results[0].media_type && (
+                                        <span>{data.results[0].media_type.charAt(0).toUpperCase() + data.results[0].media_type.slice(1)}</span>
+                                    )}</Date>
+                                    <OverView>{data?.results[0]?.overview}</OverView>
+                                </LilBox>
+                            </Box>
                         </Banner>
                     )}
-                    
+
                     <Text>
-                            <span style={{ fontSize: '25px' }}> - " {keyword} "</span> 에 대한 검색 결과 입니다.
+                        <span style={{ fontSize: '25px' }}> - " {keyword} "</span> 에 대한 검색 결과 입니다.
                     </Text>
 
-                    <BigBox >
-                    
-                    {data && data.results.map((keywords, index) => (
-                    <BoxTwo key={index}>
-                        <LilPhoto $bgPhoto={makeImagePath(keywords.poster_path || "")} />
-                        <LilBoxtwo>
-                            <LilTitle>{ keywords.title || keywords.name}</LilTitle>
-                            <LilType>{keywords.media_type && (
-                                <span>{keywords.media_type.charAt(0).toUpperCase() + keywords.media_type.slice(1)}</span>
-                            )}</LilType>
-                            <LilOverView>{keywords.overview.length > 150 ? keywords.overview.substring(0, 150) + '...' : keywords.overview}</LilOverView>
-                        </LilBoxtwo>
-                    </BoxTwo>
-                    ))}
-                    </BigBox>
+                    <AnimatePresence>
+                        <MainBox>
+                            <BigBox>
+                                {data && data.results.map((keywords, index) => (
+                                    <BoxTwo key={index}
+                                        whileHover="hover"
+                                        initial="nomal"
+                                        onClick={() => onBoxClicked(keywords)}
+                                        variants={boxVariants}
+                                    >
+                                        <LilPhoto $bgPhoto={makeImagePath(keywords.poster_path || "")} />
+                                        <LilBoxtwo>
+                                            <LilTitle>{keywords.title || keywords.name}</LilTitle>
+                                            <LilType>{keywords.media_type && (
+                                                <span>{keywords.media_type.charAt(0).toUpperCase() + keywords.media_type.slice(1)}</span>
+                                            )}</LilType>
+                                            <LilOverView>{keywords.overview.length > 150 ? keywords.overview.substring(0, 150) + '...' : keywords.overview}</LilOverView>
+                                        </LilBoxtwo>
+                                    </BoxTwo>
+                                ))}
+                            </BigBox>
+                        </MainBox>
+                    </AnimatePresence>
+
+                    <AnimatePresence>
+                        
+                            <>
+                                    <SmallBox
+                                        
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1 }}
+                                        exit={{ opacity: 0 }}
+                                    >
+                                        
+                                    </SmallBox>
+                                
+                            </>
+                        
+                    </AnimatePresence>
                 </>
-                
             )}
         </Wrapper>
     );

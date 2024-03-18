@@ -51,14 +51,14 @@ const LilTitle = styled.h2`
 
 const Popularity = styled.h2`
     font-size: 15px;
-    margin-bottom: 20px;
-    padding-left: 85px;
+    margin-bottom: 40px;
+    margin-left: 125px;
 `
 
 const Date = styled.h2`
     font-size: 22px;
-    margin-left: 150px;
-    margin-top: 40px;
+    margin-left: 40px;
+    margin-bottom: 20px;
     width: 50%;
 `;
 

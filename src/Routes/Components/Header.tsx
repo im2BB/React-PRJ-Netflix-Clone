@@ -118,6 +118,7 @@ function Header() {
     const [serchOpen, setSerchOpen] = useState(false);
     const homeMatch = useMatch("")
     const tvMatch = useMatch("tv")
+    const searchMatch = useMatch("search")
     const inputAnimation = useAnimation();
     const navAnimation = useAnimation();
     const { scrollY } = useScroll();
