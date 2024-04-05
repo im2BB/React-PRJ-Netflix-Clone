@@ -1,10 +1,11 @@
-import { PathMatch, useLocation, useMatch, useNavigate } from "react-router-dom";
+import { Navigate, PathMatch, useLocation, useMatch, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { IGetSearchResult, ISearch, getSearchMulti  } from "../api";
 import { useQuery } from "react-query";
 import { makeImagePath } from "./utils";
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
+import { BsStarFill, BsStarHalf } from "react-icons/bs";
 
 const Wrapper = styled.div`
     background-color: black;
@@ -81,7 +82,7 @@ const BigBox = styled.div`
     display: flex;
     flex-wrap: wrap;
     background-position: center center;
-    padding: 30px;
+    
 `;
 
 const Text = styled.p`
@@ -130,13 +131,19 @@ const LilTitle = styled.h2`
     margin-top: 10px;
 `;
 
+const LilName = styled.h2`
+    font-size: 10px;
+    margin-top: 8px;
+    margin-left: 25px;
+`;
+
 const LilType = styled.h2`
     font-size: 15px;
     margin-top: 8px;
 `;
 
 const LilOverView = styled.p`
-    font-size: 10px;
+    font-size: 12px;
     margin-top: 10px;
     word-wrap: break-word;
         display: -webkit-box;
@@ -156,6 +163,26 @@ const OverLay = styled(motion.div)`
     }
 `;
 
+const BigSearch = styled(motion.div)`
+    position: absolute;
+    width: 60vw;
+    height: 90vh;
+    top: 40px;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    background-color: ${props => props.theme.black.lighter};
+    border-radius: 15px;
+    overflow: auto;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+    &::-webkit-scrollbar {
+        display: none; /* Chrome, Safari, Opera */
+    }
+    z-index: 1000;
+    
+`;
+
 const SmallBox = styled(motion.div)`
     position: absolute;
     width: 60vw;
@@ -167,14 +194,117 @@ const SmallBox = styled(motion.div)`
     margin: 0 auto;
 `;
 
+const BigCover = styled.div`
+    width: 100%;
+    background-size: cover;
+    background-position: center center;
+    height: 420px;
+    color: ${props => props.theme.white.lighter};
 
-function Serch() {
-    const [clickedInfo, setClickedInfo] = useState(null);
-    console.log(clickedInfo);
-    const [showMotionDiv, setShowMotionDiv] = useState(false);
+`;
+
+const Bigposter = styled.div`
+    width: 300px;
+    height: 450px;
+    background-size: cover;
+    margin: 30px;
+    position: relative;
+    top:-330px;
+    float: left;
+    border-radius: 10px;
+    box-shadow : 3px 3px 1px black;
+
+`;
+
+const BigTitle = styled.h3`
+    color: ${props => props.theme.white.lighter};
+    font-size: 41px;
+    position:  relative;
+    top:-165px;
+    padding-left: 345px;
+`;
+
+const LlilTitle = styled.h3`
+    color: ${props => props.theme.white.lighter};
+    font-size: 15px;
+    position:  relative;
+    top:-165px;
+    padding-left: 520px;
+    padding-top: 20px;
+`;
+
+const Biggenres = styled.div`
+    padding: 20px;  
+    position:  relative;
+    top:-115px;
+    color: ${props => props.theme.white.lighter};
     
+`;
+
+const Bigrelease_date = styled.p`
+    padding: 20px;  
+    position:  relative;
+    top:-115px;
+    color: ${props => props.theme.white.lighter};
+    
+`;
+
+const Bigpopularity = styled.p`
+    padding-left: 20px;
+    padding-bottom: 20px;  
+    position:  relative;
+    top:-115px;
+    color: ${props => props.theme.white.lighter};
+`;
+
+const BigOverview = styled.p`
+    padding: 20px;
+    position:  relative;
+    top:-85px;
+    color: ${props => props.theme.white.lighter};
+    overflow: auto;
+`;
+
+const boxVariants = {
+    normal: { 
+        scale: 1
+    },
+    hover: { 
+        scale: 1.05, 
+        y: -5,
+        transition: { 
+            delay: 0.2,
+            type:"tween", 
+        } 
+    }
+};
+
+const renderStars = (rating:number, color = "#f1f169") => {  //별점 출력 함수
+    const integerPart = Math.floor(rating / 2); // 평점을 2로 나눈 정수 부분을 계산
+    const hasHalfStar = rating % 2 !== 0; // 반 별표가 있는지 확인
+
+    const filledStars = Array(integerPart).fill(2); // 평점에 해당하는 별표 배열 생성
+    const emptyStars = Array(Math.max(0, 4 - integerPart)).fill(2); // 남은 빈 별표 배열 생성
+
+    return (
+        <>
+            {filledStars.map((_, i) => (
+                <BsStarFill key={i} size="13" color={color} />
+            ))}
+            {hasHalfStar && <BsStarHalf key="half" size="13" color={color} />}
+            {emptyStars.map((_, i) => (
+                <BsStarFill key={i + integerPart} size="13" color="#E3E3E3" />
+            ))}
+        </>
+    );
+};
+
+
+function Search() {
+    const history = useNavigate();
     const location = useLocation();
     const keyword = new URLSearchParams(location.search).get("keyword");
+    const keywordMatch: PathMatch<string> | null  = useMatch("/search/:clickId");
     const page = 1;
 
     const { data, isLoading } = useQuery<IGetSearchResult>(
@@ -183,16 +313,21 @@ function Serch() {
         { enabled: !!keyword }
     );
     
-
-    const onBoxClicked = (clickedKeywords:any) => {
-        setClickedInfo(clickedKeywords);
-        setShowMotionDiv(true);
-    }
-
-    const boxVariants = {
-        normal: { scale: 1 },
-        hover: { scale: 1.2, transition: { delay: 0.2 } }
+    const onBoxClicked = (clickId:number) => {  //클릭한 값 
+        const clickedItem = data?.results.find(keyword => keyword.id === clickId);
+        console.log(clickedItem);
+        history(`/search/${clickId}?keyword=${keyword}`);
     };
+    
+    const onOverLayClicked = () => history(`/search?keyword=${keyword}`)  //기존으로 돌아기기
+
+    const clickedSearch =  
+    keywordMatch?.params.clickId &&
+    (
+        data?.results.find((keywords) => keywords.id+"" === keywordMatch.params.clickId)
+    );
+    
+    
 
     return (
         <Wrapper>
@@ -220,48 +355,69 @@ function Serch() {
                         </Banner>
                     )}
 
-                    <Text>
-                        <span style={{ fontSize: '25px' }}> - " {keyword} "</span> 에 대한 검색 결과 입니다.
-                    </Text>
+                    
 
                     <AnimatePresence>
                         <MainBox>
-                            <BigBox>
-                                {data && data.results.map((keywords, index) => (
-                                    <BoxTwo key={index}
-                                        whileHover="hover"
-                                        initial="nomal"
-                                        onClick={() => onBoxClicked(keywords)}
-                                        variants={boxVariants}
-                                    >
-                                        <LilPhoto $bgPhoto={makeImagePath(keywords.poster_path || "")} />
-                                        <LilBoxtwo>
-                                            <LilTitle>{keywords.title || keywords.name}</LilTitle>
-                                            <LilType>{keywords.media_type && (
-                                                <span>{keywords.media_type.charAt(0).toUpperCase() + keywords.media_type.slice(1)}</span>
-                                            )}</LilType>
-                                            <LilOverView>{keywords.overview.length > 150 ? keywords.overview.substring(0, 150) + '...' : keywords.overview}</LilOverView>
-                                        </LilBoxtwo>
-                                    </BoxTwo>
-                                ))}
-                            </BigBox>
+                            <Text>
+                                <span style={{ fontSize: '25px' }}> - " {keyword} "</span> 에 대한 검색 결과 입니다.
+                            </Text>
+                                <BigBox>
+                                    {data && data.results.map((keywords, index) => (
+                                        <BoxTwo key={index}
+                                            whileHover="hover"
+                                            initial="nomal"
+                                            onClick={() => onBoxClicked(keywords.id)}
+                                            variants={boxVariants}
+                                        >
+                                            <LilPhoto $bgPhoto={makeImagePath(keywords.poster_path || "")} />
+                                                <LilBoxtwo>
+                                                    <LilTitle>{keywords.title || keywords.name}</LilTitle>
+                                                    <LilName>{keywords.original_title || keywords.original_name}</LilName>
+                                                    <LilType>{keywords.media_type && (
+                                                        <span>{keywords.media_type.charAt(0).toUpperCase() + keywords.media_type.slice(1)}</span>
+                                                    )}</LilType>
+                                                    <LilOverView>{keywords.overview.length > 150 ? keywords.overview.substring(0, 150) + '.....' : keywords.overview}</LilOverView>
+                                                </LilBoxtwo>
+                                        </BoxTwo>
+                                    ))}
+                                </BigBox>
+                                
                         </MainBox>
                     </AnimatePresence>
-
+                        
                     <AnimatePresence>
-                        
+                        { keywordMatch ? (
                             <>
-                                    <SmallBox
-                                        
-                                        initial={{ opacity: 0 }}
-                                        animate={{ opacity: 1 }}
-                                        exit={{ opacity: 0 }}
-                                    >
-                                        
-                                    </SmallBox>
-                                
-                            </>
-                        
+                                <OverLay 
+                                onClick={onOverLayClicked}
+                                exit={{opacity:0}}
+                                animate={{opacity:2}}
+                                />
+                                <BigSearch
+                                style={{ position: "fixed"} } 
+                                layoutId={keywordMatch.params.clickId}>
+                                    
+                                    {clickedSearch &&
+                                    <>
+                                    <BigCover
+                                    style={{backgroundImage:`linear-gradient(to top, black,transparent),
+                                    url( ${makeImagePath (clickedSearch.backdrop_path) 
+                                    })`}} />
+                                    <BigTitle>{clickedSearch.title || clickedSearch.name}</BigTitle>
+                                    <LlilTitle>{clickedSearch.original_title || clickedSearch.original_name}</LlilTitle>
+                                    <Bigposter
+                                    style={{backgroundImage :`url(${makeImagePath(clickedSearch.poster_path)})`}}
+                                    />
+                                    <Biggenres>{clickedSearch.videos}</Biggenres>
+                                    <Bigrelease_date>개봉일 : {clickedSearch.release_date || clickedSearch.first_air_date}</Bigrelease_date>
+                                    <Bigpopularity> 평점 : {clickedSearch ? renderStars(clickedSearch.vote_average) : null} / {(clickedSearch.vote_average).toFixed(1)} </Bigpopularity>                        
+                                    <BigOverview>{clickedSearch.overview}</BigOverview>
+                                    </>}
+
+                                    </BigSearch>
+                                </>
+                            ): null }
                     </AnimatePresence>
                 </>
             )}
@@ -269,4 +425,4 @@ function Serch() {
     );
 }
 
-export default Serch;
+export default Search;

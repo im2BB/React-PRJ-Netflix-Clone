@@ -4,9 +4,6 @@ const BASE_PATH = "https://api.themoviedb.org/3";
 
 
 
-
-
-
 interface IMovie {
     id: number;
     backdrop_path: string;
@@ -149,3 +146,6 @@ export interface IGetMoviesResult {
         return fetch(`${BASE_PATH}/search/multi?query=${keyword}&include_adult=false&api_key=${API_KEY}&language=ko-KR`)
             .then(response => response.json());
     }
+
+
+    

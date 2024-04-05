@@ -151,8 +151,8 @@ const BigTitle = styled.h3`
     color: ${props => props.theme.white.lighter};
     font-size: 41px;
     position:  relative;
-    top:-185px;
-    padding-left: 35px;
+    top:-165px;
+    padding-left: 345px;
 `;
 
 const BigOverview = styled.p`
@@ -185,7 +185,7 @@ const Bigposter = styled.div`
     background-size: cover;
     margin: 30px;
     position: relative;
-    top:-160px;
+    top:-330px;
     float: left;
     border-radius: 10px;
     box-shadow : 3px 3px 1px black;

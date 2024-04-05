@@ -149,8 +149,8 @@ const BigTitle = styled.h3`
     color: ${props => props.theme.white.lighter};
     font-size: 41px;
     position:  relative;
-    top:-185px;
-    padding-left: 35px;
+    top:-165px;
+    padding-left: 345px;
 `;
 
 const LlilTitle = styled.h3`
@@ -199,7 +199,7 @@ const Bigposter = styled.div`
     background-size: cover;
     margin: 30px;
     position: relative;
-    top:-160px;
+    top:-330px;
     float: left;
     border-radius: 10px;
     box-shadow : 3px 3px 1px black;
@@ -252,6 +252,7 @@ const renderStars = (rating:number, color = "#f1f169") => {  //별점 출력 함
 function Home() {
     const history = useNavigate()
     const bigMovieMatch: PathMatch<string> | null = useMatch("/movies/:movieId");
+    
     const { data, isLoading } = useQuery<IGetMoviesResult>(
         ["Getmovies", "GetnowPlaying"],
         getMovies
@@ -272,8 +273,6 @@ function Home() {
         getUpcoming
     );
 
-    
-
     const onBoxClicked = (movieId:number) => {
         history(`/movies/${movieId}`)
     };
@@ -285,8 +284,7 @@ function Home() {
         data?.results.find((movie) => movie.id+"" === bigMovieMatch.params.movieId) ||
         RatedMovie?.results.find((movie) => movie.id+"" === bigMovieMatch.params.movieId) ||
         PopularMovie?.results.find((movie) => movie.id+"" === bigMovieMatch.params.movieId)||
-        Upcoming?.results.find((movie) => movie.id+"" === bigMovieMatch.params.movieId
-        )
+        Upcoming?.results.find((movie) => movie.id+"" === bigMovieMatch.params.movieId)
     );
     console.log(clickedMovie);
 
@@ -306,32 +304,32 @@ function Home() {
                     </Banner>
                     <Slider1>
                         <h1 style={{ margin: "20px", fontSize: "25px" }}>현재 상영중</h1>
-                                <Swiper slidesPerView={5} navigation={true} spaceBetween={10}>
-                                {data?.results.map((movie) => (
-                                                    <SwiperSlide 
-                                                    key={movie.id}>
-                                                    <Box
-                                                        layoutId={movie.id + ""}
-                                                        whileHover="hover"
-                                                        initial="normal"
-                                                        variants={boxVariants}
-                                                        onClick={() => onBoxClicked(movie.id)}
-                                                        transition={{ type: "tween" }}
-                                                        $bgPhoto={makeImagePath(movie.backdrop_path)}
-                                                >
-                                                    <img />
-                                                    <Info variants={infoVariants}>
-                                                        <h4 style={{ fontSize: "26px", padding: "10px" }}>{movie.title}</h4>
-                                                    </Info>
-                                                </Box>
-                                            </SwiperSlide>
-                                        ))}
+                                <Swiper slidesPerView={6} navigation={true} spaceBetween={10}>
+                                    {data?.results.map((movie) => (
+                                                        <SwiperSlide 
+                                                        key={movie.id}>
+                                                        <Box
+                                                            layoutId={movie.id + ""}
+                                                            whileHover="hover"
+                                                            initial="normal"
+                                                            variants={boxVariants}
+                                                            onClick={() => onBoxClicked(movie.id)}
+                                                            transition={{ type: "tween" }}
+                                                            $bgPhoto={makeImagePath(movie.backdrop_path)}
+                                                    >
+                                                        <img />
+                                                        <Info variants={infoVariants}>
+                                                            <h4 style={{ fontSize: "26px", padding: "10px" }}>{movie.title}</h4>
+                                                        </Info>
+                                                    </Box>
+                                                </SwiperSlide>
+                                    ))}
                                 </Swiper>
                     </Slider1>
 
                     <Slider1>
                         <h1 style={{ margin: "20px", fontSize: "25px" }}>죽기전에 봐야 할 영화</h1>
-                        <Swiper slidesPerView={5} navigation={true} spaceBetween={10}>
+                        <Swiper slidesPerView={6} navigation={true} spaceBetween={10}>
                             {RatedMovie?.results.map((movie) => {
                                 if (data?.results.some((dataMovie) => dataMovie.id === movie.id)) return null;
                                 return (
@@ -358,7 +356,7 @@ function Home() {
 
                     <Slider1>
                         <h1 style={{ margin: "20px", fontSize: "25px" }}>인기 상영작</h1>
-                        <Swiper slidesPerView={5} navigation={true} spaceBetween={10}>
+                        <Swiper slidesPerView={6} navigation={true} spaceBetween={10}>
                             {PopularMovie?.results.map((movie) => {
                                 if (data?.results.some((dataMovie) => dataMovie.id === movie.id)) return null;
                                 return (
@@ -385,7 +383,7 @@ function Home() {
 
                     <Slider1>
                         <h1 style={{ margin: "20px", fontSize: "25px" }}>예정작</h1>
-                        <Swiper slidesPerView={5} navigation={true} spaceBetween={10}>
+                        <Swiper slidesPerView={6} navigation={true} spaceBetween={10}>
                             {Upcoming?.results.map((movie) => {
                                 if (data?.results.some((dataMovie) => dataMovie.id === movie.id)) return null;
                                 return (
@@ -413,34 +411,34 @@ function Home() {
                 
                 <AnimatePresence>
                 {bigMovieMatch ? (
-                    <>
-                        <OverLay 
-                        onClick={onOverLayClicked}
-                        exit={{opacity:0}}
-                        animate={{opacity:2}}
-                        />
-                        <BigMovie
-                        style={{ position: "fixed"} } 
-                        layoutId={bigMovieMatch.params.movieId}>
-                        
-                        {clickedMovie && 
                         <>
-                        <BigCover 
-                        style={{backgroundImage:`linear-gradient(to top, black,transparent),
-                        url( ${makeImagePath (clickedMovie.backdrop_path) 
-                        })`}}/>
-                        <BigTitle>{clickedMovie.title}</BigTitle>
-                        <LlilTitle>{data?.results[0].original_title}</LlilTitle> 
-                        <Bigposter 
-                        style={{backgroundImage :`url(${makeImagePath(clickedMovie.poster_path)})`}}/>
-                        <Biggenres>{clickedMovie.videos}</Biggenres>
-                        <Bigrelease_date> 개봉일 : {clickedMovie.release_date}</Bigrelease_date>
-                        <Bigpopularity> 평점 : {clickedMovie ? renderStars(clickedMovie.vote_average) : null} / {(clickedMovie.vote_average).toFixed(1)} </Bigpopularity>                        
-                        <BigOverview>{clickedMovie.overview}</BigOverview>
-                        </>}
+                            <OverLay 
+                            onClick={onOverLayClicked}
+                            exit={{opacity:0}}
+                            animate={{opacity:2}}
+                            />
+                            <BigMovie
+                            style={{ position: "fixed"} } 
+                            layoutId={bigMovieMatch.params.movieId}>
+                            
+                                {clickedMovie && 
+                                <>
+                                <BigCover 
+                                style={{backgroundImage:`linear-gradient(to top, black,transparent),
+                                url( ${makeImagePath (clickedMovie.backdrop_path) 
+                                })`}}/>
+                                <BigTitle>{clickedMovie.title}</BigTitle>
+                                <LlilTitle>{clickedMovie.original_title}</LlilTitle> 
+                                <Bigposter 
+                                style={{backgroundImage :`url(${makeImagePath(clickedMovie.poster_path)})`}}/>
+                                <Biggenres>{clickedMovie.videos}</Biggenres>
+                                <Bigrelease_date> 개봉일 : {clickedMovie.release_date}</Bigrelease_date>
+                                <Bigpopularity> 평점 : {clickedMovie ? renderStars(clickedMovie.vote_average) : null} / {(clickedMovie.vote_average).toFixed(1)} </Bigpopularity>                        
+                                <BigOverview>{clickedMovie.overview}</BigOverview>
+                                </>}
 
-                        </BigMovie>
-                    </>  
+                            </BigMovie>
+                        </>  
                     ): null}
                 </AnimatePresence>
                 </>
