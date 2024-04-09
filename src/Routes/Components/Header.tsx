@@ -91,7 +91,7 @@ const Input = styled(motion.input)`
     position: absolute;
     right: 0px;
     padding: 5px 10px;
-    padding-left: 40px;
+    padding-left: 35px;
     z-index: -1;
     color: white;
     font-size: 16px;
@@ -118,7 +118,6 @@ function Header() {
     const [serchOpen, setSerchOpen] = useState(false);
     const homeMatch = useMatch("")
     const tvMatch = useMatch("tv")
-    const searchMatch = useMatch("search")
     const inputAnimation = useAnimation();
     const navAnimation = useAnimation();
     const { scrollY } = useScroll();

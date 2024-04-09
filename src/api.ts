@@ -2,7 +2,10 @@
 const API_KEY = "ec180f3d7555520fa9d4bcff596736b9";
 const BASE_PATH = "https://api.themoviedb.org/3";
 
+interface IGenreList {
+    id:number;
 
+}
 
 interface IMovie {
     id: number;
@@ -15,7 +18,7 @@ interface IMovie {
     popularity:number;
     vote_average:number;
     genre :string;
-    videos:string;
+    videos: boolean;
 }
 
 
@@ -87,6 +90,19 @@ export interface IGetMoviesResult {
     vote_average:number;
     } 
 
+export interface IGetIGenreList {
+    dates: {
+        maximum: string;
+        minimum: string;
+    };
+    page: number;
+    results: IGenreList[];
+    total_pages: number;
+    total_results: number;
+    vote_average:number;
+    } 
+
+
 
     export function getMovies() {    
         return fetch(`${BASE_PATH}/movie/now_playing?api_key=${API_KEY}&language=ko-KR`).then(
@@ -140,12 +156,22 @@ export interface IGetMoviesResult {
 
 
     export function getSearchMulti(
-        keyword: string,
+        serchkeyword: string,
         page : number
         ){
-        return fetch(`${BASE_PATH}/search/multi?query=${keyword}&include_adult=false&api_key=${API_KEY}&language=ko-KR`)
+        return fetch(`${BASE_PATH}/search/multi?query=${serchkeyword}&include_adult=false&api_key=${API_KEY}&language=ko-KR`)
             .then(response => response.json());
     }
 
 
-    
+    export function getMoviesList() {
+        return fetch(`${BASE_PATH}/genre/movie/list?api_key=${API_KEY}&language=ko-KR`).then(
+            (response) => response.json()
+        );
+    }
+
+    export function getTvList() {
+        return fetch(`${BASE_PATH}/genre/tv/list?api_key=${API_KEY}&language=ko-KR`).then(
+            (response) => response.json()
+        );
+    }

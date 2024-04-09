@@ -28,7 +28,7 @@ const Loder = styled.div`
 `;
 
 const Banner = styled.div<{ $bgPhoto: string }>`
-    height: 100vh;
+    height: 90vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -36,6 +36,7 @@ const Banner = styled.div<{ $bgPhoto: string }>`
     background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)),
     url(${(props) => props.$bgPhoto });
     background-size: cover;
+    pointer-events: none;
 `;
 
 const Title = styled.h2`

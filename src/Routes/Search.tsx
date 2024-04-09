@@ -1,10 +1,9 @@
-import { Navigate, PathMatch, useLocation, useMatch, useNavigate } from "react-router-dom";
+import { PathMatch, useLocation, useMatch, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { IGetSearchResult, ISearch, getSearchMulti  } from "../api";
+import { IGetSearchResult, getSearchMulti  } from "../api";
 import { useQuery } from "react-query";
 import { makeImagePath } from "./utils";
 import { AnimatePresence, motion } from "framer-motion";
-import { useState } from "react";
 import { BsStarFill, BsStarHalf } from "react-icons/bs";
 
 const Wrapper = styled.div`
@@ -183,16 +182,7 @@ const BigSearch = styled(motion.div)`
     
 `;
 
-const SmallBox = styled(motion.div)`
-    position: absolute;
-    width: 60vw;
-    height: 60vh;
-    background-color: darkgray;
-    top: 320;
-    left: 0;
-    right: 0;
-    margin: 0 auto;
-`;
+
 
 const BigCover = styled.div`
     width: 100%;
@@ -329,8 +319,8 @@ function Search() {
     
     
 
-    return (
-        <Wrapper>
+    return <Wrapper>(
+        
             {isLoading ? (
                 <Loader>Loading....</Loader>
             ) : (
@@ -364,11 +354,13 @@ function Search() {
                             </Text>
                                 <BigBox>
                                     {data && data.results.map((keywords, index) => (
-                                        <BoxTwo key={index}
+                                        <BoxTwo 
+                                            key={index}
                                             whileHover="hover"
                                             initial="nomal"
-                                            onClick={() => onBoxClicked(keywords.id)}
                                             variants={boxVariants}
+                                            onClick={() => onBoxClicked(keywords.id)}
+                                            transition={{ type: "tween" }}
                                         >
                                             <LilPhoto $bgPhoto={makeImagePath(keywords.poster_path || "")} />
                                                 <LilBoxtwo>
@@ -421,8 +413,9 @@ function Search() {
                     </AnimatePresence>
                 </>
             )}
-        </Wrapper>
-    );
+        
+    
+    </Wrapper>;
 }
 
 export default Search;

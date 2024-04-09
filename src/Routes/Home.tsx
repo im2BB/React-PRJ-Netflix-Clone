@@ -1,6 +1,6 @@
 
 import { useQuery } from "react-query";
-import { IGetMoviesResult, getMovies, getPopular, getRatedMovies, getUpcoming } from "../api";
+import { IGetIGenreList, IGetMoviesResult, getMovies, getMoviesList, getPopular, getRatedMovies, getUpcoming } from "../api";
 import styled from "styled-components";
 import { makeImagePath } from "./utils";
 import { motion,AnimatePresence } from "framer-motion";
@@ -8,9 +8,14 @@ import { PathMatch, useMatch, useNavigate } from "react-router-dom";
 import { BsStarFill, BsStarHalf } from "react-icons/bs";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/swiper.min.css";
+
 import "swiper/components/navigation/navigation.min.css";
 import SwiperCore, { Autoplay, Navigation, Pagination } from "swiper";
 
+const StyledSwiper = styled(Swiper)`
+    
+
+`;
 
 
 const Wrapper = styled.div`
@@ -26,7 +31,7 @@ const Loder = styled.div`
 `;
 
 const Banner = styled.div<{ $bgPhoto: string }>`
-    height: 100vh;
+    height: 70vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -39,6 +44,7 @@ const Banner = styled.div<{ $bgPhoto: string }>`
 
 const Title = styled.h2`
     font-size: 105px;
+    padding-top: 300px;
     margin-bottom: 15px;
 `;
 
@@ -65,9 +71,7 @@ const OverView = styled.p`
 
 
 const Slider1 = styled(motion.div)`
-    position: relative;
-    top: -260px;
-    
+    top: -350px;
 `
 
 const Box = styled(motion.div)<{$bgPhoto:string}>`
@@ -81,6 +85,7 @@ const Box = styled(motion.div)<{$bgPhoto:string}>`
     font-size: 35px;
     z-index: 1000;
     border-radius: 2px;
+    position: relative;
     
 `;    
 
@@ -158,7 +163,8 @@ const LlilTitle = styled.h3`
     font-size: 15px;
     position:  relative;
     top:-165px;
-    padding-left: 120px;
+    padding-left: 520px;
+    padding-top: 20px;
 `;
 
 const BigOverview = styled.p`
@@ -229,6 +235,10 @@ const infoVariants = {
     }
 }
 
+
+
+
+
 const renderStars = (rating:number, color = "#f1f169") => {  //별점 출력 함수
     const integerPart = Math.floor(rating / 2); // 평점을 2로 나눈 정수 부분을 계산
     const hasHalfStar = rating % 2 !== 0; // 반 별표가 있는지 확인
@@ -273,6 +283,11 @@ function Home() {
         getUpcoming
     );
 
+    const { data: MoviesList } = useQuery<IGetIGenreList>(
+        ["GetUpcoming"],
+        getMoviesList
+    );
+
     const onBoxClicked = (movieId:number) => {
         history(`/movies/${movieId}`)
     };
@@ -287,7 +302,8 @@ function Home() {
         Upcoming?.results.find((movie) => movie.id+"" === bigMovieMatch.params.movieId)
     );
     console.log(clickedMovie);
-
+    
+    
         SwiperCore.use([Navigation,Pagination, Autoplay]);
         
         return <Wrapper>
@@ -304,9 +320,9 @@ function Home() {
                     </Banner>
                     <Slider1>
                         <h1 style={{ margin: "20px", fontSize: "25px" }}>현재 상영중</h1>
-                                <Swiper slidesPerView={6} navigation={true} spaceBetween={10}>
+                                <StyledSwiper slidesPerView={6} navigation={true} spaceBetween={15}>
                                     {data?.results.map((movie) => (
-                                                        <SwiperSlide 
+                                                <SwiperSlide 
                                                         key={movie.id}>
                                                         <Box
                                                             layoutId={movie.id + ""}
@@ -324,12 +340,12 @@ function Home() {
                                                     </Box>
                                                 </SwiperSlide>
                                     ))}
-                                </Swiper>
+                                </StyledSwiper>
                     </Slider1>
 
                     <Slider1>
                         <h1 style={{ margin: "20px", fontSize: "25px" }}>죽기전에 봐야 할 영화</h1>
-                        <Swiper slidesPerView={6} navigation={true} spaceBetween={10}>
+                        <StyledSwiper slidesPerView={6} navigation={true} spaceBetween={10}>
                             {RatedMovie?.results.map((movie) => {
                                 if (data?.results.some((dataMovie) => dataMovie.id === movie.id)) return null;
                                 return (
@@ -351,12 +367,12 @@ function Home() {
                                     </SwiperSlide>
                                 );
                             })}
-                        </Swiper>
+                        </StyledSwiper>
                     </Slider1>
 
                     <Slider1>
                         <h1 style={{ margin: "20px", fontSize: "25px" }}>인기 상영작</h1>
-                        <Swiper slidesPerView={6} navigation={true} spaceBetween={10}>
+                        <StyledSwiper slidesPerView={6} navigation={true} spaceBetween={10}>
                             {PopularMovie?.results.map((movie) => {
                                 if (data?.results.some((dataMovie) => dataMovie.id === movie.id)) return null;
                                 return (
@@ -378,12 +394,12 @@ function Home() {
                                     </SwiperSlide>
                                 );
                             })}
-                        </Swiper>
+                        </StyledSwiper>
                     </Slider1>
 
                     <Slider1>
                         <h1 style={{ margin: "20px", fontSize: "25px" }}>예정작</h1>
-                        <Swiper slidesPerView={6} navigation={true} spaceBetween={10}>
+                        <StyledSwiper slidesPerView={6} navigation={true} spaceBetween={10}>
                             {Upcoming?.results.map((movie) => {
                                 if (data?.results.some((dataMovie) => dataMovie.id === movie.id)) return null;
                                 return (
@@ -405,7 +421,7 @@ function Home() {
                                     </SwiperSlide>
                                 );
                             })}
-                        </Swiper>
+                        </StyledSwiper>
                     </Slider1>
 
                 
