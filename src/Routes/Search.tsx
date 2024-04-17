@@ -319,7 +319,7 @@ function Search() {
     
     
 
-    return <Wrapper>(
+    return <Wrapper>
         
             {isLoading ? (
                 <Loader>Loading....</Loader>
@@ -337,7 +337,8 @@ function Search() {
                                     <Title>{data?.results[0]?.title || data?.results[0]?.name}</Title>
                                     <OiginTitle>{data?.results[0]?.original_title || data?.results[0]?.original_name}</OiginTitle>
                                     <Date>{data?.results[0].release_date || data?.results[0].first_air_date} / {data?.results[0].media_type && (
-                                        <span>{data.results[0].media_type.charAt(0).toUpperCase() + data.results[0].media_type.slice(1)}</span>
+                                        <span>{data.results[0].media_type.charAt(0).toUpperCase() + data.results[0].media_type.slice(1)}
+                                        </span>
                                     )}</Date>
                                     <OverView>{data?.results[0]?.overview}</OverView>
                                 </LilBox>
