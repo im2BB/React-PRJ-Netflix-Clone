@@ -1,6 +1,6 @@
 {
-  "homepage" :"https://im222b.github.io",
-  "name": "react-ex03",
+  "homepage": "https://im222b.github.io/react-PRJ2",
+  "name": "react-PRJ2",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -12,7 +12,6 @@
     "@types/react": "^18.2.47",
     "@types/react-dom": "^18.2.18",
     "framer-motion": "^11.0.3",
-    "gh-pages": "^6.1.1",
     "react": "^18.2.0",
     "react-beautiful-dnd": "^13.1.1",
     "react-dom": "^18.2.0",
@@ -36,8 +35,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "predeploy":"npm run build",
-    "deploy":"gh-pages -d build"
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
@@ -61,8 +60,7 @@
     "@types/jquery": "^3.5.29",
     "@types/react-beautiful-dnd": "^13.1.8",
     "@types/react-slick": "^0.23.13",
-    "@types/styled-components": "^5.1.34"
+    "@types/styled-components": "^5.1.34",
+    "gh-pages": "^6.1.1"
   }
-  
-
 }
