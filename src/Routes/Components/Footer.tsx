@@ -37,13 +37,30 @@ function Footer() {
         <hr />
         <Fot>
             <Col>
-            <Name>Developer : 이 경훈</Name>
-            <Ather>Tel : 010 6783 0603</Ather>
-            <Ather>Mail : seoulbutter@gmail</Ather>
-            <Ather>Instagram : @im__2b</Ather>
-            <Ather>Github : https://github.com/im222b/react-PRJ2</Ather>
+                <Name>Developer : 이 경훈</Name>
+                <Ather>📞 Tel : 010 6783 0603</Ather>
+                <Ather>✉️ Mail : seoulbutter@gmail</Ather>
+                <Ather >Instagram : @im__2b</Ather>
+                <Ather>Github : https://github.com/im222b/react-PRJ2</Ather>
             </Col>
+            <Col>
+                <Name>기술 사용 스텍</Name>
+                <Ather>React</Ather>
+                <Ather>Node.js</Ather>
+                <Ather>TypeScript</Ather>
+                <Ather>Visual Studio Code</Ather>
+            </Col>
+            <Col>
+                <Name>API</Name>
+                    <Ather>https://www.themoviedb.org</Ather>
+                <Name>Package</Name>
+                    <Ather>Styled-components</Ather>
+                    <Ather>Framer-motion</Ather>
+                    <Ather>Swiper</Ather>
+            </Col>
+
         </Fot>
+        
         </>
     );
     
