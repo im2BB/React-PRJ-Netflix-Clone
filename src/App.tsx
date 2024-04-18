@@ -4,6 +4,7 @@ import Tv from "./Routes/Tv";
 import Search from "./Routes/Search";
 import Header from "./Routes/Components/Header";
 import { QueryClient, QueryClientProvider } from "react-query";
+import Footer from "./Routes/Components/Footer";
 
 function App() {
   const client = new QueryClient();
@@ -19,6 +20,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="movies/:id" element={< Home />} />
         </Routes>
+        <Footer />
       </Router>
     </QueryClientProvider>
 
