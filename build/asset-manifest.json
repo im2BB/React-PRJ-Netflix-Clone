@@ -1,5 +1,6 @@
 {
   "files": {
+<<<<<<< HEAD
     "main.css": "/static/css/main.54aa3d5c.css",
     "main.js": "/static/js/main.c6c2efdd.js",
     "index.html": "/index.html",
@@ -9,5 +10,16 @@
   "entrypoints": [
     "static/css/main.54aa3d5c.css",
     "static/js/main.c6c2efdd.js"
+=======
+    "main.css": "/react-PRJ2/static/css/main.54aa3d5c.css",
+    "main.js": "/react-PRJ2/static/js/main.2a14e2da.js",
+    "index.html": "/react-PRJ2/index.html",
+    "main.54aa3d5c.css.map": "/react-PRJ2/static/css/main.54aa3d5c.css.map",
+    "main.2a14e2da.js.map": "/react-PRJ2/static/js/main.2a14e2da.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.54aa3d5c.css",
+    "static/js/main.2a14e2da.js"
+>>>>>>> 96a7a568b9d12a8ad9da9daefc1d065509f98d23
   ]
 }

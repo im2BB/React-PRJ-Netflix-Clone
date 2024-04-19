@@ -61,6 +61,7 @@ function Footer (){
                     <Ather>Framer-motion</Ather>
                     <Ather>Swiper</Ather>
             </Col>
+            
         </Nav>
         </>
     );
