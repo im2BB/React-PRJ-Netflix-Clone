@@ -1,21 +1,20 @@
 import { Link, NavigateFunction, useMatch, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { motion, useAnimation, useScroll } from "framer-motion";
+import { motion, useAnimate, useAnimation, useScroll } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 const Nav = styled(motion.nav)`
     display: flex;
     justify-content: space-between;
-    position: relative;
     align-items: center;
+    position: fixed;
     width: 100%;
     top: 0;
     font-size: 14px;
     padding: 20px 60px;
     color: white;
     `;
-
 
 const Col = styled.div`
     display: flex;
@@ -55,7 +54,6 @@ const logoVariants = {
             repeat: Infinity,
         },
     },
-
 };
 
 const Items = styled.ul`
@@ -112,11 +110,9 @@ interface IForm {
     keyword : string;
 }
 
-
-
 function Header() {
     const [serchOpen, setSerchOpen] = useState(false);
-    const homeMatch = useMatch("react-PRJ2")
+    const homeMatch = useMatch("")
     const tvMatch = useMatch("tv")
     const inputAnimation = useAnimation();
     const navAnimation = useAnimation();
@@ -139,7 +135,7 @@ function Header() {
             navAnimation.start("top")
             }
         });
-            }, [scrollY] );
+    }, [scrollY] );
     const navigate: NavigateFunction = useNavigate();
     const { register, handleSubmit } = useForm<IForm>();
     const onvaid = (data:IForm) => {
@@ -165,7 +161,7 @@ function Header() {
         </Logo>
                 <Items>
                     <Item>
-                        <Link to="/react-PRJ2">
+                        <Link to="/">
                             Movie  {homeMatch &&<Circle layoutId="circle "/>}
                         </Link>
                     </Item>
@@ -202,7 +198,6 @@ function Header() {
             </Col>
         </Nav>
     );
-
 }
 
 export default Header;
