@@ -40,7 +40,7 @@ const Banner = styled.div<{ $bgPhoto: string }>`
 `;
 
 const Title = styled.h2`
-    font-size: 105px;
+    font-size: 85px;
     margin-bottom: 15px;
 `;
 
@@ -317,7 +317,7 @@ function Tv() {
                             transition={{ type: "tween" }}
                             $bgPhoto={makeImagePath(tv.backdrop_path)}
                         >
-                            <img /> 
+                            <img  /> 
                             <Info variants={infoVariants}>
                             <h4 style={{fontSize:"26px",padding:"10px"}}>{tv.name}</h4>
                             </Info>
@@ -354,7 +354,7 @@ function Tv() {
                     })}
                     </Swiper>
                     </StyledSwiper>
-                    <StyledSwiper>
+            {/* <StyledSwiper>
                 <FrontTitle style={{margin:"20px", fontSize:"25px"}}>최근 인기 프로그램</FrontTitle>
                 <Swiper slidesPerView={5} navigation={true} spaceBetween= {10} >
                     {TodaysTvs?.results.map((tv) =>{
@@ -380,7 +380,7 @@ function Tv() {
                     );
                     })}
                     </Swiper>
-                    </StyledSwiper>
+                    </StyledSwiper> */}
                     <StyledSwiper>
                 <FrontTitle style={{margin:"20px", fontSize:"25px"}}>죽기전에 봐야할 Tv 프로그램</FrontTitle>
                 <Swiper slidesPerView={5} navigation={true} spaceBetween= {10} >
