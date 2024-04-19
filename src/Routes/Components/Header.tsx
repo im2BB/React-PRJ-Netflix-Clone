@@ -161,7 +161,7 @@ function Header() {
         </Logo>
                 <Items>
                     <Item>
-                        <Link to="/">
+                        <Link to="/react-PRJ2">
                             Movie  {homeMatch &&<Circle layoutId="circle "/>}
                         </Link>
                     </Item>
