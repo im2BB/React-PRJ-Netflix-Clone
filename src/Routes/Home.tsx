@@ -8,7 +8,6 @@ import { PathMatch, useMatch, useNavigate } from "react-router-dom";
 import { BsStarFill, BsStarHalf } from "react-icons/bs";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/swiper.min.css";
-
 import "swiper/components/navigation/navigation.min.css";
 import SwiperCore, { Autoplay, Navigation, Pagination } from "swiper";
 
@@ -291,7 +290,7 @@ function Home() {
     const onBoxClicked = (movieId:number) => {
         history(`/movies/${movieId}`)
     };
-    const onOverLayClicked = () => history(`/`)  
+    const onOverLayClicked = () => history(`/react-PRJ2`)  
     
     const clickedMovie =      //클릭한 div에 해당값 들어있는지 확인
     bigMovieMatch?.params.movieId &&

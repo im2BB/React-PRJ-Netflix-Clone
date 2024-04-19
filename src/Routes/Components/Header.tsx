@@ -7,8 +7,8 @@ import { useForm } from "react-hook-form";
 const Nav = styled(motion.nav)`
     display: flex;
     justify-content: space-between;
+    position: relative;
     align-items: center;
-    
     width: 100%;
     top: 0;
     font-size: 14px;
@@ -116,7 +116,7 @@ interface IForm {
 
 function Header() {
     const [serchOpen, setSerchOpen] = useState(false);
-    const homeMatch = useMatch("")
+    const homeMatch = useMatch("react-PRJ2")
     const tvMatch = useMatch("tv")
     const inputAnimation = useAnimation();
     const navAnimation = useAnimation();
@@ -139,7 +139,7 @@ function Header() {
             navAnimation.start("top")
             }
         });
-    }, [scrollY] );
+            }, [scrollY] );
     const navigate: NavigateFunction = useNavigate();
     const { register, handleSubmit } = useForm<IForm>();
     const onvaid = (data:IForm) => {
@@ -165,7 +165,7 @@ function Header() {
         </Logo>
                 <Items>
                     <Item>
-                        <Link to="/">
+                        <Link to="/react-PRJ2">
                             Movie  {homeMatch &&<Circle layoutId="circle "/>}
                         </Link>
                     </Item>
