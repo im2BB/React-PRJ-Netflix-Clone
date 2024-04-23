@@ -12,8 +12,9 @@ import "swiper/components/navigation/navigation.min.css";
 import SwiperCore, { Autoplay, Navigation, Pagination } from "swiper";
 
 const StyledSwiper = styled(Swiper)`
-    
-
+    position: relative;
+    justify-content: center;
+    display: flex;
 `;
 
 
@@ -66,7 +67,6 @@ const OverView = styled.p`
     padding-bottom: 200px;
     width: 50%;
 `;
-
 
 
 const Slider1 = styled(motion.div)`
@@ -319,7 +319,7 @@ function Home() {
                     </Banner>
                     <Slider1>
                         <h1 style={{ margin: "20px", fontSize: "25px" }}>현재 상영중</h1>
-                                <StyledSwiper slidesPerView={6} navigation={true} spaceBetween={15}>
+                                <StyledSwiper slidesPerView={6} autoHeight={true} navigation={true} spaceBetween={15} watchOverflow={true}>
                                     {data?.results.map((movie) => (
                                                 <SwiperSlide 
                                                         key={movie.id}>

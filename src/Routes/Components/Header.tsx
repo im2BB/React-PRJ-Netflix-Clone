@@ -28,7 +28,7 @@ const Logo = styled(motion.svg)`
     fill: ${(props) => props.theme.red};
     path {
         stroke-width: 6px;
-        stroke: white;
+        stroke: #030303;
     }
 `;
 
@@ -112,7 +112,7 @@ interface IForm {
 
 function Header() {
     const [serchOpen, setSerchOpen] = useState(false);
-    const homeMatch = useMatch("")
+    const homeMatch = useMatch("movie")
     const tvMatch = useMatch("tv")
     const inputAnimation = useAnimation();
     const navAnimation = useAnimation();
@@ -193,7 +193,7 @@ function Header() {
                         animate={inputAnimation}
                         initial={{ scaleX : 0  }}
                         transition={{type:"linear"}}
-                        placeholder="영화나 TV프로그램을 검색하세요"/>
+                        placeholder="검색어를 입력하세요"/>
                 </Search>
             </Col>
         </Nav>

@@ -5,6 +5,7 @@ import { useQuery } from "react-query";
 import { makeImagePath } from "./utils";
 import { AnimatePresence, motion } from "framer-motion";
 import { BsStarFill, BsStarHalf } from "react-icons/bs";
+import YouTube, { YouTubeProps } from 'react-youtube';
 
 const Wrapper = styled.div`
     background-color: black;
@@ -296,6 +297,17 @@ function Search() {
     const keyword = new URLSearchParams(location.search).get("keyword");
     const keywordMatch: PathMatch<string> | null  = useMatch("/search/:clickId");
     const page = 1;
+    const onPlayerReady: YouTubeProps['onReady'] = (event) => {
+        event.target.pauseVideo();
+    }
+
+    const opts: YouTubeProps['opts'] = {
+        height: '390',
+        width: '640',
+        playerVars: {
+        autoplay: 1,
+        },
+    };
 
     const { data, isLoading } = useQuery<IGetSearchResult>(
         ["getSearch", keyword, page], 
@@ -406,12 +418,14 @@ function Search() {
                                     <Bigrelease_date>개봉일 : {clickedSearch.release_date || clickedSearch.first_air_date}</Bigrelease_date>
                                     <Bigpopularity> 평점 : {clickedSearch ? renderStars(clickedSearch.vote_average) : null} / {(clickedSearch.vote_average).toFixed(1)} </Bigpopularity>                        
                                     <BigOverview>{clickedSearch.overview}</BigOverview>
+                                    <YouTube videoId="Geqsc1gMe8g" opts={opts} onReady={onPlayerReady} />;
                                     </>}
 
                                     </BigSearch>
                                 </>
                             ): null }
                     </AnimatePresence>
+                    
                 </>
             )}
         
