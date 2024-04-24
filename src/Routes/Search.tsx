@@ -1,11 +1,12 @@
 import { PathMatch, useLocation, useMatch, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { IGetSearchResult, getSearchMulti  } from "../api";
+import { IGetSearchResult, getSearchMulti, getYoutubeList  } from "../api";
 import { useQuery } from "react-query";
 import { makeImagePath } from "./utils";
 import { AnimatePresence, motion } from "framer-motion";
 import { BsStarFill, BsStarHalf } from "react-icons/bs";
 import YouTube, { YouTubeProps } from 'react-youtube';
+import { useEffect, useState } from "react";
 
 const Wrapper = styled.div`
     background-color: black;
@@ -167,7 +168,7 @@ const BigSearch = styled(motion.div)`
     position: absolute;
     width: 60vw;
     height: 90vh;
-    top: 40px;
+    top: 60px;
     left: 0;
     right: 0;
     margin: 0 auto;
@@ -200,7 +201,7 @@ const Bigposter = styled.div`
     background-size: cover;
     margin: 30px;
     position: relative;
-    top:-330px;
+    top:-455px;
     float: left;
     border-radius: 10px;
     box-shadow : 3px 3px 1px black;
@@ -211,7 +212,7 @@ const BigTitle = styled.h3`
     color: ${props => props.theme.white.lighter};
     font-size: 41px;
     position:  relative;
-    top:-165px;
+    top:-345px;
     padding-left: 345px;
 `;
 
@@ -219,42 +220,56 @@ const LlilTitle = styled.h3`
     color: ${props => props.theme.white.lighter};
     font-size: 15px;
     position:  relative;
-    top:-165px;
+    top:-365px;
     padding-left: 520px;
     padding-top: 20px;
 `;
 
-const Biggenres = styled.div`
-    padding: 20px;  
+const Frame = styled.div`
     position:  relative;
-    top:-115px;
-    color: ${props => props.theme.white.lighter};
-    
+    left: 390px;
+    bottom : 760px;
+    height: 60vh;
+    width: 50vw;
+        
 `;
 
 const Bigrelease_date = styled.p`
     padding: 20px;  
     position:  relative;
-    top:-115px;
+    top:-365px;
     color: ${props => props.theme.white.lighter};
     
 `;
 
 const Bigpopularity = styled.p`
-    padding-left: 20px;
-    padding-bottom: 20px;  
+    padding-bottom: 20px;
+    padding-left: 380px;
     position:  relative;
-    top:-115px;
+    top:-365px;
     color: ${props => props.theme.white.lighter};
 `;
 
 const BigOverview = styled.p`
+    height: 30vh;
+    width: 18vw;
     padding: 20px;
     position:  relative;
-    top:-85px;
+    right: 350px;
     color: ${props => props.theme.white.lighter};
     overflow: auto;
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
 `;
+
+
+const Dhk = styled.h1`
+    font-size: 40px;
+    color: white;
+    position: absolute;
+    padding-top: 330px;
+    padding-left: 40px;
+`
 
 const boxVariants = {
     normal: { 
@@ -302,10 +317,12 @@ function Search() {
     }
 
     const opts: YouTubeProps['opts'] = {
-        height: '390',
-        width: '640',
+        height: '540',
+        width: '620',
         playerVars: {
         autoplay: 1,
+        rel: 0, //관련 동영상 표시하지 않음 (근데 별로 쓸모 없는듯..)
+        modestbranding: 1, // 컨트롤 바에 youtube 로고를 표시하지 않음
         },
     };
 
@@ -314,7 +331,31 @@ function Search() {
         () => keyword ? getSearchMulti(keyword, page) : Promise.resolve(),
         { enabled: !!keyword }
     );
-    
+
+
+    const [selectedVideo, setSelectedVideo] = useState<any>(null);
+
+    useEffect(() => {
+        const fetchVideo = async () => {
+            if (keywordMatch && keywordMatch.params.clickId) {
+                try {
+                    const item = data?.results.find((keyword) => keyword.id.toString() === keywordMatch.params.clickId);
+                    if (item) {
+                        const mediaType = item.media_type || "movie"; // media_type가 없을 경우 기본값으로 "movie" 설정
+                        const youtubeData = await getYoutubeList(mediaType, keywordMatch.params.clickId);
+                        setSelectedVideo(youtubeData.results[0]); // 여기서는 첫 번째 비디오만 사용
+                    }
+                } catch (error) {
+                    console.error("Failed to fetch video data: ", error);
+                }
+            } else {
+                setSelectedVideo(null);
+            }
+        };
+
+        fetchVideo();
+    }, [keywordMatch, data]);
+
     const onBoxClicked = (clickId:number) => {  //클릭한 값 
         const clickedItem = data?.results.find(keyword => keyword.id === clickId);
         console.log(clickedItem);
@@ -409,16 +450,23 @@ function Search() {
                                     style={{backgroundImage:`linear-gradient(to top, black,transparent),
                                     url( ${makeImagePath (clickedSearch.backdrop_path) 
                                     })`}} />
+                                    
                                     <BigTitle>{clickedSearch.title || clickedSearch.name}</BigTitle>
                                     <LlilTitle>{clickedSearch.original_title || clickedSearch.original_name}</LlilTitle>
                                     <Bigposter
                                     style={{backgroundImage :`url(${makeImagePath(clickedSearch.poster_path)})`}}
                                     />
-                                    <Biggenres>{clickedSearch.videos}</Biggenres>
+                                    
                                     <Bigrelease_date>개봉일 : {clickedSearch.release_date || clickedSearch.first_air_date}</Bigrelease_date>
                                     <Bigpopularity> 평점 : {clickedSearch ? renderStars(clickedSearch.vote_average) : null} / {(clickedSearch.vote_average).toFixed(1)} </Bigpopularity>                        
                                     <BigOverview>{clickedSearch.overview}</BigOverview>
-                                    <YouTube videoId="Geqsc1gMe8g" opts={opts} onReady={onPlayerReady} />;
+                                    <Frame>
+                                        {selectedVideo && selectedVideo.key ? (
+                                            <YouTube videoId={selectedVideo.key} opts={opts} onReady={onPlayerReady} />
+                                        ) : (
+                                            <Dhk>😅예고편/미리보기가 없어요😅</Dhk>
+                                        )}
+                                    </Frame>
                                     </>}
 
                                     </BigSearch>

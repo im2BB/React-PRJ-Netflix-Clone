@@ -318,6 +318,7 @@ function Home() {
                         <OverView>{data?.results[0].overview}</OverView>
                     </Banner>
                     <Slider1>
+                        
                         <h1 style={{ margin: "20px", fontSize: "25px" }}>현재 상영중</h1>
                                 <StyledSwiper slidesPerView={6} autoHeight={true} navigation={true} spaceBetween={15} watchOverflow={true}>
                                     {data?.results.map((movie) => (

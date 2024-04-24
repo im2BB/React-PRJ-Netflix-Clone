@@ -35,6 +35,17 @@ interface ITv {
     vote_average:number;
 }
 
+interface IYoutube {
+    id: number;
+    backdrop_path: string;
+    poster_path: string;
+    name: string;
+    original_name:string;
+    overview: string;
+    first_air_date:number;
+    popularity:number;
+    vote_average:number;
+}
 
 export interface ISearch {
     id: number;
@@ -78,6 +89,18 @@ export interface IGetTvResult {
         vote_average: number;
     }
 
+
+    export interface IGetYoutubeResult {
+        dates: {
+            maximum: string;
+            minimum: string;
+        };
+        page: number;
+        results: IYoutube[]; 
+        total_pages: number;
+        total_results: number;
+        vote_average: number;
+    }
 
 export interface IGetMoviesResult {
     dates: {
@@ -165,6 +188,7 @@ export interface IGetIGenreList {
     }
 
 
+
     export function getMoviesList() {
         return fetch(`${BASE_PATH}/genre/movie/list?api_key=${API_KEY}&${LANGUAGE}`).then(
             (response) => response.json()
@@ -172,7 +196,20 @@ export interface IGetIGenreList {
     }
 
     export function getTvList() {
-        return fetch(`${BASE_PATH}/genre/tv/list?api_key=${API_KEY}&language=ko-KR`).then(
+        return fetch(`${BASE_PATH}/genre/tv/list?api_key=${API_KEY}&${LANGUAGE}`).then(
             (response) => response.json()
         );
+    }
+
+    export function getYoutubeList(mediaType: string, itemId: string) {
+        let url;
+        if (mediaType === "movie") {
+            url = `${BASE_PATH}/movie/${itemId}/videos?api_key=${API_KEY}&${LANGUAGE}`;
+        } else if (mediaType === "tv") {
+            url = `${BASE_PATH}/tv/${itemId}/videos?api_key=${API_KEY}&${LANGUAGE}`;
+        } else {
+            throw new Error("Invalid media type");
+        }
+    
+        return fetch(url).then((response) => response.json());
     }
