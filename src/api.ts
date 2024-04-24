@@ -2,6 +2,7 @@
 const API_KEY = "ec180f3d7555520fa9d4bcff596736b9";
 const BASE_PATH = "https://api.themoviedb.org/3";
 const LANGUAGE = "language=ko-KR";
+const LANGU = "language=en-EN";
 
 interface IGenreList {
     id:number;
@@ -20,6 +21,7 @@ interface IMovie {
     vote_average:number;
     genre :string;
     videos: boolean;
+    media_type: string;
 }
 
 
@@ -201,12 +203,12 @@ export interface IGetIGenreList {
         );
     }
 
-    export function getYoutubeList(mediaType: string, itemId: string) {
+    export function getYoutubeList(mediaType: string, itemId: string, language?: string) {
         let url;
         if (mediaType === "movie") {
-            url = `${BASE_PATH}/movie/${itemId}/videos?api_key=${API_KEY}&${LANGUAGE}`;
+            url = `${BASE_PATH}/movie/${itemId}/videos?api_key=${API_KEY}&${LANGU}`;
         } else if (mediaType === "tv") {
-            url = `${BASE_PATH}/tv/${itemId}/videos?api_key=${API_KEY}&${LANGUAGE}`;
+            url = `${BASE_PATH}/tv/${itemId}/videos?api_key=${API_KEY}&${LANGU}`;
         } else {
             throw new Error("Invalid media type");
         }

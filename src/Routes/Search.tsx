@@ -264,7 +264,7 @@ const BigOverview = styled.p`
 
 
 const Dhk = styled.h1`
-    font-size: 40px;
+    font-size: 0px;
     color: white;
     position: absolute;
     padding-top: 330px;

@@ -1,6 +1,6 @@
 
 import { useQuery } from "react-query";
-import { IGetIGenreList, IGetMoviesResult, getMovies, getMoviesList, getPopular, getRatedMovies, getUpcoming } from "../api";
+import { IGetIGenreList, IGetMoviesResult, getMovies, getMoviesList, getPopular, getRatedMovies, getUpcoming, getYoutubeList } from "../api";
 import styled from "styled-components";
 import { makeImagePath } from "./utils";
 import { motion,AnimatePresence } from "framer-motion";
@@ -10,6 +10,8 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/swiper.min.css";
 import "swiper/components/navigation/navigation.min.css";
 import SwiperCore, { Autoplay, Navigation, Pagination } from "swiper";
+import YouTube, { YouTubeProps } from "react-youtube";
+import { useEffect, useState } from "react";
 
 const StyledSwiper = styled(Swiper)`
     position: relative;
@@ -153,7 +155,7 @@ const BigTitle = styled.h3`
     color: ${props => props.theme.white.lighter};
     font-size: 41px;
     position:  relative;
-    top:-165px;
+    top:-345px;
     padding-left: 345px;
 `;
 
@@ -161,23 +163,45 @@ const LlilTitle = styled.h3`
     color: ${props => props.theme.white.lighter};
     font-size: 15px;
     position:  relative;
-    top:-165px;
+    top:-365px;
     padding-left: 520px;
     padding-top: 20px;
 `;
 
 const BigOverview = styled.p`
+    height: 30vh;
+    width: 18vw;
     padding: 20px;
     position:  relative;
-    top:-85px;
+    bottom: 100px;
+    right: 350px;
     color: ${props => props.theme.white.lighter};
     overflow: auto;
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
 `;
+
+const Frame = styled.div`
+    position:  relative;
+    left: 390px;
+    bottom : 680px;
+    height: 60vh;
+    width: 50vw;
+        
+`;
+const Dhk = styled.h1`
+    font-size: 28px;
+    color: white;
+    position: absolute;
+    padding-top: 330px;
+    padding-left: 40px;
+`
+
 
 const Bigrelease_date = styled.p`
     padding: 20px;  
     position:  relative;
-    top:-115px;
+    top:-365px;
     color: ${props => props.theme.white.lighter};
     
 `;
@@ -191,10 +215,10 @@ const Biggenres = styled.div`
 `;
 
 const Bigpopularity = styled.p`
-    padding-left: 20px;
-    padding-bottom: 20px;  
+    padding-bottom: 20px;
+    padding-left: 380px;
     position:  relative;
-    top:-115px;
+    top:-365px;
     color: ${props => props.theme.white.lighter};
 `;
 
@@ -204,12 +228,13 @@ const Bigposter = styled.div`
     background-size: cover;
     margin: 30px;
     position: relative;
-    top:-330px;
+    top:-455px;
     float: left;
     border-radius: 10px;
     box-shadow : 3px 3px 1px black;
 
 `;
+
 
 const Info = styled(motion.div)`
     background-color: ${(props) => props.theme.black.mediumdark};
@@ -261,6 +286,10 @@ const renderStars = (rating:number, color = "#f1f169") => {  //별점 출력 함
 function Home() {
     const history = useNavigate()
     const bigMovieMatch: PathMatch<string> | null = useMatch("/movies/:movieId");
+    const keywordMatch: PathMatch<string> | null  = useMatch("/movies/:movieId");
+    const onPlayerReady: YouTubeProps['onReady'] = (event) => {
+        event.target.pauseVideo();
+    }
     
     const { data, isLoading } = useQuery<IGetMoviesResult>(
         ["Getmovies", "GetnowPlaying"],
@@ -282,16 +311,50 @@ function Home() {
         getUpcoming
     );
 
-    const { data: MoviesList } = useQuery<IGetIGenreList>(
-        ["GetUpcoming"],
-        getMoviesList
-    );
+    // const { data: MoviesList } = useQuery<IGetIGenreList>(
+    //     ["GetUpcoming"],
+    //     getMoviesList
+    // );
 
     const onBoxClicked = (movieId:number) => {
         history(`/movies/${movieId}`)
     };
     const onOverLayClicked = () => history(`/react-PRJ2`)  
     
+
+    const opts: YouTubeProps['opts'] = {
+        height: '540',
+        width: '620',
+        playerVars: {
+        autoplay: 1,
+        rel: 0, //관련 동영상 표시하지 않음 (근데 별로 쓸모 없는듯..)
+        modestbranding: 1, // 컨트롤 바에 youtube 로고를 표시하지 않음
+        },
+    };
+
+    const [selectedVideo, setSelectedVideo] = useState<any>(null);
+
+    useEffect(() => {
+        const fetchVideo = async () => {
+            if (bigMovieMatch && bigMovieMatch.params.movieId) {
+                try {
+                    const item = data?.results.find((keyword) => keyword.id.toString() === bigMovieMatch.params.movieId);
+                    if (item) {
+                        const mediaType = item.media_type || "movie"; // media_type가 없을 경우 기본값으로 "movie" 설정
+                        const youtubeData = await getYoutubeList(mediaType, bigMovieMatch.params.movieId);
+                        setSelectedVideo(youtubeData.results[0]); // 여기서는 첫 번째 비디오만 사용
+                    }
+                } catch (error) {
+                    console.error("Failed to fetch video data: ", error);
+                }
+            } else {
+                setSelectedVideo(null);
+            }
+        };
+
+        fetchVideo();
+    }, [keywordMatch, data]);
+
     const clickedMovie =      //클릭한 div에 해당값 들어있는지 확인
     bigMovieMatch?.params.movieId &&
     (
@@ -451,6 +514,13 @@ function Home() {
                                 <Bigrelease_date> 개봉일 : {clickedMovie.release_date}</Bigrelease_date>
                                 <Bigpopularity> 평점 : {clickedMovie ? renderStars(clickedMovie.vote_average) : null} / {(clickedMovie.vote_average).toFixed(1)} </Bigpopularity>                        
                                 <BigOverview>{clickedMovie.overview}</BigOverview>
+                                <Frame>
+                                    {selectedVideo && selectedVideo.key ? (
+                                        <YouTube videoId={selectedVideo.key} opts={opts} onReady={onPlayerReady} />
+                                    ) : (
+                                        <Dhk>😅 예고편/미리보기가 준비되어있지 않습니다 😅</Dhk>
+                                    )}
+                                </Frame>
                                 </>}
 
                             </BigMovie>
