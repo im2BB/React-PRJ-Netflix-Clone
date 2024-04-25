@@ -161,7 +161,7 @@ const BigOverview = styled.p`
     width: 18vw;
     padding: 20px;
     position:  relative;
-    bottom: 100px;
+    bottom: 60px;
     right: 350px;
     color: ${props => props.theme.white.lighter};
     overflow: auto;

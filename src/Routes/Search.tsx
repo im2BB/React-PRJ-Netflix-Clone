@@ -254,6 +254,7 @@ const BigOverview = styled.p`
     height: 30vh;
     width: 18vw;
     padding: 20px;
+    bottom: 60px;
     position:  relative;
     right: 350px;
     color: ${props => props.theme.white.lighter};
