@@ -286,7 +286,6 @@ const renderStars = (rating:number, color = "#f1f169") => {  //별점 출력 함
 function Home() {
     const history = useNavigate()
     const bigMovieMatch: PathMatch<string> | null = useMatch("/movies/:movieId");
-    const keywordMatch: PathMatch<string> | null  = useMatch("/movies/:movieId");
     const onPlayerReady: YouTubeProps['onReady'] = (event) => {
         event.target.pauseVideo();
     }
@@ -339,9 +338,9 @@ function Home() {
             if (bigMovieMatch && bigMovieMatch.params.movieId) {
                 try {
                     const youtubeData = await getYoutubeList("movie", bigMovieMatch.params.movieId);
-                    setSelectedVideo(youtubeData.results[0]); // Use the first video only
+                    setSelectedVideo(youtubeData.results[0]); // 검색된 첫번째 사용
                 } catch (error) {
-                    console.error("Failed to fetch video data: ", error);
+                    console.error("데이터가 없는뎁쇼?: ", error);
                 }
             } else {
                 setSelectedVideo(null);
@@ -362,7 +361,7 @@ function Home() {
     console.log(clickedMovie);
     
     
-        SwiperCore.use([Navigation,Pagination, Autoplay]);
+    SwiperCore.use([Navigation,Pagination, Autoplay]);
         
         return <Wrapper>
                 {isLoading ? (<Loder>Loding....</Loder>

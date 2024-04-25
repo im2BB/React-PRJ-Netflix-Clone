@@ -1,6 +1,6 @@
 
 import { useQuery } from "react-query";
-import { IGetTvResult, getTvs, getPopulars, getTodaysTvs, getTopRated } from "../api";
+import { IGetTvResult, getTvs, getPopulars, getTodaysTvs, getTopRated, getYoutubeList } from "../api";
 import styled from "styled-components";
 import { makeImagePath } from "./utils";
 import { motion,AnimatePresence } from "framer-motion";
@@ -10,7 +10,8 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/swiper.min.css";
 import "swiper/components/navigation/navigation.min.css";
 import SwiperCore, { Autoplay, Navigation, Pagination } from "swiper";
-
+import YouTube, { YouTubeProps } from "react-youtube";
+import { useEffect, useState } from "react";
 
 
 
@@ -143,7 +144,7 @@ const BigCover = styled.div`
     width: 100%;
     background-size: cover;
     background-position: center center;
-    height: 400px;
+    height: 420px;
     color: ${props => props.theme.white.lighter};
 `;
 
@@ -152,33 +153,54 @@ const BigTitle = styled.h3`
     color: ${props => props.theme.white.lighter};
     font-size: 41px;
     position:  relative;
-    top:-165px;
+    top:-345px;
     padding-left: 345px;
 `;
-
 const BigOverview = styled.p`
+    height: 30vh;
+    width: 18vw;
     padding: 20px;
     position:  relative;
-    top:-85px;
+    bottom: 100px;
+    right: 350px;
     color: ${props => props.theme.white.lighter};
     overflow: auto;
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
 `;
+const Frame = styled.div`
+    position:  relative;
+    left: 390px;
+    bottom : 680px;
+    height: 60vh;
+    width: 50vw;
+        
+`;
+
+const Dhk = styled.h1`
+    font-size: 28px;
+    color: white;
+    position: absolute;
+    padding-top: 330px;
+    padding-left: 40px;
+`
 
 const Bigrelease_date = styled.p`
     padding: 20px;  
     position:  relative;
-    top:-115px;
+    top:-365px;
     color: ${props => props.theme.white.lighter};
     
 `;
 
 const Bigpopularity = styled.p`
-    padding-left: 20px;
-    padding-bottom: 20px;  
+    padding-bottom: 20px;
+    padding-left: 380px;
     position:  relative;
-    top:-115px;
+    top:-365px;
     color: ${props => props.theme.white.lighter};
 `;
+
 
 const Bigposter = styled.div`
     width: 300px;
@@ -186,7 +208,7 @@ const Bigposter = styled.div`
     background-size: cover;
     margin: 30px;
     position: relative;
-    top:-330px;
+    top:-455px;
     float: left;
     border-radius: 10px;
     box-shadow : 3px 3px 1px black;
@@ -223,6 +245,7 @@ const infoVariants = {
     }
 }
 
+
 const renderStars = (rating:number, color = "#f1f169") => {  //별점 출력 함수
     const integerPart = Math.floor(rating / 2); // 평점을 2로 나눈 정수 부분을 계산
     const hasHalfStar = rating % 2 !== 0; // 반 별표가 있는지 확인
@@ -246,6 +269,9 @@ const renderStars = (rating:number, color = "#f1f169") => {  //별점 출력 함
 function Tv() {
     const history = useNavigate()
     const bigTvMatch: PathMatch<string> | null = useMatch("/tv/:tvid");
+    const onPlayerReady: YouTubeProps['onReady'] = (event) => {
+        event.target.pauseVideo();
+    }
     const { data, isLoading } = useQuery<IGetTvResult>(
         ["tv", "onTheAir"],
         getTvs
@@ -270,15 +296,47 @@ function Tv() {
         history(`/tv/${tvid}`)
     };
     const onOverLayClicked = () => history(`/tv`)  
+
+    const opts: YouTubeProps['opts'] = {
+        height: '540',
+        width: '620',
+        playerVars: {
+        autoplay: 1,
+        rel: 0, //관련 동영상 표시하지 않음 (근데 별로 쓸모 없는듯..)
+        modestbranding: 1, // 컨트롤 바에 youtube 로고를 표시하지 않음
+        },
+    };
+
+
+    const [selectedVideo, setSelectedVideo] = useState<any>(null);
+
+    useEffect(() => {
+        const fetchVideo = async () => {
+            if (bigTvMatch && bigTvMatch.params.tvid) { 
+                try {
+                    const youtubeData = await getYoutubeList("tv", bigTvMatch.params.tvid); 
+                    setSelectedVideo(youtubeData.results[0]); // 검색된 첫번째 사용
+                } catch (error) {
+                    console.error("데이터가 없는뎁쇼?: ", error);
+                }
+            } else {
+                setSelectedVideo(null);
+            }
+        };
+    
+        fetchVideo();
+    }, [bigTvMatch]);
+
+
     
     const clickedtv =      //클릭한 div에 해당값 들어있는지 확인
-    bigTvMatch?.params.tvid &&( 
-    data?.results.find((tv) => tv.id+"" === bigTvMatch.params.tvid) ||
-    Populars?.results.find((tv) => tv.id+"" === bigTvMatch.params.tvid) ||
-    TodaysTvs?.results.find((tv) => tv.id+"" === bigTvMatch.params.tvid) ||
-    TopRated?.results.find((tv) => tv.id+"" === bigTvMatch.params.tvid) 
+    bigTvMatch?.params.tvid &&
+    ( 
+        data?.results.find((tv) => tv.id+"" === bigTvMatch.params.tvid) ||
+        Populars?.results.find((tv) => tv.id+"" === bigTvMatch.params.tvid) ||
+        TodaysTvs?.results.find((tv) => tv.id+"" === bigTvMatch.params.tvid) ||
+        TopRated?.results.find((tv) => tv.id+"" === bigTvMatch.params.tvid) 
     );
-    
     console.log(clickedtv);
 
     SwiperCore.use([Navigation,Pagination, Autoplay]);
@@ -434,7 +492,16 @@ function Tv() {
                         <Bigrelease_date>  첫 방영일 :{clickedtv.first_air_date}</Bigrelease_date>
                         <Bigpopularity> {clickedtv ? renderStars(clickedtv.vote_average) : null} / {(clickedtv.vote_average).toFixed(1)} </Bigpopularity>                        
                         <BigOverview>{clickedtv.overview}</BigOverview>
-                        </>}
+                        <Frame>
+                            {selectedVideo && selectedVideo.key ? (
+                                <YouTube videoId={selectedVideo.key} opts={opts} onReady={onPlayerReady} />
+                            ) : (
+                                <Dhk>😅 예고편/미리보기가 준비되어있지 않습니다 😅</Dhk>
+                            )}
+                        </Frame>
+                                </>}
+                        
+                        
                         
                         </Bigtv>
                         
