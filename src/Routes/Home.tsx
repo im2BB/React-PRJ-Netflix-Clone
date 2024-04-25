@@ -338,12 +338,8 @@ function Home() {
         const fetchVideo = async () => {
             if (bigMovieMatch && bigMovieMatch.params.movieId) {
                 try {
-                    const item = data?.results.find((keyword) => keyword.id.toString() === bigMovieMatch.params.movieId);
-                    if (item) {
-                        const mediaType = item.media_type || "movie"; // media_type가 없을 경우 기본값으로 "movie" 설정
-                        const youtubeData = await getYoutubeList(mediaType, bigMovieMatch.params.movieId);
-                        setSelectedVideo(youtubeData.results[0]); // 여기서는 첫 번째 비디오만 사용
-                    }
+                    const youtubeData = await getYoutubeList("movie", bigMovieMatch.params.movieId);
+                    setSelectedVideo(youtubeData.results[0]); // Use the first video only
                 } catch (error) {
                     console.error("Failed to fetch video data: ", error);
                 }
@@ -351,9 +347,9 @@ function Home() {
                 setSelectedVideo(null);
             }
         };
-
+    
         fetchVideo();
-    }, [keywordMatch, data]);
+    }, [bigMovieMatch]);
 
     const clickedMovie =      //클릭한 div에 해당값 들어있는지 확인
     bigMovieMatch?.params.movieId &&

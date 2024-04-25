@@ -203,15 +203,29 @@ export interface IGetIGenreList {
         );
     }
 
-    export function getYoutubeList(mediaType: string, itemId: string, language?: string) {
+    export function getYoutubeList(mediaType: string, itemId: string, language?: string): Promise<any> {
         let url;
+        let searchLanguage = "ko-KR"; // 우선적으로 사용할 언어 설정
+    
+        if (language && language.toLowerCase() === "en-en") {
+            searchLanguage = "en-EN"; // 입력된 언어 값이 "en-EN"인 경우, 검색 언어를 변경
+        }
+    
         if (mediaType === "movie") {
-            url = `${BASE_PATH}/movie/${itemId}/videos?api_key=${API_KEY}&${LANGU}`;
+            url = `${BASE_PATH}/movie/${itemId}/videos?api_key=${API_KEY}&language=${searchLanguage}`;
         } else if (mediaType === "tv") {
-            url = `${BASE_PATH}/tv/${itemId}/videos?api_key=${API_KEY}&${LANGU}`;
+            url = `${BASE_PATH}/tv/${itemId}/videos?api_key=${API_KEY}&language=${searchLanguage}`;
         } else {
             throw new Error("Invalid media type");
         }
     
-        return fetch(url).then((response) => response.json());
+        return fetch(url)
+            .then((response) => response.json())
+            .then((data) => {
+                // 만약 검색 결과가 없고, 언어가 "ko-KR"일 경우 다시 영어로 검색
+                if (data.results.length === 0 && searchLanguage === "ko-KR") {
+                    return getYoutubeList(mediaType, itemId, "en-EN");
+                }
+                return data;
+            });
     }
