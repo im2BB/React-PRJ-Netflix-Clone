@@ -4,8 +4,19 @@ const BASE_PATH = "https://api.themoviedb.org/3";
 const LANGUAGE = "language=ko-KR";
 const LANGU = "language=en-EN";
 
-interface IGenreList {
-    id:number;
+interface IPepleList {
+    adult:string;
+    gender:number;
+    id: string;
+    known_for_department: string;
+    name: string;
+    original_name: string;
+    popularity: number;
+    profile_path: string;
+    cast_id: number;
+    character: string;
+    credit_id: number;
+    order: number;
 
 }
 
@@ -122,7 +133,7 @@ export interface IGetIGenreList {
         minimum: string;
     };
     page: number;
-    results: IGenreList[];
+    results: IPepleList[];
     total_pages: number;
     total_results: number;
     vote_average:number;
@@ -203,6 +214,9 @@ export interface IGetIGenreList {
         );
     }
 
+
+
+
     export function getYoutubeList(mediaType: string, itemId: string, language?: string): Promise<any> {
         let url;
         let searchLanguage = "ko-KR"; // 우선적으로 사용할 언어 설정
@@ -222,7 +236,7 @@ export interface IGetIGenreList {
         return fetch(url)
             .then((response) => response.json())
             .then((data) => {
-                // 만약 검색 결과가 없고, 언어가 "ko-KR"일 경우 다시 영어로 검색
+                // 만약 검색 결과가 없음 en으로 검색
                 if (data.results.length === 0 && searchLanguage === "ko-KR") {
                     return getYoutubeList(mediaType, itemId, "en-EN");
                 }

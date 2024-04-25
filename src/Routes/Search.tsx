@@ -26,7 +26,8 @@ const Banner = styled.div<{ $bgPhoto: string }>`
     flex-direction: column;
     justify-content: center;
     padding: 60px;
-    background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)), url(${props => props.$bgPhoto});
+    background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)), 
+    url(${props => props.$bgPhoto});
     background-size: cover;
 `;
 
@@ -98,8 +99,8 @@ const MainBox = styled.div`
 `
 
 const BigPhoto = styled.div<{ $bgPhoto: string }>`
-    color: ${props => props.theme.white.lighter}; 
-    background-color: white;
+    //color: ${props => props.theme.white.lighter}; 
+    //background-color: white;
     background-image: url(${props => props.$bgPhoto});
     background-size: cover;
     background-position: center center;
@@ -110,8 +111,8 @@ const BigPhoto = styled.div<{ $bgPhoto: string }>`
     `;
 
 const LilPhoto = styled.div<{ $bgPhoto: string }>`
-    color: ${props => props.theme.white.lighter}; 
-    background-color: white;
+    //color: ${props => props.theme.white.lighter}; 
+   // background-color: white;
     background-image: url(${props => props.$bgPhoto});
     background-size: cover;
     background-position: center center;
@@ -191,7 +192,7 @@ const BigCover = styled.div`
     background-size: cover;
     background-position: center center;
     height: 420px;
-    color: ${props => props.theme.white.lighter};
+    //color: ${props => props.theme.white.lighter};
 
 `;
 
@@ -209,7 +210,7 @@ const Bigposter = styled.div`
 `;
 
 const BigTitle = styled.h3`
-    color: ${props => props.theme.white.lighter};
+    //color: ${props => props.theme.white.lighter};
     font-size: 41px;
     position:  relative;
     top:-345px;
@@ -217,7 +218,7 @@ const BigTitle = styled.h3`
 `;
 
 const LlilTitle = styled.h3`
-    color: ${props => props.theme.white.lighter};
+    //color: ${props => props.theme.white.lighter};
     font-size: 15px;
     position:  relative;
     top:-365px;
@@ -238,7 +239,7 @@ const Bigrelease_date = styled.p`
     padding: 20px;  
     position:  relative;
     top:-365px;
-    color: ${props => props.theme.white.lighter};
+    //color: ${props => props.theme.white.lighter};
     
 `;
 
@@ -247,7 +248,7 @@ const Bigpopularity = styled.p`
     padding-left: 380px;
     position:  relative;
     top:-365px;
-    color: ${props => props.theme.white.lighter};
+    //color: ${props => props.theme.white.lighter};
 `;
 
 const BigOverview = styled.p`
@@ -257,7 +258,7 @@ const BigOverview = styled.p`
     bottom: 60px;
     position:  relative;
     right: 350px;
-    color: ${props => props.theme.white.lighter};
+    //color: ${props => props.theme.white.lighter};
     overflow: auto;
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none; /* Firefox */
@@ -332,9 +333,10 @@ function Search() {
         () => keyword ? getSearchMulti(keyword, page) : Promise.resolve(),
         { enabled: !!keyword }
     );
-
-
     const [selectedVideo, setSelectedVideo] = useState<any>(null);
+
+
+
 
     useEffect(() => {
         const fetchVideo = async () => {
@@ -424,7 +426,7 @@ function Search() {
                                                     <LilType>{keywords.media_type && (
                                                         <span>{keywords.media_type.charAt(0).toUpperCase() + keywords.media_type.slice(1)}</span>
                                                     )}</LilType>
-                                                    <LilOverView>{keywords.overview.length > 150 ? keywords.overview.substring(0, 150) + '.....' : keywords.overview}</LilOverView>
+                                                    <LilOverView>{keywords.overview.length > 150 ? keywords.overview.substring(0, 120) + '.....' : keywords.overview}</LilOverView>
                                                 </LilBoxtwo>
                                         </BoxTwo>
                                     ))}
@@ -468,6 +470,7 @@ function Search() {
                                             <Dhk>😅예고편/미리보기가 없어요😅</Dhk>
                                         )}
                                     </Frame>
+                                    
                                     </>}
 
                                     </BigSearch>

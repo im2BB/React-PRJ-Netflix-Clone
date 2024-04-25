@@ -70,7 +70,7 @@ const Item = styled.li`
     flex-direction: column;
     position: relative;
     &:hover {
-        color: ${(props) => props.theme.white.lighter};
+        color: ${(props) => props.theme.white.darker};
     }
 `;
 
@@ -112,7 +112,7 @@ interface IForm {
 
 function Header() {
     const [serchOpen, setSerchOpen] = useState(false);
-    const homeMatch = useMatch("movie")
+    const homeMatch = useMatch("react-PRJ2")
     const tvMatch = useMatch("tv")
     const inputAnimation = useAnimation();
     const navAnimation = useAnimation();

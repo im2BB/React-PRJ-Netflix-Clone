@@ -1,6 +1,6 @@
 
 import { useQuery } from "react-query";
-import { IGetIGenreList, IGetMoviesResult, getMovies, getMoviesList, getPopular, getRatedMovies, getUpcoming, getYoutubeList } from "../api";
+import { IGetMoviesResult, getMovies,  getPopular, getRatedMovies, getUpcoming, getYoutubeList } from "../api";
 import styled from "styled-components";
 import { makeImagePath } from "./utils";
 import { motion,AnimatePresence } from "framer-motion";
@@ -13,16 +13,15 @@ import SwiperCore, { Autoplay, Navigation, Pagination } from "swiper";
 import YouTube, { YouTubeProps } from "react-youtube";
 import { useEffect, useState } from "react";
 
-const StyledSwiper = styled(Swiper)`
-    position: relative;
-    justify-content: center;
-    display: flex;
-`;
 
 
 const Wrapper = styled.div`
     background-color: black;
     padding-bottom: 200px;
+    `;
+
+const StyledSwiper = styled(Swiper)`
+    
 `;
 
 const Loder = styled.div`
@@ -41,7 +40,7 @@ const Banner = styled.div<{ $bgPhoto: string }>`
     background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)),
     url(${(props) => props.$bgPhoto });
     background-size: cover;
-    pointer-events: none;
+    
 `;
 
 const Title = styled.h2`
@@ -73,12 +72,13 @@ const OverView = styled.p`
 
 const Slider1 = styled(motion.div)`
     top: -350px;
+    
 `
 
 const Box = styled(motion.div)<{$bgPhoto:string}>`
-    color: ${props => props.theme.white.lighter}; 
+    //color: ${props => props.theme.white.lighter}; 
     background-color: white;
-    background-image: url(${props => props.$bgPhoto});
+    background-image: url(${(props) => props.$bgPhoto });
     background-size: cover;
     background-position: center center;
     transform: translate(-10%, -10%);
@@ -87,7 +87,6 @@ const Box = styled(motion.div)<{$bgPhoto:string}>`
     z-index: 1000;
     border-radius: 2px;
     position: relative;
-    
 `;    
 
 
@@ -248,6 +247,10 @@ const Info = styled(motion.div)`
     }
 `;
 
+const Img = styled(motion.img)`
+    background-color: ${(props) => props.theme.black.mediumdark};
+    color: ${props => props.theme.white.lighter};
+`;
 
 const infoVariants = {
     hover: {
@@ -320,6 +323,7 @@ function Home() {
     };
     const onOverLayClicked = () => history(`/react-PRJ2`)  
     
+    
 
     const opts: YouTubeProps['opts'] = {
         height: '540',
@@ -338,7 +342,7 @@ function Home() {
             if (bigMovieMatch && bigMovieMatch.params.movieId) {
                 try {
                     const youtubeData = await getYoutubeList("movie", bigMovieMatch.params.movieId);
-                    setSelectedVideo(youtubeData.results[0]); // 검색된 첫번째 사용
+                    setSelectedVideo(youtubeData.results[0]); // Use the first video only
                 } catch (error) {
                     console.error("데이터가 없는뎁쇼?: ", error);
                 }
@@ -361,7 +365,7 @@ function Home() {
     console.log(clickedMovie);
     
     
-    SwiperCore.use([Navigation,Pagination, Autoplay]);
+        SwiperCore.use([Navigation,Pagination, Autoplay]);
         
         return <Wrapper>
                 {isLoading ? (<Loder>Loding....</Loder>
@@ -378,7 +382,7 @@ function Home() {
                     <Slider1>
                         
                         <h1 style={{ margin: "20px", fontSize: "25px" }}>현재 상영중</h1>
-                                <StyledSwiper slidesPerView={6} autoHeight={true} navigation={true} spaceBetween={15} watchOverflow={true}>
+                                <StyledSwiper slidesPerView={5} autoHeight={true} navigation={true} spaceBetween={15} watchOverflow={true}>
                                     {data?.results.map((movie) => (
                                                 <SwiperSlide 
                                                         key={movie.id}>
@@ -391,19 +395,20 @@ function Home() {
                                                             transition={{ type: "tween" }}
                                                             $bgPhoto={makeImagePath(movie.backdrop_path)}
                                                     >
-                                                        <img />
+                                                        
                                                         <Info variants={infoVariants}>
                                                             <h4 style={{ fontSize: "26px", padding: "10px" }}>{movie.title}</h4>
                                                         </Info>
                                                     </Box>
                                                 </SwiperSlide>
+                                                
                                     ))}
                                 </StyledSwiper>
                     </Slider1>
-
+                    
                     <Slider1>
                         <h1 style={{ margin: "20px", fontSize: "25px" }}>죽기전에 봐야 할 영화</h1>
-                        <StyledSwiper slidesPerView={6} navigation={true} spaceBetween={10}>
+                        <StyledSwiper slidesPerView={5} navigation={true} spaceBetween={15} watchOverflow={true}>
                             {RatedMovie?.results.map((movie) => {
                                 if (data?.results.some((dataMovie) => dataMovie.id === movie.id)) return null;
                                 return (
@@ -417,7 +422,7 @@ function Home() {
                                             transition={{ type: "tween" }}
                                             $bgPhoto={makeImagePath(movie.backdrop_path)}
                                         >
-                                            <img />
+                                            
                                             <Info variants={infoVariants}>
                                                 <h4 style={{ fontSize: "26px", padding: "10px" }}>{movie.title}</h4>
                                             </Info>
@@ -430,7 +435,7 @@ function Home() {
 
                     <Slider1>
                         <h1 style={{ margin: "20px", fontSize: "25px" }}>인기 상영작</h1>
-                        <StyledSwiper slidesPerView={6} navigation={true} spaceBetween={10}>
+                        <StyledSwiper  slidesPerView={5} navigation={true} spaceBetween={15} watchOverflow={true}>
                             {PopularMovie?.results.map((movie) => {
                                 if (data?.results.some((dataMovie) => dataMovie.id === movie.id)) return null;
                                 return (
@@ -444,7 +449,7 @@ function Home() {
                                             transition={{ type: "tween" }}
                                             $bgPhoto={makeImagePath(movie.backdrop_path)}
                                         >
-                                            <img />
+                                        
                                             <Info variants={infoVariants}>
                                                 <h4 style={{ fontSize: "26px", padding: "10px" }}>{movie.title}</h4>
                                             </Info>
@@ -457,7 +462,7 @@ function Home() {
 
                     <Slider1>
                         <h1 style={{ margin: "20px", fontSize: "25px" }}>예정작</h1>
-                        <StyledSwiper slidesPerView={6} navigation={true} spaceBetween={10}>
+                        <StyledSwiper  slidesPerView={5} navigation={true} spaceBetween={15} watchOverflow={true}>
                             {Upcoming?.results.map((movie) => {
                                 if (data?.results.some((dataMovie) => dataMovie.id === movie.id)) return null;
                                 return (
@@ -471,7 +476,7 @@ function Home() {
                                             transition={{ type: "tween" }}
                                             $bgPhoto={makeImagePath(movie.backdrop_path)}
                                         >
-                                            <img />
+                                            
                                             <Info variants={infoVariants}>
                                                 <h4 style={{ fontSize: "26px", padding: "10px" }}>{movie.title}</h4>
                                             </Info>
