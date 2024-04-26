@@ -313,10 +313,7 @@ function Home() {
         getUpcoming
     );
 
-    // const { data: MoviesList } = useQuery<IGetIGenreList>(
-    //     ["GetUpcoming"],
-    //     getMoviesList
-    // );
+    const [selectedVideo, setSelectedVideo] = useState<any>(null);
 
     const onBoxClicked = (movieId:number) => {
         history(`/movies/${movieId}`)
@@ -335,7 +332,7 @@ function Home() {
         },
     };
 
-    const [selectedVideo, setSelectedVideo] = useState<any>(null);
+    
 
     useEffect(() => {
         const fetchVideo = async () => {

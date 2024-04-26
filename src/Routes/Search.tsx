@@ -1,12 +1,13 @@
 import { PathMatch, useLocation, useMatch, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { IGetSearchResult, getSearchMulti, getYoutubeList  } from "../api";
+import { IGetSearchResult,  getSearchMulti, getYoutubeList  } from "../api";
 import { useQuery } from "react-query";
 import { makeImagePath } from "./utils";
 import { AnimatePresence, motion } from "framer-motion";
 import { BsStarFill, BsStarHalf } from "react-icons/bs";
 import YouTube, { YouTubeProps } from 'react-youtube';
 import { useEffect, useState } from "react";
+import ReactPlayer from 'react-player/lazy';
 
 const Wrapper = styled.div`
     background-color: black;
@@ -185,16 +186,25 @@ const BigSearch = styled(motion.div)`
     
 `;
 
-
+const BigMain = styled.div`
+    display: flex;
+    flex-wrap: wrap;
+`;
 
 const BigCover = styled.div`
     width: 100%;
     background-size: cover;
     background-position: center center;
     height: 420px;
-    //color: ${props => props.theme.white.lighter};
 
 `;
+const BigSerch = styled.div`
+    height: 0;
+    width: 50vw;
+    padding-top: 60px;
+`;
+
+
 
 const Bigposter = styled.div`
     width: 300px;
@@ -206,37 +216,28 @@ const Bigposter = styled.div`
     float: left;
     border-radius: 10px;
     box-shadow : 3px 3px 1px black;
+    
 
 `;
 
 const BigTitle = styled.h3`
-    //color: ${props => props.theme.white.lighter};
+    width: 50vw;
     font-size: 41px;
     position:  relative;
-    top:-345px;
-    padding-left: 345px;
+    top:-355px;
+    
 `;
 
 const LlilTitle = styled.h3`
-    //color: ${props => props.theme.white.lighter};
     font-size: 15px;
     position:  relative;
     top:-365px;
-    padding-left: 520px;
+    padding-left: 90px;
     padding-top: 20px;
 `;
 
-const Frame = styled.div`
-    position:  relative;
-    left: 390px;
-    bottom : 760px;
-    height: 60vh;
-    width: 50vw;
-        
-`;
-
 const Bigrelease_date = styled.p`
-    padding: 20px;  
+    padding-top: 20px;
     position:  relative;
     top:-365px;
     //color: ${props => props.theme.white.lighter};
@@ -244,33 +245,46 @@ const Bigrelease_date = styled.p`
 `;
 
 const Bigpopularity = styled.p`
+    position: center center;
     padding-bottom: 20px;
-    padding-left: 380px;
+    padding-left: 50px;
     position:  relative;
     top:-365px;
     //color: ${props => props.theme.white.lighter};
 `;
 
-const BigOverview = styled.p`
-    height: 30vh;
-    width: 18vw;
+const Frame = styled.div`
+    position: relative;
+    top: -440px;
+    height: 70vh;
+    width: 60vw;
     padding: 20px;
-    bottom: 60px;
-    position:  relative;
-    right: 350px;
-    //color: ${props => props.theme.white.lighter};
-    overflow: auto;
-    -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: none; /* Firefox */
+    .player {
+        position: absolute;
+        left: 0px;
+        width: 100%;
+        height: 100%;
+        border-radius: 10px;
+        overflow: hidden;
+    }
 `;
 
+const BigOverview = styled.p`
+    padding-bottom: 20px;
+    padding-left: 50px;
+    position:  relative;
+    width: 30vw;
+    height: 25vh;
+    top:-365px;
+    overflow: auto;
+    
+`;
 
 const Dhk = styled.h1`
     font-size: 0px;
     color: white;
     position: absolute;
-    padding-top: 330px;
-    padding-left: 40px;
+
 `
 
 const boxVariants = {
@@ -319,8 +333,7 @@ function Search() {
     }
 
     const opts: YouTubeProps['opts'] = {
-        height: '540',
-        width: '620',
+
         playerVars: {
         autoplay: 1,
         rel: 0, //관련 동영상 표시하지 않음 (근데 별로 쓸모 없는듯..)
@@ -334,7 +347,6 @@ function Search() {
         { enabled: !!keyword }
     );
     const [selectedVideo, setSelectedVideo] = useState<any>(null);
-
 
 
 
@@ -358,6 +370,9 @@ function Search() {
 
         fetchVideo();
     }, [keywordMatch, data]);
+
+
+
 
     const onBoxClicked = (clickId:number) => {  //클릭한 값 
         const clickedItem = data?.results.find(keyword => keyword.id === clickId);
@@ -449,28 +464,40 @@ function Search() {
                                     
                                     {clickedSearch &&
                                     <>
+                                    <BigMain>
                                     <BigCover
                                     style={{backgroundImage:`linear-gradient(to top, black,transparent),
                                     url( ${makeImagePath (clickedSearch.backdrop_path) 
                                     })`}} />
+                                        <BigSerch>
+                                                <Bigposter
+                                                style={{backgroundImage :`url(${makeImagePath(clickedSearch.poster_path)})`}}/>
+                                                <BigTitle>{clickedSearch.title || clickedSearch.name}</BigTitle>
+                                                <LlilTitle>{clickedSearch.original_title || clickedSearch.original_name}</LlilTitle>
+                                                <Bigrelease_date>개봉일 : {clickedSearch.release_date || clickedSearch.first_air_date}</Bigrelease_date>
+                                                <Bigpopularity> 평점 : {clickedSearch ? renderStars(clickedSearch.vote_average) : null} / {(clickedSearch.vote_average).toFixed(1)} </Bigpopularity>                        
+                                                <BigOverview>{clickedSearch.overview}</BigOverview>
+                                                <Frame>
+                                                        {selectedVideo && selectedVideo.key ? (
+                                                            <ReactPlayer 
+                                                            className="react-player" 
+                                                            url={`https://www.youtube.com/watch?v=${selectedVideo.key}`}
+                                                            width="100%" 
+                                                            height="100%" 
+                                                            playing={true} 
+                                                            loop={true} />
+                                                        ) : (
+                                                            <Dhk>😅예고편/미리보기가 없어요😅</Dhk>
+                                                        )}
+                                                </Frame>
+                                                
+                                        </BigSerch>
                                     
-                                    <BigTitle>{clickedSearch.title || clickedSearch.name}</BigTitle>
-                                    <LlilTitle>{clickedSearch.original_title || clickedSearch.original_name}</LlilTitle>
-                                    <Bigposter
-                                    style={{backgroundImage :`url(${makeImagePath(clickedSearch.poster_path)})`}}
-                                    />
+                                        
+                                            
                                     
-                                    <Bigrelease_date>개봉일 : {clickedSearch.release_date || clickedSearch.first_air_date}</Bigrelease_date>
-                                    <Bigpopularity> 평점 : {clickedSearch ? renderStars(clickedSearch.vote_average) : null} / {(clickedSearch.vote_average).toFixed(1)} </Bigpopularity>                        
-                                    <BigOverview>{clickedSearch.overview}</BigOverview>
-                                    <Frame>
-                                        {selectedVideo && selectedVideo.key ? (
-                                            <YouTube videoId={selectedVideo.key} opts={opts} onReady={onPlayerReady} />
-                                        ) : (
-                                            <Dhk>😅예고편/미리보기가 없어요😅</Dhk>
-                                        )}
-                                    </Frame>
-                                    
+
+                                    </BigMain>
                                     </>}
 
                                     </BigSearch>

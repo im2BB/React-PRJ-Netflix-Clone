@@ -2,7 +2,6 @@
 const API_KEY = "ec180f3d7555520fa9d4bcff596736b9";
 const BASE_PATH = "https://api.themoviedb.org/3";
 const LANGUAGE = "language=ko-KR";
-const LANGU = "language=en-EN";
 
 interface IPepleList {
     adult:string;
@@ -18,6 +17,15 @@ interface IPepleList {
     credit_id: number;
     order: number;
 
+}
+
+interface IYoutubeList {
+    name: string;
+    key: string;
+    site: string;
+    size: number;
+    type: string;
+    published_at: number;
 }
 
 interface IMovie {
@@ -133,14 +141,39 @@ export interface IGetIGenreList {
         minimum: string;
     };
     page: number;
-    results: IPepleList[];
+    results: IYoutubeList[];
     total_pages: number;
     total_results: number;
     vote_average:number;
     } 
 
+export interface IGetIPersonList {
+        dates: {
+            maximum: string;
+            minimum: string;
+        };
+        page: number;
+        results: IPepleList[];
+        total_pages: number;
+        total_results: number;
+        vote_average:number;
+        } 
 
+    //인물 관련 Api
+    export function getCreditsByMediaType(mediaType: string, mediaId: string) {
+        let url;
+        if (mediaType === "movie") {
+            url = `${BASE_PATH}/movie/${mediaId}/credits?api_key=${API_KEY}&${LANGUAGE}`;
+        } else if (mediaType === "tv") {
+            url = `${BASE_PATH}/tv/${mediaId}/credits?api_key=${API_KEY}&${LANGUAGE}`;
+        } else {
+            throw new Error("Invalid media type");
+        }
+    
+        return fetch(url).then(response => response.json());
+    }
 
+    //영화 관련 Api
     export function getMovies() {    
         return fetch(`${BASE_PATH}/movie/now_playing?api_key=${API_KEY}&${LANGUAGE}`).then(
             (response) => response.json()
@@ -165,7 +198,13 @@ export interface IGetIGenreList {
         );
     }
 
+    export function getMoviesList() {
+        return fetch(`${BASE_PATH}/genre/movie/list?api_key=${API_KEY}&${LANGUAGE}`).then(
+            (response) => response.json()
+        );
+    }
 
+    //Tv 관련 Api
 
     export function getTvs() {        
         return fetch(`${BASE_PATH}/tv/on_the_air?api_key=${API_KEY}&${LANGUAGE}`).then(
@@ -178,7 +217,7 @@ export interface IGetIGenreList {
             (response) => response.json()
         );
     }
-    
+
     export function getTodaysTvs() {        
         return fetch(`${BASE_PATH}/tv/airing_today?api_key=${API_KEY}&${LANGUAGE}`).then(
             (response) => response.json()
@@ -190,37 +229,30 @@ export interface IGetIGenreList {
             (response) => response.json()
         );
     }
-
-
-    export function getSearchMulti(
-        serchkeyword: string,
-        page : number
-        ){
-        return fetch(`${BASE_PATH}/search/multi?query=${serchkeyword}&include_adult=false&api_key=${API_KEY}&${LANGUAGE}`)
-            .then(response => response.json());
-    }
-
-
-
-    export function getMoviesList() {
-        return fetch(`${BASE_PATH}/genre/movie/list?api_key=${API_KEY}&${LANGUAGE}`).then(
-            (response) => response.json()
-        );
-    }
-
+    
     export function getTvList() {
         return fetch(`${BASE_PATH}/genre/tv/list?api_key=${API_KEY}&${LANGUAGE}`).then(
             (response) => response.json()
         );
     }
+    
 
 
-
-
+    //검색 관련 Api
+        export function getSearchMulti(
+            serchkeyword: string,
+            page : number
+            ){
+            return fetch(`${BASE_PATH}/search/multi?query=${serchkeyword}&include_adult=false&api_key=${API_KEY}&${LANGUAGE}`)
+                .then(response => response.json());
+        }
+    
+    
+    //유튜브 관련 Api
     export function getYoutubeList(mediaType: string, itemId: string, language?: string): Promise<any> {
         let url;
         let searchLanguage = "ko-KR"; // 우선적으로 사용할 언어 설정
-    
+        
         if (language && language.toLowerCase() === "en-en") {
             searchLanguage = "en-EN"; // 입력된 언어 값이 "en-EN"인 경우, 검색 언어를 변경
         }
@@ -243,3 +275,5 @@ export interface IGetIGenreList {
                 return data;
             });
     }
+
+
