@@ -22,11 +22,11 @@ const Loader = styled.div`
 `;
 
 const Banner = styled.div<{ $bgPhoto: string }>`
-    height: 100vh;
+    height: 80vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: 60px;
+    padding-left: 60px;
     background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)), 
     url(${props => props.$bgPhoto});
     background-size: cover;
@@ -57,7 +57,7 @@ const OverView = styled.p`
 
 const Box = styled.div`
     display: flex;
-    margin-left:50px;
+    
 `;
 
 const BoxTwo = styled(motion.div)`
@@ -81,7 +81,7 @@ const LilBox = styled.div`
     
 `;
 const BigBox = styled.div`
-    margin-top: -200px;
+
     display: flex;
     flex-wrap: wrap;
     background-position: center center;
@@ -89,14 +89,16 @@ const BigBox = styled.div`
 `;
 
 const Text = styled.p`
-    height: 250px;
-    margin-top:-160px;
+    height: 10vh;
     padding-left: 50px;
     font-size: 20px;
+    padding-bottom: 10px;
+    padding-top: 10px;
 `;
 
 const MainBox = styled.div`
     margin-left: 50px;
+
 `
 
 const BigPhoto = styled.div<{ $bgPhoto: string }>`
@@ -221,10 +223,11 @@ const Bigposter = styled.div`
 `;
 
 const BigTitle = styled.h3`
-    width: 50vw;
+    width: 55vw;
     font-size: 41px;
     position:  relative;
     top:-355px;
+    
     
 `;
 
@@ -232,33 +235,34 @@ const LlilTitle = styled.h3`
     font-size: 15px;
     position:  relative;
     top:-365px;
-    padding-left: 90px;
+    padding-left: 20px;
     padding-top: 20px;
+    width: 50vw;
 `;
 
 const Bigrelease_date = styled.p`
     padding-top: 20px;
+    padding-left: 20px;
+    width: 30vw;
     position:  relative;
     top:-365px;
-    //color: ${props => props.theme.white.lighter};
+    
     
 `;
 
 const Bigpopularity = styled.p`
     position: center center;
-    padding-bottom: 20px;
-    padding-left: 50px;
+    padding-top: 5px;
+    padding-left: 20px;
     position:  relative;
+    width: 30vw;
+    height: 5vh;
     top:-365px;
-    //color: ${props => props.theme.white.lighter};
+    
+    
 `;
 
-const Hello = styled.div`
-    height: 20vh;
-    width: 20vw;
-    color: black;
-    background-color: white;
-`
+
 
 const Frame = styled.div`
     position: relative;
@@ -278,7 +282,8 @@ const Frame = styled.div`
 
 const BigOverview = styled.p`
     padding-bottom: 20px;
-    padding-left: 50px;
+    padding-top: 20px;
+    padding-left: 20px;
     position:  relative;
     width: 30vw;
     height: 25vh;
@@ -338,7 +343,7 @@ function Search() {
     const onPlayerReady: YouTubeProps['onReady'] = (event) => {
         event.target.pauseVideo();
     }
-    
+
     const { data, isLoading } = useQuery<IGetSearchResult>(
         ["getSearch", keyword, page], 
         () => keyword ? getSearchMulti(keyword, page) : Promise.resolve(),
