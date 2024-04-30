@@ -253,6 +253,13 @@ const Bigpopularity = styled.p`
     //color: ${props => props.theme.white.lighter};
 `;
 
+const Hello = styled.div`
+    height: 20vh;
+    width: 20vw;
+    color: black;
+    background-color: white;
+`
+
 const Frame = styled.div`
     position: relative;
     top: -440px;
@@ -331,16 +338,7 @@ function Search() {
     const onPlayerReady: YouTubeProps['onReady'] = (event) => {
         event.target.pauseVideo();
     }
-
-    const opts: YouTubeProps['opts'] = {
-
-        playerVars: {
-        autoplay: 1,
-        rel: 0, //관련 동영상 표시하지 않음 (근데 별로 쓸모 없는듯..)
-        modestbranding: 1, // 컨트롤 바에 youtube 로고를 표시하지 않음
-        },
-    };
-
+    
     const { data, isLoading } = useQuery<IGetSearchResult>(
         ["getSearch", keyword, page], 
         () => keyword ? getSearchMulti(keyword, page) : Promise.resolve(),
@@ -490,6 +488,7 @@ function Search() {
                                                             <Dhk>😅예고편/미리보기가 없어요😅</Dhk>
                                                         )}
                                                 </Frame>
+
                                                 
                                         </BigSerch>
                                     
