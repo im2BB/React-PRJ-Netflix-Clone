@@ -12,6 +12,7 @@ import "swiper/components/navigation/navigation.min.css";
 import SwiperCore, { Autoplay, Navigation, Pagination } from "swiper";
 import YouTube, { YouTubeProps } from "react-youtube";
 import { useEffect, useState } from "react";
+import ReactPlayer from "react-player";
 
 
 
@@ -140,54 +141,68 @@ const OverLay = styled(motion.div)`
     }
 `;
 
+const BigMain = styled.div`
+    display: flex;
+    flex-wrap: wrap;
+`;
+
 const BigCover = styled.div`
     width: 100%;
     background-size: cover;
     background-position: center center;
     height: 420px;
-    color: ${props => props.theme.white.lighter};
+
 
 `;
 
 
 const BigTitle = styled.h3`
-    color: ${props => props.theme.white.lighter};
+    width: 55vw;
+    position: center center;
     font-size: 41px;
     position:  relative;
-    top:-345px;
-    padding-left: 345px;
+    top:-355px;
+    
 `;
 
 const LlilTitle = styled.h3`
-    color: ${props => props.theme.white.lighter};
     font-size: 15px;
     position:  relative;
     top:-365px;
-    padding-left: 520px;
+    padding-left: 20px;
     padding-top: 20px;
+    width: 50vw;
 `;
 
 const BigOverview = styled.p`
-    height: 30vh;
-    width: 18vw;
-    padding: 20px;
+    padding-bottom: 20px;
+    padding-top: 20px;
+    padding-left: 20px;
     position:  relative;
-    bottom: 100px;
-    right: 350px;
-    color: ${props => props.theme.white.lighter};
+    width: 30vw;
+    height: 25vh;
+    top:-365px;
     overflow: auto;
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none; /* Firefox */
 `;
 
 const Frame = styled.div`
-    position:  relative;
-    left: 390px;
-    bottom : 680px;
-    height: 60vh;
-    width: 50vw;
-        
+    position: relative;
+    top: -440px;
+    height: 70vh;
+    width: 60vw;
+    padding: 20px;
+    .player {
+        position: absolute;
+        left: 0px;
+        width: 100%;
+        height: 100%;
+        border-radius: 10px;
+        overflow: hidden;
+    }
 `;
+
 const Dhk = styled.h1`
     font-size: 28px;
     color: white;
@@ -195,13 +210,18 @@ const Dhk = styled.h1`
     padding-top: 330px;
     padding-left: 40px;
 `
-
+const BigSerch = styled.div`
+    height: 0;
+    width: 50vw;
+    padding-top: 60px;
+`;
 
 const Bigrelease_date = styled.p`
-    padding: 20px;  
+    padding-top: 20px;
+    padding-left: 20px;
+    width: 30vw;
     position:  relative;
     top:-365px;
-    color: ${props => props.theme.white.lighter};
     
 `;
 
@@ -214,11 +234,14 @@ const Biggenres = styled.div`
 `;
 
 const Bigpopularity = styled.p`
-    padding-bottom: 20px;
-    padding-left: 380px;
+    position: center center;
+    padding-top: 5px;
+    padding-left: 20px;
     position:  relative;
+    width: 30vw;
+    height: 5vh;
     top:-365px;
-    color: ${props => props.theme.white.lighter};
+ 
 `;
 
 const Bigposter = styled.div`
@@ -231,6 +254,7 @@ const Bigposter = styled.div`
     float: left;
     border-radius: 10px;
     box-shadow : 3px 3px 1px black;
+    
 
 `;
 
@@ -499,25 +523,34 @@ function Home() {
                             
                                 {clickedMovie && 
                                 <>
+                                <BigMain>
                                 <BigCover 
                                 style={{backgroundImage:`linear-gradient(to top, black,transparent),
                                 url( ${makeImagePath (clickedMovie.backdrop_path) 
                                 })`}}/>
-                                <BigTitle>{clickedMovie.title}</BigTitle>
-                                <LlilTitle>{clickedMovie.original_title}</LlilTitle> 
-                                <Bigposter 
-                                style={{backgroundImage :`url(${makeImagePath(clickedMovie.poster_path)})`}}/>
-                                <Biggenres>{clickedMovie.videos}</Biggenres>
-                                <Bigrelease_date> 개봉일 : {clickedMovie.release_date}</Bigrelease_date>
-                                <Bigpopularity> 평점 : {clickedMovie ? renderStars(clickedMovie.vote_average) : null} / {(clickedMovie.vote_average).toFixed(1)} </Bigpopularity>                        
-                                <BigOverview>{clickedMovie.overview}</BigOverview>
-                                <Frame>
-                                    {selectedVideo && selectedVideo.key ? (
-                                        <YouTube videoId={selectedVideo.key} opts={opts} onReady={onPlayerReady} />
-                                    ) : (
-                                        <Dhk>😅 예고편/미리보기가 준비되어있지 않습니다 😅</Dhk>
-                                    )}
-                                </Frame>
+                                    <BigSerch>
+                                        <Bigposter 
+                                        style={{backgroundImage :`url(${makeImagePath(clickedMovie.poster_path)})`}}/>
+                                        <BigTitle>{clickedMovie.title}</BigTitle>
+                                        <LlilTitle>{clickedMovie.original_title}</LlilTitle> 
+                                        <Bigrelease_date> 개봉일 : {clickedMovie.release_date}</Bigrelease_date>
+                                        <Bigpopularity> 평점 : {clickedMovie ? renderStars(clickedMovie.vote_average) : null} / {(clickedMovie.vote_average).toFixed(1)} </Bigpopularity>                        
+                                        <BigOverview>{clickedMovie.overview}</BigOverview>
+                                        <Frame>
+                                            {selectedVideo && selectedVideo.key ? (
+                                                    <ReactPlayer 
+                                                        className="react-player" 
+                                                        url={`https://www.youtube.com/watch?v=${selectedVideo.key}`}
+                                                        width="100%" 
+                                                        height="100%" 
+                                                        playing={true} 
+                                                        loop={true} />
+                                                    ) : (
+                                                        <Dhk>😅예고편/미리보기가 없어요😅</Dhk>
+                                                    )}
+                                        </Frame>
+                                    </BigSerch>
+                                </BigMain>
                                 </>}
 
                             </BigMovie>

@@ -60,7 +60,7 @@ function Footer (){
                     <Ather>Styled-components</Ather>
                     <Ather>Framer-motion</Ather>
                     <Ather>Swiper</Ather>
-                    <Ather>Youtube iframe</Ather>
+                    <Ather>React Player</Ather>
             </Col>
             
         </Nav>

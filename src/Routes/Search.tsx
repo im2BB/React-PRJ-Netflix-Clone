@@ -22,7 +22,7 @@ const Loader = styled.div`
 `;
 
 const Banner = styled.div<{ $bgPhoto: string }>`
-    height: 80vh;
+    height: 0vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -481,29 +481,22 @@ function Search() {
                                                 <Bigpopularity> 평점 : {clickedSearch ? renderStars(clickedSearch.vote_average) : null} / {(clickedSearch.vote_average).toFixed(1)} </Bigpopularity>                        
                                                 <BigOverview>{clickedSearch.overview}</BigOverview>
                                                 <Frame>
-                                                        {selectedVideo && selectedVideo.key ? (
+                                                    {selectedVideo && selectedVideo.key ? (
                                                             <ReactPlayer 
-                                                            className="react-player" 
-                                                            url={`https://www.youtube.com/watch?v=${selectedVideo.key}`}
-                                                            width="100%" 
-                                                            height="100%" 
-                                                            playing={true} 
-                                                            loop={true} />
+                                                                className="react-player" 
+                                                                url={`https://www.youtube.com/watch?v=${selectedVideo.key}`}
+                                                                width="100%" 
+                                                                height="100%" 
+                                                                playing={true} 
+                                                                loop={true} />
                                                         ) : (
                                                             <Dhk>😅예고편/미리보기가 없어요😅</Dhk>
                                                         )}
                                                 </Frame>
-
                                                 
                                         </BigSerch>
-                                    
-                                        
-                                            
-                                    
-
-                                    </BigMain>
+                                        </BigMain>
                                     </>}
-
                                     </BigSearch>
                                 </>
                             ): null }

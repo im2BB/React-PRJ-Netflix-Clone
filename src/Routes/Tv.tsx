@@ -12,6 +12,7 @@ import "swiper/components/navigation/navigation.min.css";
 import SwiperCore, { Autoplay, Navigation, Pagination } from "swiper";
 import YouTube, { YouTubeProps } from "react-youtube";
 import { useEffect, useState } from "react";
+import ReactPlayer from "react-player";
 
 
 
@@ -140,6 +141,17 @@ const OverLay = styled(motion.div)`
     }
 `;
 
+const BigMain = styled.div`
+    display: flex;
+    flex-wrap: wrap;
+`;
+
+const BigSerch = styled.div`
+    height: 0;
+    width: 50vw;
+    padding-top: 60px;
+`;
+
 const BigCover = styled.div`
     width: 100%;
     background-size: cover;
@@ -150,31 +162,40 @@ const BigCover = styled.div`
 
 
 const BigTitle = styled.h3`
-    color: ${props => props.theme.white.lighter};
+    width: 55vw;
     font-size: 41px;
     position:  relative;
-    top:-345px;
-    padding-left: 345px;
+    top:-355px;
+    
+    
 `;
+
 const BigOverview = styled.p`
-    height: 30vh;
-    width: 18vw;
-    padding: 20px;
+    padding-bottom: 20px;
+    padding-top: 20px;
+    padding-left: 20px;
     position:  relative;
-    bottom: 60px;
-    right: 350px;
-    color: ${props => props.theme.white.lighter};
+    width: 30vw;
+    height: 25vh;
+    top:-365px;
     overflow: auto;
-    -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: none; /* Firefox */
+    
 `;
+
 const Frame = styled.div`
-    position:  relative;
-    left: 390px;
-    bottom : 680px;
-    height: 60vh;
-    width: 50vw;
-        
+    position: relative;
+    top: -440px;
+    height: 70vh;
+    width: 60vw;
+    padding: 20px;
+    .player {
+        position: absolute;
+        left: 0px;
+        width: 100%;
+        height: 100%;
+        border-radius: 10px;
+        overflow: hidden;
+    }
 `;
 
 const Dhk = styled.h1`
@@ -186,19 +207,26 @@ const Dhk = styled.h1`
 `
 
 const Bigrelease_date = styled.p`
-    padding: 20px;  
+    padding-top: 20px;
+    padding-left: 20px;
+    width: 30vw;
     position:  relative;
     top:-365px;
-    color: ${props => props.theme.white.lighter};
+    
     
 `;
 
+
 const Bigpopularity = styled.p`
-    padding-bottom: 20px;
-    padding-left: 380px;
+    position: center center;
+    padding-top: 5px;
+    padding-left: 20px;
     position:  relative;
+    width: 30vw;
+    height: 5vh;
     top:-365px;
-    color: ${props => props.theme.white.lighter};
+    
+    
 `;
 
 
@@ -212,6 +240,7 @@ const Bigposter = styled.div`
     float: left;
     border-radius: 10px;
     box-shadow : 3px 3px 1px black;
+    
 
 `;
 
@@ -482,23 +511,33 @@ function Tv() {
                         
                         {clickedtv && 
                         <>
+                        <BigMain>
                         <BigCover 
                         style={{backgroundImage:`linear-gradient(to top, black,transparent ),
                         url( ${makeImagePath (clickedtv.backdrop_path) 
                         })`}}/>
-                        <BigTitle>{clickedtv.name}</BigTitle>
-                        <Bigposter 
-                        style={{backgroundImage :`url(${makeImagePath(clickedtv.poster_path)})`}}/>
-                        <Bigrelease_date>  첫 방영일 :{clickedtv.first_air_date}</Bigrelease_date>
-                        <Bigpopularity> {clickedtv ? renderStars(clickedtv.vote_average) : null} / {(clickedtv.vote_average).toFixed(1)} </Bigpopularity>                        
-                        <BigOverview>{clickedtv.overview}</BigOverview>
-                        <Frame>
-                            {selectedVideo && selectedVideo.key ? (
-                                <YouTube videoId={selectedVideo.key} opts={opts} onReady={onPlayerReady} />
-                            ) : (
-                                <Dhk>😅 예고편/미리보기가 준비되어있지 않습니다 😅</Dhk>
-                            )}
-                        </Frame>
+                            <BigSerch>
+                                <Bigposter 
+                                style={{backgroundImage :`url(${makeImagePath(clickedtv.poster_path)})`}}/>
+                                <BigTitle>{clickedtv.name}</BigTitle>
+                                <Bigrelease_date>  첫 방영일 :{clickedtv.first_air_date}</Bigrelease_date>
+                                <Bigpopularity> {clickedtv ? renderStars(clickedtv.vote_average) : null} / {(clickedtv.vote_average).toFixed(1)} </Bigpopularity>                        
+                                <BigOverview>{clickedtv.overview}</BigOverview>
+                                    <Frame>
+                                        {selectedVideo && selectedVideo.key ? (
+                                                <ReactPlayer 
+                                                    className="react-player" 
+                                                    url={`https://www.youtube.com/watch?v=${selectedVideo.key}`}
+                                                    width="100%" 
+                                                    height="100%" 
+                                                    playing={true} 
+                                                    loop={true} />
+                                            ) : (
+                                                <Dhk>😅예고편/미리보기가 없어요😅</Dhk>
+                                            )}
+                                    </Frame>
+                            </BigSerch>
+                        </BigMain>
                                 </>}
                         
                         
