@@ -10,47 +10,13 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/swiper.min.css";
 import "swiper/components/navigation/navigation.min.css";
 import SwiperCore, { Autoplay, Navigation, Pagination } from "swiper";
-import YouTube, { YouTubeProps } from "react-youtube";
+import { YouTubeProps } from "react-youtube";
 import { useEffect, useState } from "react";
 import ReactPlayer from "react-player";
+import * as S from "../CSS/LilBoxCss";
+import * as o from "../CSS/BigBoxCss";
+import * as t from "../CSS/MainCss";
 
-
-
-
-const Wrapper = styled.div`
-    background-color: black;
-    padding-bottom: 200px;
-`;
-
-const Loder = styled.div`
-    height: 20vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-`;
-
-const Banner = styled.div<{ $bgPhoto: string }>`
-    height: 90vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 60px;
-    background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)),
-    url(${(props) => props.$bgPhoto });
-    background-size: cover;
-    pointer-events: none;
-`;
-
-const Title = styled.h2`
-    font-size: 85px;
-    margin-bottom: 15px;
-`;
-
-const LilTitle = styled.h2`
-    font-size: 20px;
-    margin-bottom: 5px;
-    padding-left: 45px;
-`;
 
 const Popularity = styled.h2`
     font-size: 15px;
@@ -58,24 +24,10 @@ const Popularity = styled.h2`
     margin-left: 125px;
 `
 
-const Date = styled.h2`
-    font-size: 22px;
-    margin-left: 40px;
-    margin-bottom: 20px;
-    width: 50%;
-`;
-
-const OverView = styled.p`
-    font-size: 18px;
-    margin-left: 40px;
-    width: 50%;
-`;
 
 const StyledSwiper = styled(SwiperSlide)`
-    position: relative;
-    top: -200px;
-`;
 
+`;
 
 const Box = styled(motion.div)<{$bgPhoto:string}>`
     background-color: white;
@@ -89,8 +41,6 @@ const Box = styled(motion.div)<{$bgPhoto:string}>`
     height: 250px;
     
 `;
-
-
 
 const boxVariants = {
     normal: {
@@ -108,149 +58,6 @@ const boxVariants = {
 
 
 
-
-
-const Bigtv = styled(motion.div)`
-    position: absolute;
-    width: 60vw;
-    height: 90vh;
-    top: 40px;
-    left: 0;
-    right: 0;
-    margin: 0 auto;
-    background-color: ${props => props.theme.black.lighter};
-    border-radius: 15px;
-    overflow: auto;
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* IE and Edge */
-    &::-webkit-scrollbar {
-        display: none; /* Chrome, Safari, Opera */
-    }
-    z-index: 1000;
-`;
-
-const OverLay = styled(motion.div)`
-    position: fixed;
-    top: 0;
-    width:  100%;
-    height: 100%;
-    background-color: rgba(0,0,0,0.5);
-    opacity:0;
-    ::-webkit-scrollbar {
-    display: none;
-    }
-`;
-
-const BigMain = styled.div`
-    display: flex;
-    flex-wrap: wrap;
-`;
-
-const BigSerch = styled.div`
-    height: 0;
-    width: 50vw;
-    padding-top: 60px;
-`;
-
-const BigCover = styled.div`
-    width: 100%;
-    background-size: cover;
-    background-position: center center;
-    height: 420px;
-    color: ${props => props.theme.white.lighter};
-`;
-
-
-const BigTitle = styled.h3`
-    width: 55vw;
-    font-size: 41px;
-    position:  relative;
-    top:-355px;
-    
-    
-`;
-
-const BigOverview = styled.p`
-    padding-bottom: 20px;
-    padding-top: 20px;
-    padding-left: 20px;
-    position:  relative;
-    width: 30vw;
-    height: 25vh;
-    top:-365px;
-    overflow: auto;
-    
-`;
-
-const Frame = styled.div`
-    position: relative;
-    top: -440px;
-    height: 70vh;
-    width: 60vw;
-    padding: 20px;
-    .player {
-        position: absolute;
-        left: 0px;
-        width: 100%;
-        height: 100%;
-        border-radius: 10px;
-        overflow: hidden;
-    }
-`;
-
-const Dhk = styled.h1`
-    font-size: 28px;
-    color: white;
-    position: absolute;
-    padding-top: 330px;
-    padding-left: 40px;
-`
-
-const Bigrelease_date = styled.p`
-    padding-top: 20px;
-    padding-left: 20px;
-    width: 30vw;
-    position:  relative;
-    top:-365px;
-    
-    
-`;
-
-
-const Bigpopularity = styled.p`
-    position: center center;
-    padding-top: 5px;
-    padding-left: 20px;
-    position:  relative;
-    width: 30vw;
-    height: 5vh;
-    top:-365px;
-    
-    
-`;
-
-
-const Bigposter = styled.div`
-    width: 300px;
-    height: 450px;
-    background-size: cover;
-    margin: 30px;
-    position: relative;
-    top:-455px;
-    float: left;
-    border-radius: 10px;
-    box-shadow : 3px 3px 1px black;
-    
-
-`;
-
-const FrontTitle = styled.h2`
-    margin: 20px; 
-    font-Size: 25px;
-    top:-340px;
-`;
-
-
 const Info = styled(motion.div)`
     background-color: ${(props) => props.theme.black.mediumdark};
     opacity: 0;
@@ -262,7 +69,6 @@ const Info = styled(motion.div)`
         font-size: 15px;
     }
 `;
-
 
 const infoVariants = {
     hover: {
@@ -370,23 +176,23 @@ function Tv() {
 
     SwiperCore.use([Navigation,Pagination, Autoplay]);
     
-        return <Wrapper>
-        {isLoading ? (<Loder>Loding....</Loder>
+        return <t.Wrapper>
+        {isLoading ? (<t.Loader>Loding....</t.Loader>
         ) : (
             <>
-            <Banner  
+            <t.Banner  
             $bgPhoto = {makeImagePath(data?.results[0].backdrop_path || "")}
             >
-                <Title>{data?.results[0].name}</Title>
-                <LilTitle>{data?.results[0].original_name}</LilTitle>
+                <o.Title>{data?.results[0].name}</o.Title>
+                <o.LilTitle>{data?.results[0].original_name}</o.LilTitle>
                 <Popularity>좋아요👍:{data?.results[0].popularity}</Popularity>
-                <Date>첫 방영일: {data?.results[0].first_air_date}</Date>
-                <OverView>{data?.results[0].overview}</OverView>
-            </Banner>
+                <o.Date>첫 방영일: {data?.results[0].first_air_date}</o.Date>
+                <o.OverView>{data?.results[0].overview}</o.OverView>
+            </t.Banner>
             
                 
                 <StyledSwiper>
-                <FrontTitle style={{margin:"20px", fontSize:"25px"}}>On the Air</FrontTitle>
+                <o.FrontTitle>On the Air</o.FrontTitle>
                 <Swiper 
                     slidesPerView={5}
                     navigation={true}
@@ -415,7 +221,7 @@ function Tv() {
                 </StyledSwiper>
                 
                 <StyledSwiper>
-                <FrontTitle style={{margin:"20px", fontSize:"25px"}}>Top 10</FrontTitle>
+                <o.FrontTitle style={{margin:"20px", fontSize:"25px"}}>Top 10</o.FrontTitle>
                 <Swiper slidesPerView={5} navigation={true} spaceBetween= {10} >
                     {Populars?.results.map((tv) =>{
                     if (data?.results.some((dataTv)=> dataTv.id === tv.id)) return null;
@@ -441,35 +247,9 @@ function Tv() {
                     })}
                     </Swiper>
                     </StyledSwiper>
-            {/* <StyledSwiper>
-                <FrontTitle style={{margin:"20px", fontSize:"25px"}}>최근 인기 프로그램</FrontTitle>
-                <Swiper slidesPerView={5} navigation={true} spaceBetween= {10} >
-                    {TodaysTvs?.results.map((tv) =>{
-                    if (data?.results.some((dataTv)=> dataTv.id === tv.id)) return null;
-                    return (
-                        <SwiperSlide 
-                        key={tv.id}> 
-                        <Box
-                            layoutId={tv.id + ""}
-                            whileHover="hover"
-                            initial="normal"
-                            variants={boxVariants}
-                            onClick={() => onBoxClicked(tv.id)}
-                            transition={{ type: "tween" }}
-                            $bgPhoto={makeImagePath(tv.backdrop_path)}
-                        >
-                            <img /> 
-                            <Info variants={infoVariants}>
-                            <h4 style={{fontSize:"26px",padding:"10px"}}>{tv.name}</h4>
-                            </Info>
-                        </Box>
-                        </SwiperSlide>
-                    );
-                    })}
-                    </Swiper>
-                    </StyledSwiper> */}
+
                     <StyledSwiper>
-                <FrontTitle style={{margin:"20px", fontSize:"25px"}}>죽기전에 봐야할 Tv 프로그램</FrontTitle>
+                <o.FrontTitle style={{margin:"20px", fontSize:"25px"}}>죽기전에 봐야할 Tv 프로그램</o.FrontTitle>
                 <Swiper slidesPerView={5} navigation={true} spaceBetween= {10} >
                     {TopRated?.results.map((tv) =>{
                     if (data?.results.some((dataTv)=> dataTv.id === tv.id)) return null;
@@ -499,57 +279,56 @@ function Tv() {
                 <AnimatePresence>
                 {bigTvMatch ? (
                     <>
-                        <OverLay 
+                        <S.OverLay 
                         onClick={onOverLayClicked}
                         exit={{opacity:0}}
                         animate={{opacity:2}}
-                        
                         />
-                        <Bigtv
+                        <S.BigType 
                         style={{position: "fixed"}} 
                         layoutId={bigTvMatch.params.movieId}>
                         
-                        {clickedtv && 
-                        <>
-                        <BigMain>
-                        <BigCover 
-                        style={{backgroundImage:`linear-gradient(to top, black,transparent ),
-                        url( ${makeImagePath (clickedtv.backdrop_path) 
-                        })`}}/>
-                            <BigSerch>
-                                <Bigposter 
-                                style={{backgroundImage :`url(${makeImagePath(clickedtv.poster_path)})`}}/>
-                                <BigTitle>{clickedtv.name}</BigTitle>
-                                <Bigrelease_date>  첫 방영일 :{clickedtv.first_air_date}</Bigrelease_date>
-                                <Bigpopularity> {clickedtv ? renderStars(clickedtv.vote_average) : null} / {(clickedtv.vote_average).toFixed(1)} </Bigpopularity>                        
-                                <BigOverview>{clickedtv.overview}</BigOverview>
-                                    <Frame>
-                                        {selectedVideo && selectedVideo.key ? (
-                                                <ReactPlayer 
-                                                    className="react-player" 
-                                                    url={`https://www.youtube.com/watch?v=${selectedVideo.key}`}
-                                                    width="100%" 
-                                                    height="100%" 
-                                                    playing={true} 
-                                                    loop={true} />
-                                            ) : (
-                                                <Dhk>😅예고편/미리보기가 없어요😅</Dhk>
-                                            )}
-                                    </Frame>
-                            </BigSerch>
-                        </BigMain>
-                                </>}
+                            {clickedtv && 
+                            <>
+                            <S.BigMain>
+                            <S.BigCover 
+                            style={{backgroundImage:`linear-gradient(to top, black,transparent ),
+                            url( ${makeImagePath (clickedtv.backdrop_path) 
+                            })`}}/>
+                                <S.BigSearch>
+                                    <S.Bigposter 
+                                    style={{backgroundImage :`url(${makeImagePath(clickedtv.poster_path)})`}}/>
+                                    <S.BigTitle>{clickedtv.name}</S.BigTitle>
+                                    <S.Bigrelease_date>  첫 방영일 :{clickedtv.first_air_date}</S.Bigrelease_date>
+                                    <S.Bigpopularity> {clickedtv ? renderStars(clickedtv.vote_average) : null} / {(clickedtv.vote_average).toFixed(1)} </S.Bigpopularity>                        
+                                    <S.BigOverview>{clickedtv.overview}</S.BigOverview>
+                                        <S.Frame>
+                                            {selectedVideo && selectedVideo.key ? (
+                                                    <ReactPlayer 
+                                                        className="react-player" 
+                                                        url={`https://www.youtube.com/watch?v=${selectedVideo.key}`}
+                                                        width="80%" 
+                                                        height="80%" 
+                                                        playing={true} 
+                                                        loop={true} />
+                                                ) : (
+                                                    <S.Dhk>😅예고편/미리보기가 없어요😅</S.Dhk>
+                                                )}
+                                        </S.Frame>
+                                </S.BigSearch>
+                            </S.BigMain>
+                                    </>}
                         
                         
                         
-                        </Bigtv>
+                        </S.BigType>
                         
                     </>  
                     ): null}
                 </AnimatePresence> 
                 </>
             )} 
-            </Wrapper>;
+            </t.Wrapper>;
     
 }
 

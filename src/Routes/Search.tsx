@@ -5,32 +5,12 @@ import { useQuery } from "react-query";
 import { makeImagePath } from "./utils";
 import { AnimatePresence, motion } from "framer-motion";
 import { BsStarFill, BsStarHalf } from "react-icons/bs";
-import YouTube, { YouTubeProps } from 'react-youtube';
+import { YouTubeProps } from 'react-youtube';
 import { useEffect, useState } from "react";
 import ReactPlayer from 'react-player/lazy';
+import * as S from "../CSS/LilBoxCss";
+import * as t from "../CSS/MainCss";
 
-const Wrapper = styled.div`
-    background-color: black;
-    padding-bottom: 200px;
-`;
-
-const Loader = styled.div`
-    height: 20vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-`;
-
-const Banner = styled.div<{ $bgPhoto: string }>`
-    height: 70vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding-left: 60px;
-    background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)), 
-    url(${props => props.$bgPhoto});
-    background-size: cover;
-`;
 
 const Title = styled.h2`
     font-size: 30px;
@@ -116,14 +96,16 @@ const LilPhoto = styled.div<{ $bgPhoto: string }>`
     background-size: cover;
     background-position: center center;
     border-radius: 5px;
-    height: 250px;
-    width: 150px;
+    height: 290px;
+    width: 185px;
+    margin: 5px;
     
     `;
 
     const LilBoxtwo = styled.div`
         display: column ;
         width: 150px;
+        padding: 10px;
     
     `;
 
@@ -151,149 +133,6 @@ const LilOverView = styled.p`
         -webkit-line-clamp: 3 ;
         -webkit-box-orient: vertical;
 `;
-
-const OverLay = styled(motion.div)`
-    position: fixed;
-    top: 0;
-    width:  100%;
-    height: 100%;
-    background-color: rgba(0,0,0,0.5);
-    opacity:0;
-    ::-webkit-scrollbar {
-    display: none;
-    }
-`;
-
-const BigSearch = styled(motion.div)`
-    position: absolute;
-    width: 60vw;
-    height: 90vh;
-    top: 60px;
-    left: 0;
-    right: 0;
-    margin: 0 auto;
-    background-color: ${props => props.theme.black.lighter};
-    border-radius: 15px;
-    overflow: auto;
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* IE and Edge */
-    &::-webkit-scrollbar {
-        display: none; /* Chrome, Safari, Opera */
-    }
-    z-index: 1000;
-    
-`;
-
-const BigMain = styled.div`
-    display: flex;
-    flex-wrap: wrap;
-`;
-
-const BigCover = styled.div`
-    width: 100%;
-    background-size: cover;
-    background-position: center center;
-    height: 420px;
-
-`;
-const BigSerch = styled.div`
-    height: 0;
-    width: 50vw;
-    padding-top: 60px;
-`;
-
-
-
-const Bigposter = styled.div`
-    width: 300px;
-    height: 450px;
-    background-size: cover;
-    margin: 30px;
-    position: relative;
-    top:-455px;
-    float: left;
-    border-radius: 10px;
-    box-shadow : 3px 3px 1px black;
-    
-
-`;
-
-const BigTitle = styled.h3`
-    width: 55vw;
-    font-size: 41px;
-    position:  relative;
-    top:-355px;
-    
-    
-`;
-
-const LlilTitle = styled.h3`
-    font-size: 15px;
-    position:  relative;
-    top:-365px;
-    padding-left: 20px;
-    padding-top: 20px;
-    width: 50vw;
-`;
-
-const Bigrelease_date = styled.p`
-    padding-top: 20px;
-    padding-left: 20px;
-    width: 30vw;
-    position:  relative;
-    top:-365px;
-    
-    
-`;
-
-const Bigpopularity = styled.p`
-    position: center center;
-    padding-top: 5px;
-    padding-left: 20px;
-    position:  relative;
-    width: 30vw;
-    height: 5vh;
-    top:-365px;
-    
-    
-`;
-
-
-
-const Frame = styled.div`
-    position: relative;
-    top: -440px;
-    height: 70vh;
-    width: 60vw;
-    padding: 20px;
-    .player {
-        position: absolute;
-        left: 0px;
-        width: 100%;
-        height: 100%;
-        border-radius: 10px;
-        overflow: hidden;
-    }
-`;
-
-const BigOverview = styled.p`
-    padding-bottom: 20px;
-    padding-top: 20px;
-    padding-left: 20px;
-    position:  relative;
-    width: 30vw;
-    height: 25vh;
-    top:-365px;
-    overflow: auto;
-    
-`;
-
-const Dhk = styled.h1`
-    font-size: 0px;
-    color: white;
-    position: absolute;
-
-`
 
 const boxVariants = {
     normal: { 
@@ -389,18 +228,18 @@ function Search() {
     
     
 
-    return <Wrapper>
+    return <t.Wrapper>
         
             {isLoading ? (
-                <Loader>Loading....</Loader>
+                <t.Loader>Loading....</t.Loader>
             ) : (
                 <>
                     {data && data.total_results === 0 ? (
-                        <Banner $bgPhoto="">
+                        <t.Banner $bgPhoto="">
                             <p>"{keyword}" 에 관련된 정보가 존재하지 않습니다.</p>
-                        </Banner>
+                        </t.Banner>
                     ) : (
-                        <Banner $bgPhoto={makeImagePath(data?.results[0]?.backdrop_path || "")}>
+                        <t.Banner $bgPhoto={makeImagePath(data?.results[0]?.backdrop_path || "")}>
                             <Box>
                                 <BigPhoto $bgPhoto={makeImagePath(data?.results[0].poster_path || "")}/>
                                 <LilBox>
@@ -413,7 +252,7 @@ function Search() {
                                     <OverView>{data?.results[0]?.overview}</OverView>
                                 </LilBox>
                             </Box>
-                        </Banner>
+                        </t.Banner>
                     )}
 
                     
@@ -452,57 +291,55 @@ function Search() {
                     <AnimatePresence>
                         { keywordMatch ? (
                             <>
-                                <OverLay 
+                                <S.OverLay 
                                 onClick={onOverLayClicked}
                                 exit={{opacity:0}}
                                 animate={{opacity:2}}
                                 />
-                                <BigSearch
+                                <S.BigType
                                 style={{ position: "fixed"} } 
                                 layoutId={keywordMatch.params.clickId}>
                                     
                                     {clickedSearch &&
                                     <>
-                                    <BigMain>
-                                    <BigCover
+                                    <S.BigMain>
+                                    <S.BigCover
                                     style={{backgroundImage:`linear-gradient(to top, black,transparent),
                                     url( ${makeImagePath (clickedSearch.backdrop_path) 
                                     })`}} />
-                                        <BigSerch>
-                                                <Bigposter
+                                        <S.BigSearch>
+                                                <S.Bigposter
                                                 style={{backgroundImage :`url(${makeImagePath(clickedSearch.poster_path)})`}}/>
-                                                <BigTitle>{clickedSearch.title || clickedSearch.name}</BigTitle>
-                                                <LlilTitle>{clickedSearch.original_title || clickedSearch.original_name}</LlilTitle>
-                                                <Bigrelease_date>개봉일 : {clickedSearch.release_date || clickedSearch.first_air_date}</Bigrelease_date>
-                                                <Bigpopularity> 평점 : {clickedSearch ? renderStars(clickedSearch.vote_average) : null} / {(clickedSearch.vote_average).toFixed(1)} </Bigpopularity>                        
-                                                <BigOverview>{clickedSearch.overview}</BigOverview>
-                                                <Frame>
+                                                <S.BigTitle>{clickedSearch.title || clickedSearch.name}</S.BigTitle>
+                                                <S.LlilTitle>{clickedSearch.original_title || clickedSearch.original_name}</S.LlilTitle>
+                                                <S.Bigrelease_date>개봉일 : {clickedSearch.release_date || clickedSearch.first_air_date}</S.Bigrelease_date>
+                                                <S.Bigpopularity> 평점 : {clickedSearch ? renderStars(clickedSearch.vote_average) : null} / {(clickedSearch.vote_average).toFixed(1)} </S.Bigpopularity>                        
+                                                <S.BigOverview>{clickedSearch.overview}</S.BigOverview>
+                                                <S.Frame>
                                                     {selectedVideo && selectedVideo.key ? (
                                                             <ReactPlayer 
                                                                 className="react-player" 
                                                                 url={`https://www.youtube.com/watch?v=${selectedVideo.key}`}
-                                                                width="100%" 
-                                                                height="100%" 
+                                                                width="80%" 
+                                                                height="80%" 
                                                                 playing={true} 
                                                                 loop={true} />
                                                         ) : (
-                                                            <Dhk>😅예고편/미리보기가 없어요😅</Dhk>
+                                                            <S.Dhk>😅예고편/미리보기가 없어요😅</S.Dhk>
                                                         )}
-                                                </Frame>
+                                                </S.Frame>
                                                 
-                                        </BigSerch>
-                                        </BigMain>
+                                        </S.BigSearch>
+                                        </S.BigMain>
                                     </>}
-                                    </BigSearch>
+                                    </S.BigType>
                                 </>
                             ): null }
                     </AnimatePresence>
                     
                 </>
             )}
-        
-    
-    </Wrapper>;
+        </t.Wrapper>;
 }
 
 export default Search;
