@@ -22,7 +22,7 @@ const Loader = styled.div`
 `;
 
 const Banner = styled.div<{ $bgPhoto: string }>`
-    height: 0vh;
+    height: 70vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -75,7 +75,7 @@ const BoxTwo = styled(motion.div)`
 `;
 
 const LilBox = styled.div`
-    margin-top: 300px;
+    margin-top: 200px;
     display: column;
     width: 480px;
     
@@ -102,27 +102,23 @@ const MainBox = styled.div`
 `
 
 const BigPhoto = styled.div<{ $bgPhoto: string }>`
-    //color: ${props => props.theme.white.lighter}; 
-    //background-color: white;
     background-image: url(${props => props.$bgPhoto});
     background-size: cover;
-    background-position: center center;
+
     border-radius: 5px;
     height: 450px;
-    width: 315px;
+    width: 300px;
     margin: 10px;
     `;
 
 const LilPhoto = styled.div<{ $bgPhoto: string }>`
-    //color: ${props => props.theme.white.lighter}; 
-   // background-color: white;
     background-image: url(${props => props.$bgPhoto});
     background-size: cover;
     background-position: center center;
     border-radius: 5px;
     height: 250px;
     width: 150px;
-    margin: 10px;
+    
     `;
 
     const LilBoxtwo = styled.div`
