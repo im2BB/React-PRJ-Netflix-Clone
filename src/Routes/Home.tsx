@@ -3,7 +3,7 @@ import { useQuery } from "react-query";
 import { IGetMoviesResult, getMovies,  getPopular, getRatedMovies, getUpcoming, getYoutubeList } from "../api";
 import styled from "styled-components";
 import { makeImagePath } from "./utils";
-import { motion,AnimatePresence } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import { PathMatch, useMatch, useNavigate } from "react-router-dom";
 import { BsStarFill, BsStarHalf } from "react-icons/bs";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -155,11 +155,16 @@ function Home() {
                     <>
                     <t.Banner  
                     $bgPhoto = {makeImagePath(data?.results[0].backdrop_path || "")}
-                    >
-                        <o.Title>{data?.results[0].title}</o.Title>
-                        <o.LilTitle>{data?.results[0].original_title}</o.LilTitle>
-                        <o.Date>개봉일 : {data?.results[0].release_date}</o.Date>
-                        <o.OverView>{data?.results[0].overview}</o.OverView>
+                    >   
+                    <t.Box> 
+                    <t.BigPhoto $bgPhoto={makeImagePath(data?.results[0].poster_path || "")}/>
+                        <t.LilBox>
+                            <o.Title>{data?.results[0].title}</o.Title>
+                            <o.LilTitle>{data?.results[0].original_title}</o.LilTitle>
+                            <o.Date>개봉일 : {data?.results[0].release_date}</o.Date>
+                            <o.OverView>{data?.results[0].overview}</o.OverView>
+                        </t.LilBox>
+                    </t.Box>
                     </t.Banner>
                     
                     <MovieSlider title="현재 상영중" movies={data?.results || []} />

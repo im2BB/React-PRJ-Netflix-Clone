@@ -10,35 +10,9 @@ import { useEffect, useState } from "react";
 import ReactPlayer from 'react-player/lazy';
 import * as S from "../CSS/LilBoxCss";
 import * as t from "../CSS/MainCss";
+import * as o from "../CSS/BigBoxCss";
 
 
-const Title = styled.h2`
-    font-size: 30px;
-    margin-bottom: 15px;
-    margin-left: 30px;
-`;
-
-const Date = styled.h2`
-    font-size: 18px;
-    margin-left: 100px;
-`;
-
-const OiginTitle = styled.h2`
-    font-size: 25px;
-    margin-bottom: 10px;
-    padding-left: 45px;
-`;
-
-const OverView = styled.p`
-    padding-top: 20px;
-    font-size: 15px;
-    margin-left: 40px;
-`;
-
-const Box = styled.div`
-    display: flex;
-    
-`;
 
 const BoxTwo = styled(motion.div)`
     display: flex;
@@ -54,14 +28,8 @@ const BoxTwo = styled(motion.div)`
 
 `;
 
-const LilBox = styled.div`
-    margin-top: 200px;
-    display: column;
-    width: 480px;
-    
-`;
-const BigBox = styled.div`
 
+const BigBox = styled(motion.div)`
     display: flex;
     flex-wrap: wrap;
     background-position: center center;
@@ -80,16 +48,6 @@ const MainBox = styled.div`
     margin-left: 50px;
 
 `
-
-const BigPhoto = styled.div<{ $bgPhoto: string }>`
-    background-image: url(${props => props.$bgPhoto});
-    background-size: cover;
-
-    border-radius: 5px;
-    height: 450px;
-    width: 300px;
-    margin: 10px;
-    `;
 
 const LilPhoto = styled.div<{ $bgPhoto: string }>`
     background-image: url(${props => props.$bgPhoto});
@@ -240,18 +198,18 @@ function Search() {
                         </t.Banner>
                     ) : (
                         <t.Banner $bgPhoto={makeImagePath(data?.results[0]?.backdrop_path || "")}>
-                            <Box>
-                                <BigPhoto $bgPhoto={makeImagePath(data?.results[0].poster_path || "")}/>
-                                <LilBox>
-                                    <Title>{data?.results[0]?.title || data?.results[0]?.name}</Title>
-                                    <OiginTitle>{data?.results[0]?.original_title || data?.results[0]?.original_name}</OiginTitle>
-                                    <Date>{data?.results[0].release_date || data?.results[0].first_air_date} / {data?.results[0].media_type && (
+                            <t.Box>
+                                <t.BigPhoto $bgPhoto={makeImagePath(data?.results[0].poster_path || "")}/>
+                                <t.LilBox>
+                                    <o.Title>{data?.results[0]?.title || data?.results[0]?.name}</o.Title>
+                                    <o.LilTitle>{data?.results[0]?.original_title || data?.results[0]?.original_name}</o.LilTitle>
+                                    <o.Date>{data?.results[0].release_date || data?.results[0].first_air_date} / {data?.results[0].media_type && (
                                         <span>{data.results[0].media_type.charAt(0).toUpperCase() + data.results[0].media_type.slice(1)}
                                         </span>
-                                    )}</Date>
-                                    <OverView>{data?.results[0]?.overview}</OverView>
-                                </LilBox>
-                            </Box>
+                                    )}</o.Date>
+                                    <o.OverView>{data?.results[0]?.overview}</o.OverView>
+                                </t.LilBox>
+                            </t.Box>
                         </t.Banner>
                     )}
 

@@ -109,11 +109,16 @@ function Tv() {
             <t.Banner  
             $bgPhoto = {makeImagePath(data?.results[0].backdrop_path || "")}
             >
-                <o.Title>{data?.results[0].name}</o.Title>
-                <o.LilTitle>{data?.results[0].original_name}</o.LilTitle>
-                <o.Popularity>좋아요👍:{data?.results[0].popularity}</o.Popularity>
-                <o.Date>첫 방영일: {data?.results[0].first_air_date}</o.Date>
-                <o.OverView>{data?.results[0].overview}</o.OverView>
+            <t.Box>
+            <t.BigPhoto $bgPhoto={makeImagePath(data?.results[0].poster_path || "")}/>
+                <t.LilBox>
+                    <o.Title>{data?.results[0].name}</o.Title>
+                    <o.LilTitle>{data?.results[0].original_name}</o.LilTitle>
+                    <o.Popularity>좋아요👍:{data?.results[0].popularity}</o.Popularity>
+                    <o.Date>첫 방영일: {data?.results[0].first_air_date}</o.Date>
+                    <o.OverView>{data?.results[0].overview}</o.OverView>
+                </t.LilBox>
+            </t.Box>
             </t.Banner>
             
                 

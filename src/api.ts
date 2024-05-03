@@ -41,6 +41,7 @@ interface IMovie {
     genre :string;
     videos: boolean;
     media_type: string;
+    key:string;
 }
 
 

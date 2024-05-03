@@ -6,29 +6,26 @@ import { SwiperSlide } from "swiper/swiper-react";
 //슬라이드 내 출력물 Css
 
 export const Title = styled.h2`
-    font-size: 85px;
-    padding-top: 300px;
+    font-size: 30px;
     margin-bottom: 15px;
+    margin-left: 30px;
 `;
 
 export const LilTitle = styled.h2`
-    font-size: 20px;
-    margin-bottom: 40px;
+    font-size: 25px;
+    margin-bottom: 10px;
     padding-left: 45px;
 `;
 
 export const Date = styled.h2`
-    font-size: 22px;
-    margin-left: 150px;
-    margin-bottom: 20px;
-    width: 50%;
+    font-size: 18px;
+    margin-left: 100px;
 `;
 
 export const OverView = styled.p`
+    padding-top: 20px;
     font-size: 15px;
     margin-left: 40px;
-    padding-bottom: 200px;
-    width: 50%;
 `;
 
 export const Slider1 = styled(motion.div)`
