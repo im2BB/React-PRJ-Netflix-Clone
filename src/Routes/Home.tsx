@@ -10,7 +10,6 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/swiper.min.css";
 import "swiper/components/navigation/navigation.min.css";
 import SwiperCore, { Autoplay, Navigation, Pagination } from "swiper";
-import { YouTubeProps } from "react-youtube";
 import { useEffect, useState } from "react";
 import ReactPlayer from "react-player";
 import * as S from "../CSS/LilBoxCss";
@@ -20,67 +19,7 @@ import * as t from "../CSS/MainCss";
 
 
 const StyledSwiper = styled(Swiper)`
-
 `;
-
-
-const Box = styled(motion.div)<{$bgPhoto:string}>` 
-    background-color: white;
-    background-image: url(${(props) => props.$bgPhoto });
-    background-size: cover;
-    background-position: center center;
-    transform: translate(-10%, -10%);
-    height: 250px;
-    font-size: 35px;
-    z-index: 1000;
-    border-radius: 2px;
-    position: relative;
-`;    
-
-
-
-const boxVariants = {
-    
-    normal: {
-        scale:1,
-    },
-    hover: {
-        scale:1.05,
-        y: -5,
-        transition: {
-            delay:0.1,
-            type:"tween",
-        },
-    },
-};
-
-
-const Info = styled(motion.div)`
-    background-color: ${(props) => props.theme.black.mediumdark};
-    opacity: 0;
-    position: absolute;
-    width: 100%;
-    bottom: 0;
-    h4{
-        text-align: center;
-        font-size: 15px;
-    }
-`;
-
-
-
-const infoVariants = {
-    hover: {
-        opacity:1.05,
-        transition: {
-            delay:0.1,
-            type:"tween",
-        },
-    }
-}
-
-
-
 
 
 const renderStars = (rating:number, color = "#f1f169") => {  //별점 출력 함수
@@ -113,25 +52,27 @@ function MovieSlider({ title, movies }: { title: string, movies: any[] }) {
         history(`/movies/${movieId}`);
     };
 
+    
+
     return (
         <o.Slider1>
             <o.FrontTitle>{title}</o.FrontTitle>
             <StyledSwiper slidesPerView={5} autoHeight={true} navigation={true} spaceBetween={15} watchOverflow={true}>
                 {movies.map((movie) => (
                     <SwiperSlide key={movie.id}>
-                        <Box
+                        <o.Box
                             layoutId={movie.id + ""}
                             whileHover="hover"
                             initial="normal"
-                            variants={boxVariants}
+                            variants={o.boxVariants}
                             onClick={() => onBoxClicked(movie.id)}
                             transition={{ type: "tween" }}
                             $bgPhoto={makeImagePath(movie.backdrop_path)}
                         >
-                            <Info variants={infoVariants}>
+                            <o.Info variants={o.infoVariants}>
                                 <h4 style={{ fontSize: "26px", padding: "10px" }}>{movie.title}</h4>
-                            </Info>
-                        </Box>
+                            </o.Info>
+                        </o.Box>
                     </SwiperSlide>
                 ))}
             </StyledSwiper>
@@ -197,7 +138,11 @@ function Home() {
     );
     console.log(clickedMovie);
     
-    
+    const filterDuplicates = (moviesToFilter: any[], excludedMovies: any[]) => {
+        return moviesToFilter.filter(movie =>
+            !excludedMovies.some(excludedMovie => excludedMovie.id === movie.id)
+        );
+    };
 
     
         SwiperCore.use([Navigation,Pagination, Autoplay]);
@@ -219,16 +164,15 @@ function Home() {
                     
                     <MovieSlider title="현재 상영중" movies={data?.results || []} />
                     <MovieSlider title="죽기전에 봐야 할 영화" movies={RatedMovie?.results || []} />
-                    {/* <MovieSlider title="인기 상영작" movies={PopularMovie?.results || []} /> */}
-                    <MovieSlider title="예정작" movies={Upcoming?.results || []} />
-
+                    <MovieSlider title="인기 상영작" movies={filterDuplicates(PopularMovie?.results || [], data?.results || [])}  />
+                    <MovieSlider title="예정작" movies={filterDuplicates(Upcoming?.results || [], data?.results || [])} />
+                    
                 
                 <AnimatePresence>
                 {bigMovieMatch ? (
                         <>
                             <S.OverLay 
                             onClick={onOverLayClicked}
-                            exit={{opacity:0}}
                             animate={{opacity:2}}
                             />
                             <S.BigType

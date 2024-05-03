@@ -10,7 +10,6 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/swiper.min.css";
 import "swiper/components/navigation/navigation.min.css";
 import SwiperCore, { Autoplay, Navigation, Pagination } from "swiper";
-import { YouTubeProps } from "react-youtube";
 import { useEffect, useState } from "react";
 import ReactPlayer from "react-player";
 import * as S from "../CSS/LilBoxCss";
@@ -18,67 +17,8 @@ import * as o from "../CSS/BigBoxCss";
 import * as t from "../CSS/MainCss";
 
 
-const Popularity = styled.h2`
-    font-size: 15px;
-    margin-bottom: 40px;
-    margin-left: 125px;
-`
-
-
 const StyledSwiper = styled(SwiperSlide)`
-
 `;
-
-const Box = styled(motion.div)<{$bgPhoto:string}>`
-    background-color: white;
-    background-image: url(${props => props.$bgPhoto});
-    background-size: cover;
-    background-position: center center;
-    transform: translate(-50%, -50%);
-    height: auto;
-    color :white;
-    font-size:24px;
-    height: 250px;
-    
-`;
-
-const boxVariants = {
-    normal: {
-        scale:1,
-    },
-    hover: {
-        scale:1.05,
-        y: 0,
-        transition: {
-            delay:0.1,
-            type:"tween",
-        },
-    },
-};
-
-
-
-const Info = styled(motion.div)`
-    background-color: ${(props) => props.theme.black.mediumdark};
-    opacity: 0;
-    position: absolute;
-    width: 100%;
-    bottom: 0;
-    h4{
-        text-align: center;
-        font-size: 15px;
-    }
-`;
-
-const infoVariants = {
-    hover: {
-        opacity:1.05,
-        transition: {
-            delay:0.1,
-            type:"tween",
-        },
-    }
-}
 
 
 const renderStars = (rating:number, color = "#f1f169") => {  //별점 출력 함수
@@ -104,9 +44,6 @@ const renderStars = (rating:number, color = "#f1f169") => {  //별점 출력 함
 function Tv() {
     const history = useNavigate()
     const bigTvMatch: PathMatch<string> | null = useMatch("/tv/:tvid");
-    const onPlayerReady: YouTubeProps['onReady'] = (event) => {
-        event.target.pauseVideo();
-    }
     const { data, isLoading } = useQuery<IGetTvResult>(
         ["tv", "onTheAir"],
         getTvs
@@ -131,17 +68,6 @@ function Tv() {
         history(`/tv/${tvid}`)
     };
     const onOverLayClicked = () => history(`/tv`)  
-
-    const opts: YouTubeProps['opts'] = {
-        height: '540',
-        width: '620',
-        playerVars: {
-        autoplay: 1,
-        rel: 0, //관련 동영상 표시하지 않음 (근데 별로 쓸모 없는듯..)
-        modestbranding: 1, // 컨트롤 바에 youtube 로고를 표시하지 않음
-        },
-    };
-
 
     const [selectedVideo, setSelectedVideo] = useState<any>(null);
 
@@ -185,7 +111,7 @@ function Tv() {
             >
                 <o.Title>{data?.results[0].name}</o.Title>
                 <o.LilTitle>{data?.results[0].original_name}</o.LilTitle>
-                <Popularity>좋아요👍:{data?.results[0].popularity}</Popularity>
+                <o.Popularity>좋아요👍:{data?.results[0].popularity}</o.Popularity>
                 <o.Date>첫 방영일: {data?.results[0].first_air_date}</o.Date>
                 <o.OverView>{data?.results[0].overview}</o.OverView>
             </t.Banner>
@@ -201,20 +127,20 @@ function Tv() {
                     {data?.results.map((tv) => (
                         <SwiperSlide 
                         key={tv.id}> 
-                        <Box
+                        <o.Box
                             layoutId={tv.id + ""}
                             whileHover="hover"
                             initial="normal"
-                            variants={boxVariants}
+                            variants={o.boxVariants}
                             onClick={() => onBoxClicked(tv.id)}
                             transition={{ type: "tween" }}
                             $bgPhoto={makeImagePath(tv.backdrop_path)}
                         >
                             <img  /> 
-                            <Info variants={infoVariants}>
+                            <o.Info variants={o.infoVariants}>
                             <h4 style={{fontSize:"26px",padding:"10px"}}>{tv.name}</h4>
-                            </Info>
-                        </Box>
+                            </o.Info>
+                        </o.Box>
                         </SwiperSlide>
                     ))}
                     </Swiper>
@@ -222,31 +148,31 @@ function Tv() {
                 
                 <StyledSwiper>
                 <o.FrontTitle style={{margin:"20px", fontSize:"25px"}}>Top 10</o.FrontTitle>
-                <Swiper slidesPerView={5} navigation={true} spaceBetween= {10} >
-                    {Populars?.results.map((tv) =>{
-                    if (data?.results.some((dataTv)=> dataTv.id === tv.id)) return null;
-                    return (
-                        <SwiperSlide 
-                        key={tv.id}> 
-                        <Box
-                            layoutId={tv.id + ""}
-                            whileHover="hover"
-                            initial="normal"
-                            variants={boxVariants}
-                            onClick={() => onBoxClicked(tv.id)}
-                            transition={{ type: "tween" }}
-                            $bgPhoto={makeImagePath(tv.backdrop_path)}
-                        >
-                            <img /> 
-                            <Info variants={infoVariants}>
-                            <h4 style={{fontSize:"26px",padding:"10px"}}>{tv.name}</h4>
-                            </Info>
-                        </Box>
-                        </SwiperSlide>
-                    );
-                    })}
+                    <Swiper slidesPerView={5} navigation={true} spaceBetween= {10} >
+                        {Populars?.results.map((tv) =>{
+                            if (data?.results.some((dataTv)=> dataTv.id === tv.id)) return null;
+                            return (
+                                <SwiperSlide 
+                                key={tv.id}> 
+                                <o.Box
+                                    layoutId={tv.id + ""}
+                                    whileHover="hover"
+                                    initial="normal"
+                                    variants={o.boxVariants}
+                                    onClick={() => onBoxClicked(tv.id)}
+                                    transition={{ type: "tween" }}
+                                    $bgPhoto={makeImagePath(tv.backdrop_path)}
+                                >
+                                    <img /> 
+                                    <o.Info variants={o.infoVariants}>
+                                    <h4 style={{fontSize:"26px",padding:"10px"}}>{tv.name}</h4>
+                                    </o.Info>
+                                </o.Box>
+                                </SwiperSlide>
+                            );
+                        })}
                     </Swiper>
-                    </StyledSwiper>
+                </StyledSwiper>
 
                     <StyledSwiper>
                 <o.FrontTitle style={{margin:"20px", fontSize:"25px"}}>죽기전에 봐야할 Tv 프로그램</o.FrontTitle>
@@ -256,20 +182,20 @@ function Tv() {
                     return (
                         <SwiperSlide 
                         key={tv.id}> 
-                        <Box
+                        <o.Box
                             layoutId={tv.id + ""}
                             whileHover="hover"
                             initial="normal"
-                            variants={boxVariants}
+                            variants={o.boxVariants}
                             onClick={() => onBoxClicked(tv.id)}
                             transition={{ type: "tween" }}
                             $bgPhoto={makeImagePath(tv.backdrop_path)}
                         >
                             <img /> 
-                            <Info variants={infoVariants}>
+                            <o.Info variants={o.infoVariants}>
                             <h4 style={{fontSize:"26px",padding:"10px"}}>{tv.name}</h4>
-                            </Info>
-                        </Box>
+                            </o.Info>
+                        </o.Box>
                         </SwiperSlide>
                     );
                     })}
