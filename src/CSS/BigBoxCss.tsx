@@ -2,6 +2,8 @@ import { motion } from "framer-motion";
 import styled from "styled-components";
 
 
+//슬라이드 내 출력물 Css
+
 export const Title = styled.h2`
     font-size: 85px;
     padding-top: 300px;

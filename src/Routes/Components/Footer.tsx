@@ -3,6 +3,7 @@ import styled from "styled-components";
 
 
 const Nav = styled(motion.nav)`
+    
     height: 100%;
     color: white;
     display: flex;
@@ -29,6 +30,7 @@ const Ather = styled.div`
 `;
 
 const Line =styled.hr`
+margin-top: 60px;
     height: 1px;
 `;
 

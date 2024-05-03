@@ -103,6 +103,43 @@ const renderStars = (rating:number, color = "#f1f169") => {  //별점 출력 함
     );
 };
 
+
+
+//슬라이더 
+function MovieSlider({ title, movies }: { title: string, movies: any[] }) {
+    const history = useNavigate();
+
+    const onBoxClicked = (movieId: number) => {
+        history(`/movies/${movieId}`);
+    };
+
+    return (
+        <o.Slider1>
+            <o.FrontTitle>{title}</o.FrontTitle>
+            <StyledSwiper slidesPerView={5} autoHeight={true} navigation={true} spaceBetween={15} watchOverflow={true}>
+                {movies.map((movie) => (
+                    <SwiperSlide key={movie.id}>
+                        <Box
+                            layoutId={movie.id + ""}
+                            whileHover="hover"
+                            initial="normal"
+                            variants={boxVariants}
+                            onClick={() => onBoxClicked(movie.id)}
+                            transition={{ type: "tween" }}
+                            $bgPhoto={makeImagePath(movie.backdrop_path)}
+                        >
+                            <Info variants={infoVariants}>
+                                <h4 style={{ fontSize: "26px", padding: "10px" }}>{movie.title}</h4>
+                            </Info>
+                        </Box>
+                    </SwiperSlide>
+                ))}
+            </StyledSwiper>
+        </o.Slider1>
+    );
+}
+
+
 function Home() {
     const history = useNavigate()
     const bigMovieMatch: PathMatch<string> | null = useMatch("/movies/:movieId")
@@ -128,9 +165,7 @@ function Home() {
 
     const [selectedVideo, setSelectedVideo] = useState<any>(null);
 
-    const onBoxClicked = (movieId:number) => {
-        history(`/movies/${movieId}`)
-    };
+    
     const onOverLayClicked = () => history(`/react-PRJ2`)  
     
     
@@ -163,6 +198,8 @@ function Home() {
     console.log(clickedMovie);
     
     
+
+    
         SwiperCore.use([Navigation,Pagination, Autoplay]);
         
         return <t.Wrapper>
@@ -179,113 +216,11 @@ function Home() {
                         <o.Date>개봉일 : {data?.results[0].release_date}</o.Date>
                         <o.OverView>{data?.results[0].overview}</o.OverView>
                     </t.Banner>
-                    <o.Slider1>
-                        
-                        <o.FrontTitle>현재 상영중</o.FrontTitle>
-                                <StyledSwiper slidesPerView={5} autoHeight={true} navigation={true} spaceBetween={15} watchOverflow={true}>
-                                    {data?.results.map((movie) => (
-                                                <SwiperSlide 
-                                                        key={movie.id}>
-                                                        <Box
-                                                            layoutId={movie.id + ""}
-                                                            whileHover="hover"
-                                                            initial="normal"
-                                                            variants={boxVariants}
-                                                            onClick={() => onBoxClicked(movie.id)}
-                                                            transition={{ type: "tween" }}
-                                                            $bgPhoto={makeImagePath(movie.backdrop_path)}
-                                                    >
-                                                        
-                                                        <Info variants={infoVariants}>
-                                                            <h4 style={{ fontSize: "26px", padding: "10px" }}>{movie.title}</h4>
-                                                        </Info>
-                                                    </Box>
-                                                </SwiperSlide>
-                                                
-                                    ))}
-                                </StyledSwiper>
-                    </o.Slider1>
                     
-                    <o.Slider1>
-                        <o.FrontTitle style={{ margin: "20px", fontSize: "25px" }}>죽기전에 봐야 할 영화</o.FrontTitle>
-                        <StyledSwiper slidesPerView={5} navigation={true} spaceBetween={15} watchOverflow={true}>
-                            {RatedMovie?.results.map((movie) => {
-                                if (data?.results.some((dataMovie) => dataMovie.id === movie.id)) return null;
-                                return (
-                                    <SwiperSlide key={movie.id}>
-                                        <Box
-                                            layoutId={movie.id + ""}
-                                            whileHover="hover"
-                                            initial="normal"
-                                            variants={boxVariants}
-                                            onClick={() => onBoxClicked(movie.id)}
-                                            transition={{ type: "tween" }}
-                                            $bgPhoto={makeImagePath(movie.backdrop_path)}
-                                        >
-                                            
-                                            <Info variants={infoVariants}>
-                                                <h4 style={{ fontSize: "26px", padding: "10px" }}>{movie.title}</h4>
-                                            </Info>
-                                        </Box>
-                                    </SwiperSlide>
-                                );
-                            })}
-                        </StyledSwiper>
-                    </o.Slider1>
-
-                    <o.Slider1>
-                        <o.FrontTitle style={{ margin: "20px", fontSize: "25px" }}>인기 상영작</o.FrontTitle>
-                        <StyledSwiper  slidesPerView={5} navigation={true} spaceBetween={15} watchOverflow={true}>
-                            {PopularMovie?.results.map((movie) => {
-                                if (data?.results.some((dataMovie) => dataMovie.id === movie.id)) return null;
-                                return (
-                                    <SwiperSlide key={movie.id}>
-                                        <Box
-                                            layoutId={movie.id + ""}
-                                            whileHover="hover"
-                                            initial="normal"
-                                            variants={boxVariants}
-                                            onClick={() => onBoxClicked(movie.id)}
-                                            transition={{ type: "tween" }}
-                                            $bgPhoto={makeImagePath(movie.backdrop_path)}
-                                        >
-                                        
-                                            <Info variants={infoVariants}>
-                                                <h4 style={{ fontSize: "26px", padding: "10px" }}>{movie.title}</h4>
-                                            </Info>
-                                        </Box>
-                                    </SwiperSlide>
-                                );
-                            })}
-                        </StyledSwiper>
-                    </o.Slider1>
-
-                    <o.Slider1>
-                        <o.FrontTitle style={{ margin: "20px", fontSize: "25px" }}>예정작</o.FrontTitle>
-                        <StyledSwiper  slidesPerView={5} navigation={true} spaceBetween={15} watchOverflow={true}>
-                            {Upcoming?.results.map((movie) => {
-                                if (data?.results.some((dataMovie) => dataMovie.id === movie.id)) return null;
-                                return (
-                                    <SwiperSlide key={movie.id}>
-                                        <Box
-                                            layoutId={movie.id + ""}
-                                            whileHover="hover"
-                                            initial="normal"
-                                            variants={boxVariants}
-                                            onClick={() => onBoxClicked(movie.id)}
-                                            transition={{ type: "tween" }}
-                                            $bgPhoto={makeImagePath(movie.backdrop_path)}
-                                        >
-                                            
-                                            <Info variants={infoVariants}>
-                                                <h4 style={{ fontSize: "26px", padding: "10px" }}>{movie.title}</h4>
-                                            </Info>
-                                        </Box>
-                                    </SwiperSlide>
-                                );
-                            })}
-                        </StyledSwiper>
-                    </o.Slider1>
+                    <MovieSlider title="현재 상영중" movies={data?.results || []} />
+                    <MovieSlider title="죽기전에 봐야 할 영화" movies={RatedMovie?.results || []} />
+                    {/* <MovieSlider title="인기 상영작" movies={PopularMovie?.results || []} /> */}
+                    <MovieSlider title="예정작" movies={Upcoming?.results || []} />
 
                 
                 <AnimatePresence>

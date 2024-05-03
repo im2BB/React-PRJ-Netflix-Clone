@@ -3,6 +3,8 @@ import styled from "styled-components";
 
 
 
+//전체적 크기 및 기본 설정 Css
+
 export const Wrapper = styled.div`
     background-color: black;
     padding-bottom: 200px;

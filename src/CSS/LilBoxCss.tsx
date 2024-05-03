@@ -1,6 +1,9 @@
 import { motion } from "framer-motion";
 import styled from "styled-components";
 
+
+//작은 박스내 출력물 css
+
 export const OverLay = styled(motion.div)`
     position: fixed;
     top: 0;
@@ -105,8 +108,8 @@ export const Frame = styled.div`
     position: relative;
     padding-top: 150px;
     margin: 35px;
-    top: -520px;
-    height: 80vh;
+    top: -500px;
+    height: 96vh;
     width: 70vw;
     .player {
         position: absolute;

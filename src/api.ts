@@ -161,16 +161,9 @@ export interface IGetIPersonList {
 
     //인물 관련 Api
     export function getCreditsByMediaType(mediaType: string, mediaId: string) {
-        let url;
-        if (mediaType === "movie") {
-            url = `${BASE_PATH}/movie/${mediaId}/credits?api_key=${API_KEY}&${LANGUAGE}`;
-        } else if (mediaType === "tv") {
-            url = `${BASE_PATH}/tv/${mediaId}/credits?api_key=${API_KEY}&${LANGUAGE}`;
-        } else {
-            throw new Error("Invalid media type");
-        }
-    
-        return fetch(url).then(response => response.json());
+        return fetch(`${BASE_PATH}/person/person_id?${API_KEY}&${LANGUAGE}`).then(
+            response => response.json()
+        );
     }
 
     //영화 관련 Api
