@@ -3,6 +3,16 @@ const API_KEY = "ec180f3d7555520fa9d4bcff596736b9";
 const BASE_PATH = "https://api.themoviedb.org/3";
 const LANGUAGE = "language=ko-KR";
 
+
+interface IProvider {
+    logo_path: string;
+    provider_id: number;
+    provider_name: string;
+    display_priority: number;
+}
+
+
+
 interface IPepleList {
     adult:string;
     gender:number;
@@ -67,6 +77,7 @@ interface IYoutube {
     first_air_date:number;
     popularity:number;
     vote_average:number;
+    
 }
 
 export interface ISearch {
@@ -85,6 +96,17 @@ export interface ISearch {
     genre: string;
     videos: string;
     media_type: string;
+}
+
+export interface IWatchProvider {
+    link: string;
+    rent?: IProvider[];
+    buy?: IProvider[];
+}
+
+export interface IGetWatchProvidersResult {
+    id: number;
+    results: Record<string, IWatchProvider>;
 }
 
 export interface IGetTvResult {
@@ -122,6 +144,7 @@ export interface IGetTvResult {
         total_pages: number;
         total_results: number;
         vote_average: number;
+        key:number;
     }
 
 export interface IGetMoviesResult {
@@ -134,6 +157,7 @@ export interface IGetMoviesResult {
     total_pages: number;
     total_results: number;
     vote_average:number;
+    itemId :number;
     } 
 
 export interface IGetIGenreList {
@@ -198,6 +222,13 @@ export interface IGetIPersonList {
         );
     }
 
+    export function getWatchProviders(movieId: string): Promise<IGetWatchProvidersResult> {
+        return fetch(`${BASE_PATH}/movie/${movieId}/watch/providers?api_key=${API_KEY}&${LANGUAGE}`)
+            .then(response => response.json()
+        );
+    }
+
+
     //Tv 관련 Api
 
     export function getTvs() {        
@@ -243,14 +274,14 @@ export interface IGetIPersonList {
     
     
     //유튜브 관련 Api
-    export function getYoutubeList(mediaType: string, itemId: string, language?: string): Promise<any> {
+    export function getYoutubeList(mediaType: string, itemId: string, language?: string): Promise<IGetYoutubeResult> {
         let url;
         let searchLanguage = "ko-KR"; // 우선적으로 사용할 언어 설정
         
         if (language && language.toLowerCase() === "en-en") {
             searchLanguage = "en-EN"; // 입력된 언어 값이 "en-EN"인 경우, 검색 언어를 변경
         }
-    
+        
         if (mediaType === "movie") {
             url = `${BASE_PATH}/movie/${itemId}/videos?api_key=${API_KEY}&language=${searchLanguage}`;
         } else if (mediaType === "tv") {
@@ -258,7 +289,7 @@ export interface IGetIPersonList {
         } else {
             throw new Error("Invalid media type");
         }
-    
+        
         return fetch(url)
             .then((response) => response.json())
             .then((data) => {
@@ -269,5 +300,4 @@ export interface IGetIPersonList {
                 return data;
             });
     }
-
 

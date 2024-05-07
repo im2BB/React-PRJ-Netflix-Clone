@@ -1,6 +1,6 @@
 import { Link, NavigateFunction, useMatch, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { motion, useAnimate, useAnimation, useScroll } from "framer-motion";
+import { motion, useAnimation, useScroll } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
