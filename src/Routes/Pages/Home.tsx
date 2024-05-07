@@ -30,8 +30,6 @@ function MovieSlider({ title, movies }: { title: string, movies: any[] }) {
         history(`/movies/${movieId}`);
     };
 
-    
-
     return (
         <o.Slider1>
             <o.FrontTitle>{title}</o.FrontTitle>
@@ -62,6 +60,9 @@ function MovieSlider({ title, movies }: { title: string, movies: any[] }) {
 function Home() {
     const history = useNavigate()
     const bigMovieMatch: PathMatch<string> | null = useMatch("/movies/:movieId")
+    const onOverLayClicked = () => history(`/react-PRJ2`)  
+    const [selectedVideo, setSelectedVideo] = useState<any>(null);
+
     const { data, isLoading } = useQuery<IGetMoviesResult>(
         ["Getmovies", "GetnowPlaying"],
         getMovies
@@ -82,14 +83,9 @@ function Home() {
         getUpcoming
     );
     
-    const [selectedVideo, setSelectedVideo] = useState<any>(null);
-
-    
-    const onOverLayClicked = () => history(`/react-PRJ2`)  
 
 
-    
-    
+
 
     useEffect(() => {
         const fetchVideo = async () => {
@@ -148,7 +144,7 @@ function Home() {
                     </t.Box>
                     </t.Banner>
                     
-                    <MovieSlider title="현재 상영중" movies={data?.results || []} />
+                    <MovieSlider title="현재 상영중" movies={data?.results.slice(1) || []} />
                     <MovieSlider title="죽기전에 봐야 할 영화" movies={RatedMovie?.results || []} />
                     <MovieSlider title="인기 상영작" movies={filterDuplicates(PopularMovie?.results || [], data?.results || [])}  />
                     <MovieSlider title="예정작" movies={filterDuplicates(Upcoming?.results || [], data?.results || [])} />

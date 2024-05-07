@@ -128,7 +128,7 @@ export const Dhk = styled.h1`
 
 `;
 
-export const BigCover = styled.div`
+export const BigCover = styled(motion.div)`
     width: 100%;
     background-size: cover;
     background-position: center center;
@@ -138,7 +138,7 @@ export const BigCover = styled.div`
 `;
 
 
-export const BigMain = styled.div`
+export const BigMain = styled(motion.div)`
 display: flex;
 flex-wrap: wrap;
 `;

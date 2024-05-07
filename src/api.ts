@@ -216,17 +216,18 @@ export interface IGetIPersonList {
         );
     }
 
-    export function getMoviesList() {
-        return fetch(`${BASE_PATH}/genre/movie/list?api_key=${API_KEY}&${LANGUAGE}`).then(
-            (response) => response.json()
-        );
-    }
-
-    export function getWatchProviders(movieId: string): Promise<IGetWatchProvidersResult> {
-        return fetch(`${BASE_PATH}/movie/${movieId}/watch/providers?api_key=${API_KEY}&${LANGUAGE}`)
+    export function getWatchProviders(itemId: string): Promise<IGetWatchProvidersResult> {
+        return fetch(`${BASE_PATH}/movie/${itemId}/watch/providers?api_key=${API_KEY}&${LANGUAGE}`)
             .then(response => response.json()
         );
     }
+
+    export function getCredits(itemId: string) {
+        return fetch(`${BASE_PATH}/movie/${itemId}/credits?api_key=${API_KEY}&${LANGUAGE}`).then(
+            (response) => response.json()
+        );
+    }
+    
 
 
     //Tv 관련 Api
@@ -260,6 +261,7 @@ export interface IGetIPersonList {
             (response) => response.json()
         );
     }
+
     
 
 

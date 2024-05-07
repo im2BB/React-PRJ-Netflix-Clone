@@ -26,10 +26,11 @@ export const OverView = styled.p`
     padding-top: 20px;
     font-size: 15px;
     margin-left: 40px;
+    
 `;
 
 export const Slider1 = styled(motion.div)`
-top: -350px;
+    top: -350px;
 
 `;
 
@@ -45,7 +46,6 @@ export const Box = styled(motion.div)<{$bgPhoto:string}>`
     background-size: cover;
     background-position: center center;
     transform: translate(-50%, -50%);
-    height: auto;
     color :white;
     font-size:24px;
     height: 250px;
@@ -62,7 +62,7 @@ export const boxVariants = {
         scale:1.05,
         y: -5,
         transition: {
-            delay:0.1,
+            delay:0.,
             type:"tween",
         },
     },

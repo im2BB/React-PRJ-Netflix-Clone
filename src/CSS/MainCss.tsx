@@ -13,7 +13,7 @@ export const Wrapper = styled.div`
 export const LilBox = styled.div`
     margin-top: 200px;
     display: column;
-    width: 480px;
+    width: 50vw;
     
 `;
 

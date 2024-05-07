@@ -3,7 +3,7 @@ import { useQuery } from "react-query";
 import { IGetTvResult, getTvs, getPopulars, getTodaysTvs, getTopRated, getYoutubeList } from "../../api";
 import styled from "styled-components";
 import { makeImagePath } from "../../Utils/utils";
-import { motion,AnimatePresence } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import { PathMatch, useMatch, useNavigate } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/swiper.min.css";
@@ -17,13 +17,45 @@ import * as t from "../../CSS/MainCss";
 import { renderStars } from "../../Utils/RenderStars";
 
 
-const StyledSwiper = styled(SwiperSlide)`
+const StyledSwiper = styled(Swiper)`
 `;
 
+//슬라이더 
+function TvSlider({ title, Tvs }: { title: string, Tvs: any[] }) {
+    const history = useNavigate()
+    const onBoxClicked = (tvId: number) => {
+        history(`/tv/${tvId}`);
+    };
 
+    return (
+        <o.Slider1>
+            <o.FrontTitle>{title}</o.FrontTitle>
+            <StyledSwiper slidesPerView={5} autoHeight={true} navigation={true} spaceBetween={15} watchOverflow={true}>
+                {Tvs.map((tv) => (
+                    <SwiperSlide key={tv.id}>
+                        <o.Box
+                            layoutId={tv.id + ""}
+                            whileHover="hover"
+                            initial="normal"
+                            variants={o.boxVariants}
+                            onClick={() => onBoxClicked(tv.id)}
+                            transition={{ type: "tween" }}
+                            $bgPhoto={makeImagePath(tv.backdrop_path)}
+                        >
+                            <o.Info variants={o.infoVariants}>
+                                <h4 style={{ fontSize: "26px", padding: "10px" }}>{tv.title}</h4>
+                            </o.Info>
+                        </o.Box>
+                    </SwiperSlide>
+                ))}
+            </StyledSwiper>
+        </o.Slider1>
+    );
+}
 
 function Tv() {
-    const history = useNavigate()
+    const history = useNavigate();
+    const onOverLayClicked = () => history(`/tv`)
     const bigTvMatch: PathMatch<string> | null = useMatch("/tv/:tvid");
     const { data, isLoading } = useQuery<IGetTvResult>(
         ["tv", "onTheAir"],
@@ -45,11 +77,6 @@ function Tv() {
         getTopRated
     );
         
-    const onBoxClicked = (tvid:number) => {
-        history(`/tv/${tvid}`)
-    };
-    const onOverLayClicked = () => history(`/tv`)  
-
     const [selectedVideo, setSelectedVideo] = useState<any>(null);
 
     useEffect(() => {
@@ -81,6 +108,13 @@ function Tv() {
     );
     console.log(clickedtv);
 
+    const filterDuplicates = (tvToFilter: any[], excludedTv: any[]) => {
+        return tvToFilter.filter(tv =>
+            !excludedTv.some(excludedTv => excludedTv.id === tv.id)
+        );
+    };
+
+    
     SwiperCore.use([Navigation,Pagination, Autoplay]);
     
         return <t.Wrapper>
@@ -102,98 +136,17 @@ function Tv() {
             </t.Box>
             </t.Banner>
             
-                
-                <StyledSwiper>
-                <o.FrontTitle>On the Air</o.FrontTitle>
-                <Swiper 
-                    slidesPerView={5}
-                    navigation={true}
-                    spaceBetween= {10} 
-                    >
-                    {data?.results.map((tv) => (
-                        <SwiperSlide 
-                        key={tv.id}> 
-                        <o.Box
-                            layoutId={tv.id + ""}
-                            whileHover="hover"
-                            initial="normal"
-                            variants={o.boxVariants}
-                            onClick={() => onBoxClicked(tv.id)}
-                            transition={{ type: "tween" }}
-                            $bgPhoto={makeImagePath(tv.backdrop_path)}
-                        >
-                            <img  /> 
-                            <o.Info variants={o.infoVariants}>
-                            <h4 style={{fontSize:"26px",padding:"10px"}}>{tv.name}</h4>
-                            </o.Info>
-                        </o.Box>
-                        </SwiperSlide>
-                    ))}
-                    </Swiper>
-                </StyledSwiper>
-                
-                <StyledSwiper>
-                <o.FrontTitle style={{margin:"20px", fontSize:"25px"}}>Top 10</o.FrontTitle>
-                    <Swiper slidesPerView={5} navigation={true} spaceBetween= {10} >
-                        {Populars?.results.map((tv) =>{
-                            if (data?.results.some((dataTv)=> dataTv.id === tv.id)) return null;
-                            return (
-                                <SwiperSlide 
-                                key={tv.id}> 
-                                <o.Box
-                                    layoutId={tv.id + ""}
-                                    whileHover="hover"
-                                    initial="normal"
-                                    variants={o.boxVariants}
-                                    onClick={() => onBoxClicked(tv.id)}
-                                    transition={{ type: "tween" }}
-                                    $bgPhoto={makeImagePath(tv.backdrop_path)}
-                                >
-                                    <img /> 
-                                    <o.Info variants={o.infoVariants}>
-                                    <h4 style={{fontSize:"26px",padding:"10px"}}>{tv.name}</h4>
-                                    </o.Info>
-                                </o.Box>
-                                </SwiperSlide>
-                            );
-                        })}
-                    </Swiper>
-                </StyledSwiper>
-
-                    <StyledSwiper>
-                <o.FrontTitle style={{margin:"20px", fontSize:"25px"}}>죽기전에 봐야할 Tv 프로그램</o.FrontTitle>
-                <Swiper slidesPerView={5} navigation={true} spaceBetween= {10} >
-                    {TopRated?.results.map((tv) =>{
-                    if (data?.results.some((dataTv)=> dataTv.id === tv.id)) return null;
-                    return (
-                        <SwiperSlide 
-                        key={tv.id}> 
-                        <o.Box
-                            layoutId={tv.id + ""}
-                            whileHover="hover"
-                            initial="normal"
-                            variants={o.boxVariants}
-                            onClick={() => onBoxClicked(tv.id)}
-                            transition={{ type: "tween" }}
-                            $bgPhoto={makeImagePath(tv.backdrop_path)}
-                        >
-                            <img /> 
-                            <o.Info variants={o.infoVariants}>
-                            <h4 style={{fontSize:"26px",padding:"10px"}}>{tv.name}</h4>
-                            </o.Info>
-                        </o.Box>
-                        </SwiperSlide>
-                    );
-                    })}
-                    </Swiper>
-                    </StyledSwiper>
+                <TvSlider title="가장 인기 있는 Tv Show" Tvs={Populars?.results || []} />
+                <TvSlider title="On Air" Tvs={filterDuplicates(TodaysTvs?.results || [], data?.results || [])}  />
+                <TvSlider title="꼭 봐야하는 Tv Show" Tvs={filterDuplicates(TopRated?.results || [], data?.results || [])} />
+                        
+            
                     
                 <AnimatePresence>
                 {bigTvMatch ? (
                     <>
                         <S.OverLay 
                         onClick={onOverLayClicked}
-                        exit={{opacity:0}}
                         animate={{opacity:2}}
                         />
                         <S.BigType 
