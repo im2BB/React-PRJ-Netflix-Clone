@@ -26,9 +26,10 @@ export const BigPhoto = styled.div<{ $bgPhoto: string }>`
     background-image: url(${props => props.$bgPhoto});
     background-size: cover;
     border-radius: 5px;
-    height: 450px;
+    height: 50vh;
     width: 300px;
-    margin: 10px;
+    margin: 80px;
+    
     `;
 
 

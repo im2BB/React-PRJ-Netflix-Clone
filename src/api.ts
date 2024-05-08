@@ -4,6 +4,8 @@ const BASE_PATH = "https://api.themoviedb.org/3";
 const LANGUAGE = "language=ko-KR";
 
 
+
+
 interface IProvider {
     logo_path: string;
     provider_id: number;

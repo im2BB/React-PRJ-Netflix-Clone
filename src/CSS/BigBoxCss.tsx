@@ -1,7 +1,5 @@
 import { motion } from "framer-motion";
 import styled from "styled-components";
-import { SwiperSlide } from "swiper/swiper-react";
-
 
 //슬라이드 내 출력물 Css
 
@@ -31,7 +29,8 @@ export const OverView = styled.p`
 
 export const Slider1 = styled(motion.div)`
     top: -350px;
-
+    
+    
 `;
 
 export const FrontTitle = styled.h2`

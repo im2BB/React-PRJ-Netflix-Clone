@@ -19,6 +19,7 @@ import { renderStars } from "../../Utils/RenderStars";
 
 
 const StyledSwiper = styled(Swiper)`
+
 `;
 
 
@@ -31,9 +32,13 @@ function MovieSlider({ title, movies }: { title: string, movies: any[] }) {
     };
 
     return (
+        
         <o.Slider1>
             <o.FrontTitle>{title}</o.FrontTitle>
-            <StyledSwiper slidesPerView={5} autoHeight={true} navigation={true} spaceBetween={15} watchOverflow={true}>
+            <StyledSwiper slidesPerView={5} autoHeight={true}
+                        spaceBetween={15} watchOverflow={true}
+                        navigation={true} 
+                                >
                 {movies.map((movie) => (
                     <SwiperSlide key={movie.id}>
                         <o.Box
@@ -53,6 +58,7 @@ function MovieSlider({ title, movies }: { title: string, movies: any[] }) {
                 ))}
             </StyledSwiper>
         </o.Slider1>
+        
     );
 }
 

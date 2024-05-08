@@ -25,15 +25,11 @@ const BoxTwo = styled(motion.div)`
     border-width:0.1px;
     border-color: black;
     flex-wrap: wrap;
-
 `;
-
 
 const BigBox = styled(motion.div)`
     display: flex;
     flex-wrap: wrap;
-    background-position: center center;
-    
 `;
 
 const Text = styled.p`
@@ -46,8 +42,7 @@ const Text = styled.p`
 
 const MainBox = styled.div`
     margin-left: 50px;
-
-`
+    `;
 
 const LilPhoto = styled.div<{ $bgPhoto: string }>`
     background-image: url(${props => props.$bgPhoto});
@@ -165,7 +160,6 @@ function Search() {
     );
     
     
-
     return <t.Wrapper>
         
             {isLoading ? (
@@ -192,9 +186,7 @@ function Search() {
                             </t.Box>
                         </t.Banner>
                     )}
-
                     
-
                     <AnimatePresence>
                         <MainBox>
                             <Text>
