@@ -52,3 +52,4 @@ npm start
 - 태블릿: 768px - 1024px
 - 모바일: 480px - 768px
 - 소형 모바일: 480px 이하
+# React-PRJ-Netflix-Clone
