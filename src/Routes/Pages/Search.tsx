@@ -294,7 +294,6 @@ function Search() {
 
   const onBoxClicked = (clickId: number) => {
     //클릭한 값
-    const clickedItem = data?.results.find((keyword) => keyword.id === clickId);
     history(`/search/${clickId}?keyword=${keyword}`);
   };
 

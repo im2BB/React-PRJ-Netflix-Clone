@@ -2,9 +2,6 @@ const API_KEY = "ec180f3d7555520fa9d4bcff596736b9";
 const BASE_PATH = "https://api.themoviedb.org/3";
 const LANGUAGE = "language=ko-KR";
 
-// OMDB API 키 (무료로 사용 가능)
-const OMDB_API_KEY = "http://www.omdbapi.com/?apikey=YOUR_OMDB_API_KEY"; // 실제 API 키로 교체 필요
-
 // 로튼 토마토 스타일 평점 인터페이스
 export interface IRottenTomatoScore {
   imdbRating: string;
