@@ -201,19 +201,13 @@ function Home() {
     const fetchTomatoData = async () => {
       if (data?.results[0]) {
         try {
-          console.log(
-            "로튼 토마토 데이터 요청:",
-            data.results[0].original_title,
-            data.results[0].release_date
-          );
           const tomatoResult = await getRottenTomatoFromTMDB(
             data.results[0].original_title,
             data.results[0].release_date?.toString()
           );
-          console.log("로튼 토마토 결과:", tomatoResult);
           setTomatoData(tomatoResult);
         } catch (error) {
-          console.error("로튼 토마토 에러:", error);
+          // Error handling without console.log
         }
       }
     };
@@ -226,19 +220,13 @@ function Home() {
     const fetchDetailTomatoData = async () => {
       if (clickedMovie) {
         try {
-          console.log(
-            "상세 페이지 로튼 토마토 데이터 요청:",
-            clickedMovie.original_title,
-            clickedMovie.release_date
-          );
           const tomatoResult = await getRottenTomatoFromTMDB(
             clickedMovie.original_title,
             clickedMovie.release_date?.toString()
           );
-          console.log("상세 페이지 로튼 토마토 결과:", tomatoResult);
           setDetailTomatoData(tomatoResult);
         } catch (error) {
-          console.error("상세 페이지 로튼 토마토 에러:", error);
+          // Error handling without console.log
         }
       } else {
         setDetailTomatoData(null);

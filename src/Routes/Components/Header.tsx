@@ -293,7 +293,7 @@ function Header() {
       <Col>
         <Logo variants={logoVariants} whileHover="active" initial="normal">
           <FaSearchengin className="logo-image" />
-          <span className="logo-text">MovieSpot</span>
+          <span className="logo-text">MovieSearch</span>
         </Logo>
         <Items>
           <Item>

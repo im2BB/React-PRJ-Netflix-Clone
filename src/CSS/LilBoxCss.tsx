@@ -248,7 +248,7 @@ export const BigOverview = styled.p`
   position: relative;
   width: 30vw;
   height: 25vh;
-  top: -330px;
+  top: -250px;
   overflow: auto;
   color: ${(props) => props.theme.white.lighter};
   line-height: 1.6;

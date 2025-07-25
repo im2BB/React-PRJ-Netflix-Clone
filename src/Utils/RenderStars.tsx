@@ -149,6 +149,9 @@ export const renderRealTomatoScore = (
   const imdbScore = tomatoData.imdbRating
     ? parseFloat(tomatoData.imdbRating) * 10
     : null;
+  const metacriticScore = tomatoData.metacriticScore
+    ? parseInt(tomatoData.metacriticScore)
+    : null;
 
   return (
     <RealTomatoContainer>
@@ -182,6 +185,17 @@ export const renderRealTomatoScore = (
           <TomatoContainer>
             <span style={{ fontSize: "14px", color: "#f5c518" }}>
               ⭐ {tomatoData.imdbRating}/10
+            </span>
+          </TomatoContainer>
+        </TomatoRow>
+      )}
+
+      {metacriticScore !== null && (
+        <TomatoRow>
+          <TomatoLabel>Metacritic:</TomatoLabel>
+          <TomatoContainer>
+            <span style={{ fontSize: "14px", color: "#00c030" }}>
+              🟢 {tomatoData.metacriticScore}
             </span>
           </TomatoContainer>
         </TomatoRow>

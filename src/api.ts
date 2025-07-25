@@ -18,6 +18,7 @@ export interface IRottenTomatoScore {
   tomatoUserReviews?: string; // 사용자 리뷰 수
   tomatoUserRatings?: string; // 사용자 평점 수
   tomatoURL?: string; // 로튼 토마토 URL
+  metacriticScore?: string; // Metacritic 점수
 }
 
 interface IProvider {
@@ -320,10 +321,7 @@ export async function getRottenTomatoScore(
     // OMDB API 키가 설정되어 있는지 확인
     const omdbApiKey = process.env.REACT_APP_OMDB_API_KEY;
 
-    console.log("OMDB API 키 확인:", omdbApiKey);
-
     if (!omdbApiKey || omdbApiKey === "YOUR_OMDB_API_KEY") {
-      console.log("OMDB API 키가 설정되지 않음");
       return null;
     }
 
@@ -332,18 +330,28 @@ export async function getRottenTomatoScore(
       year ? `&y=${year}` : ""
     }&apikey=${omdbApiKey}`;
 
-    console.log("OMDB API URL:", searchUrl);
-
     const response = await fetch(searchUrl);
     const data = await response.json();
 
-    console.log("OMDB API 응답:", data);
-
     if (data.Response === "True") {
+      // Ratings 배열에서 Rotten Tomatoes와 Metacritic 점수 추출
+      let tomatoScore: string | undefined;
+      let metacriticScore: string | undefined;
+
+      if (data.Ratings && Array.isArray(data.Ratings)) {
+        data.Ratings.forEach((rating: { Source: string; Value: string }) => {
+          if (rating.Source === "Rotten Tomatoes") {
+            tomatoScore = rating.Value;
+          } else if (rating.Source === "Metacritic") {
+            metacriticScore = rating.Value;
+          }
+        });
+      }
+
       return {
         imdbRating: data.imdbRating || "N/A",
         imdbVotes: data.imdbVotes || "N/A",
-        tomatoScore: data.tomatoScore || undefined,
+        tomatoScore: tomatoScore,
         tomatoUserScore: data.tomatoUserScore || undefined,
         tomatoConsensus: data.tomatoConsensus || undefined,
         tomatoFresh: data.tomatoFresh || undefined,
@@ -352,12 +360,12 @@ export async function getRottenTomatoScore(
         tomatoUserReviews: data.tomatoUserReviews || undefined,
         tomatoUserRatings: data.tomatoUserRatings || undefined,
         tomatoURL: data.tomatoURL || undefined,
+        metacriticScore: metacriticScore, // Metacritic 점수 추가
       };
     }
 
     return null;
   } catch (error) {
-    console.error("OMDB API 에러:", error);
     return null;
   }
 }
