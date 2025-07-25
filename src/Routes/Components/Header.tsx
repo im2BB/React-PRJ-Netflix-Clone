@@ -292,8 +292,18 @@ function Header() {
     <Nav variants={navVariants} animate={navAnimation} initial={"top"}>
       <Col>
         <Logo variants={logoVariants} whileHover="active" initial="normal">
-          <FaSearchengin className="logo-image" />
-          <span className="logo-text">MovieSearch</span>
+          <Link
+            to="/react-PRJ2"
+            style={{
+              textDecoration: "none",
+              color: "inherit",
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            <FaSearchengin className="logo-image" />
+            <span className="logo-text">MovieSpot</span>
+          </Link>
         </Logo>
         <Items>
           <Item>

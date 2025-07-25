@@ -16,6 +16,7 @@ import * as S from "../../CSS/LilBoxCss";
 import * as t from "../../CSS/MainCss";
 import * as o from "../../CSS/BigBoxCss";
 import { renderStars, renderTomatoScore } from "../../Utils/RenderStars";
+import { Helmet } from "react-helmet";
 
 const BoxTwo = styled(motion.div)`
   display: flex;
@@ -307,6 +308,11 @@ function Search() {
 
   return (
     <t.Wrapper>
+      <Helmet>
+        <title>
+          {keyword ? `MovieSpot - ${keyword} 검색` : "MovieSpot - 검색"}
+        </title>
+      </Helmet>
       {isLoading ? (
         <t.Loader>Loading....</t.Loader>
       ) : (

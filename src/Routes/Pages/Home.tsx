@@ -18,6 +18,7 @@ import "swiper/components/navigation/navigation.min.css";
 import SwiperCore, { Autoplay, Navigation, Pagination } from "swiper";
 import { useEffect, useState } from "react";
 import ReactPlayer from "react-player";
+import { Helmet } from "react-helmet";
 import * as S from "../../CSS/LilBoxCss";
 import * as o from "../../CSS/BigBoxCss";
 import * as t from "../../CSS/MainCss";
@@ -247,6 +248,9 @@ function Home() {
 
   return (
     <t.Wrapper>
+      <Helmet>
+        <title>MovieSpot - 홈</title>
+      </Helmet>
       {isLoading ? (
         <t.Loader>Loding....</t.Loader>
       ) : (

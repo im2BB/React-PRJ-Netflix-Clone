@@ -31,6 +31,10 @@
       "dest": "/logo512.png"
     },
     {
+      "src": "/",
+      "dest": "/react-PRJ2"
+    },
+    {
       "src": "/(.*)",
       "dest": "/index.html"
     }
