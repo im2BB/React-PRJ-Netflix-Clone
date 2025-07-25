@@ -155,15 +155,15 @@ function Tv() {
 
   useEffect(() => {
     const fetchVideo = async () => {
-      if (bigTvMatch && bigTvMatch.params.tvid) {
+      if (bigTvMatch && bigTvMatch.params.tvId) {
         try {
           const youtubeData = await getYoutubeList(
             "tv",
-            bigTvMatch.params.tvid
+            bigTvMatch.params.tvId
           );
-          setSelectedVideo(youtubeData.results[0]); // 검색된 첫번째 사용
+          setSelectedVideo(youtubeData.results[0]); // Use the first video only
         } catch (error) {
-          console.error("데이터가 없는뎁쇼?: ", error);
+          // Error handling without console.log
         }
       } else {
         setSelectedVideo(null);
@@ -179,7 +179,6 @@ function Tv() {
       Populars?.results.find((tv) => tv.id + "" === bigTvMatch.params.tvid) ||
       TodaysTvs?.results.find((tv) => tv.id + "" === bigTvMatch.params.tvid) ||
       TopRated?.results.find((tv) => tv.id + "" === bigTvMatch.params.tvid));
-  console.log(clickedTv);
 
   const filterDuplicates = (tvToFilter: any[], excludedTv: any[]) => {
     return tvToFilter.filter(

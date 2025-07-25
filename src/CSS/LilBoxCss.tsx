@@ -213,7 +213,7 @@ export const Bigrelease_date = styled.p`
   }
 `;
 
-export const Bigpopularity = styled.p`
+export const Bigpopularity = styled.div`
   position: center center;
   padding-top: 5px;
   padding-left: 20px;
@@ -248,7 +248,7 @@ export const BigOverview = styled.p`
   position: relative;
   width: 30vw;
   height: 25vh;
-  top: -365px;
+  top: -330px;
   overflow: auto;
   color: ${(props) => props.theme.white.lighter};
   line-height: 1.6;
@@ -347,10 +347,11 @@ export const BigCover = styled(motion.div)`
 
 export const BigMain = styled(motion.div)`
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
+  height: 100%;
+  overflow-y: auto;
 
   @media (max-width: 768px) {
-    flex-direction: column;
     align-items: center;
   }
 `;

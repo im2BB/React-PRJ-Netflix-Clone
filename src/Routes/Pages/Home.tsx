@@ -139,6 +139,7 @@ function Home() {
   const onOverLayClicked = () => history(`/react-PRJ2`);
   const [selectedVideo, setSelectedVideo] = useState<any>(null);
   const [tomatoData, setTomatoData] = useState<any>(null);
+  const [detailTomatoData, setDetailTomatoData] = useState<any>(null);
 
   const { data, isLoading } = useQuery<IGetMoviesResult>(
     ["Getmovies", "GetnowPlaying"],
@@ -160,45 +161,6 @@ function Home() {
     getUpcoming
   );
 
-  useEffect(() => {
-    const fetchVideo = async () => {
-      if (bigMovieMatch && bigMovieMatch.params.movieId) {
-        try {
-          const youtubeData = await getYoutubeList(
-            "movie",
-            bigMovieMatch.params.movieId
-          );
-          setSelectedVideo(youtubeData.results[0]); // Use the first video only
-        } catch (error) {
-          console.error("데이터가 없는뎁쇼?: ", error);
-        }
-      } else {
-        setSelectedVideo(null);
-      }
-    };
-
-    fetchVideo();
-  }, [bigMovieMatch]);
-
-  // 로튼 토마토 데이터 가져오기
-  useEffect(() => {
-    const fetchTomatoData = async () => {
-      if (data?.results[0]) {
-        try {
-          const tomatoResult = await getRottenTomatoFromTMDB(
-            data.results[0].title,
-            data.results[0].release_date?.toString()
-          );
-          setTomatoData(tomatoResult);
-        } catch (error) {
-          console.error("로튼 토마토 데이터 가져오기 실패:", error);
-        }
-      }
-    };
-
-    fetchTomatoData();
-  }, [data]);
-
   const clickedMovie = //클릭한 div에 해당값 들어있는지 확인
     bigMovieMatch?.params.movieId &&
     (data?.results.find(
@@ -213,7 +175,78 @@ function Home() {
       Upcoming?.results.find(
         (movie) => movie.id + "" === bigMovieMatch.params.movieId
       ));
-  console.log(clickedMovie);
+
+  useEffect(() => {
+    const fetchVideo = async () => {
+      if (bigMovieMatch && bigMovieMatch.params.movieId) {
+        try {
+          const youtubeData = await getYoutubeList(
+            "movie",
+            bigMovieMatch.params.movieId
+          );
+          setSelectedVideo(youtubeData.results[0]); // Use the first video only
+        } catch (error) {
+          // Error handling without console.log
+        }
+      } else {
+        setSelectedVideo(null);
+      }
+    };
+
+    fetchVideo();
+  }, [bigMovieMatch]);
+
+  // 로튼 토마토 데이터 가져오기
+  useEffect(() => {
+    const fetchTomatoData = async () => {
+      if (data?.results[0]) {
+        try {
+          console.log(
+            "로튼 토마토 데이터 요청:",
+            data.results[0].original_title,
+            data.results[0].release_date
+          );
+          const tomatoResult = await getRottenTomatoFromTMDB(
+            data.results[0].original_title,
+            data.results[0].release_date?.toString()
+          );
+          console.log("로튼 토마토 결과:", tomatoResult);
+          setTomatoData(tomatoResult);
+        } catch (error) {
+          console.error("로튼 토마토 에러:", error);
+        }
+      }
+    };
+
+    fetchTomatoData();
+  }, [data]);
+
+  // 상세 페이지 로튼 토마토 데이터 가져오기
+  useEffect(() => {
+    const fetchDetailTomatoData = async () => {
+      if (clickedMovie) {
+        try {
+          console.log(
+            "상세 페이지 로튼 토마토 데이터 요청:",
+            clickedMovie.original_title,
+            clickedMovie.release_date
+          );
+          const tomatoResult = await getRottenTomatoFromTMDB(
+            clickedMovie.original_title,
+            clickedMovie.release_date?.toString()
+          );
+          console.log("상세 페이지 로튼 토마토 결과:", tomatoResult);
+          setDetailTomatoData(tomatoResult);
+        } catch (error) {
+          console.error("상세 페이지 로튼 토마토 에러:", error);
+        }
+      } else {
+        setDetailTomatoData(null);
+      }
+    };
+
+    fetchDetailTomatoData();
+  }, [clickedMovie]);
 
   const filterDuplicates = (moviesToFilter: any[], excludedMovies: any[]) => {
     return moviesToFilter.filter(
@@ -316,8 +349,10 @@ function Home() {
                               ? renderStars(clickedMovie.vote_average)
                               : null}{" "}
                             / {clickedMovie.vote_average.toFixed(1)}
-                            <div style={{ marginTop: "5px" }}>
-                              {renderTomatoScore(clickedMovie.vote_average)}
+                            <div style={{ padding: "10px" }}>
+                              {detailTomatoData
+                                ? renderRealTomatoScore(detailTomatoData)
+                                : renderTomatoScore(clickedMovie.vote_average)}
                             </div>
                           </S.Bigpopularity>
                           <S.BigOverview>{clickedMovie.overview}</S.BigOverview>

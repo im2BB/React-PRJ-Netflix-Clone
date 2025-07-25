@@ -282,7 +282,7 @@ function Search() {
             setSelectedVideo(youtubeData.results[0]); // 여기서는 첫 번째 비디오만 사용
           }
         } catch (error) {
-          console.error("Failed to fetch video data: ", error);
+          // Error handling without console.log
         }
       } else {
         setSelectedVideo(null);
@@ -295,7 +295,6 @@ function Search() {
   const onBoxClicked = (clickId: number) => {
     //클릭한 값
     const clickedItem = data?.results.find((keyword) => keyword.id === clickId);
-    console.log(clickedItem);
     history(`/search/${clickId}?keyword=${keyword}`);
   };
 

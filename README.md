@@ -1,55 +1,98 @@
-# React Movie App
+# React-PRJ-Netflix-Clone
 
-TMDB API를 사용한 영화 정보 웹 애플리케이션입니다.
+스포티파이 톤앤톤 디자인을 적용한 영화/드라마 스트리밍 플랫폼 클론 프로젝트입니다.
 
-## 주요 기능
+## 🚀 주요 기능
 
-- 영화 및 TV 쇼 정보 조회
-- 반응형 웹 디자인
-- 로튼 토마토 스타일 평점 시스템
-- YouTube 예고편 재생
-- 검색 기능
+- **영화 & TV 쇼 검색**: TMDB API를 활용한 실시간 검색
+- **로튼 토마토 스타일 평점**: OMDB API를 통한 실제 평점 데이터
+- **반응형 디자인**: 모든 디바이스에서 최적화된 경험
+- **YouTube 예고편**: 영화/드라마 예고편 자동 재생
+- **스포티파이 톤앤톤**: 현대적이고 세련된 UI/UX
 
-## API 설정
+## 🛠️ 기술 스택
 
-### TMDB API
+- **Frontend**: React 18, TypeScript
+- **Styling**: Styled Components
+- **Animation**: Framer Motion
+- **State Management**: Recoil
+- **API**: TMDB API, OMDB API, YouTube API
+- **Carousel**: Swiper.js
+- **Icons**: React Icons
 
-이미 설정되어 있습니다.
-
-### OMDB API (로튼 토마토 평점용)
-
-1. [OMDB API](http://www.omdbapi.com/)에서 무료 API 키를 발급받으세요.
-2. `src/api.ts` 파일에서 다음 줄을 찾아 API 키를 교체하세요:
-   ```typescript
-   const OMDB_API_KEY = "http://www.omdbapi.com/?apikey=YOUR_OMDB_API_KEY"; // 실제 API 키로 교체 필요
-   ```
-3. `getRottenTomatoScore` 함수에서도 API 키를 교체하세요:
-   ```typescript
-   const searchUrl = `http://www.omdbapi.com/?t=${encodeURIComponent(title)}${
-     year ? `&y=${year}` : ""
-   }&apikey=YOUR_OMDB_API_KEY`;
-   ```
-
-## 설치 및 실행
+## 📦 설치 및 실행
 
 ```bash
+# 의존성 설치
 npm install
+
+# 개발 서버 실행
 npm start
+
+# 빌드
+npm run build
 ```
 
-## 기술 스택
+## 🔑 API 키 설정
 
-- React
-- TypeScript
-- Styled Components
-- Framer Motion
-- React Query
-- Swiper
+### TMDB API 키
 
-## 반응형 지원
+1. [TMDB](https://www.themoviedb.org/settings/api)에서 API 키 발급
+2. 프로젝트 루트에 `.env` 파일 생성
+3. 다음 내용 추가:
 
-- 데스크톱: 1024px 이상
-- 태블릿: 768px - 1024px
-- 모바일: 480px - 768px
-- 소형 모바일: 480px 이하
-# React-PRJ-Netflix-Clone
+```
+REACT_APP_API_KEY=your_tmdb_api_key_here
+```
+
+### OMDB API 키 (선택사항)
+
+로튼 토마토 스타일 평점을 사용하려면:
+
+1. [OMDB API](http://www.omdbapi.com/)에서 무료 API 키 발급
+2. `.env` 파일에 다음 내용 추가:
+
+```
+REACT_APP_OMDB_API_KEY=your_omdb_api_key_here
+```
+
+> **참고**: OMDB API 키가 설정되지 않으면 기본 TMDB 평점이 표시됩니다.
+
+## 🎨 디자인 특징
+
+- **스포티파이 톤앤톤**: 깊이 있는 다크 테마와 그린 액센트
+- **반응형 레이아웃**: 1024px, 768px, 480px 브레이크포인트
+- **부드러운 애니메이션**: Framer Motion을 활용한 자연스러운 전환
+- **그라데이션 효과**: 배경과 슬라이더 간의 자연스러운 연결
+
+## 📱 반응형 지원
+
+- **데스크톱**: 5개 슬라이드 표시
+- **태블릿**: 4개 슬라이드 표시
+- **모바일**: 3개 슬라이드 표시
+- **소형 모바일**: 2개 슬라이드 표시
+
+## 🎯 주요 페이지
+
+- **홈**: 현재 상영중, 인기작, 예정작 슬라이더
+- **TV**: 드라마/시리즈 콘텐츠
+- **검색**: 실시간 검색 기능
+- **상세 페이지**: 영화/드라마 상세 정보 및 예고편
+
+## 🔧 문제 해결
+
+### OMDB API 오류
+
+```
+GET https://www.omdbapi.com/?t=...&apikey=YOUR_OMDB_API_KEY 401 (Unauthorized)
+```
+
+이 오류가 발생하면:
+
+1. OMDB API 키가 올바르게 설정되었는지 확인
+2. `.env` 파일이 프로젝트 루트에 있는지 확인
+3. 개발 서버를 재시작
+
+## 📄 라이선스
+
+이 프로젝트는 학습 목적으로 제작되었습니다.

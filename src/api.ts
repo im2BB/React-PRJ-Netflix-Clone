@@ -317,13 +317,27 @@ export async function getRottenTomatoScore(
   year?: string
 ): Promise<IRottenTomatoScore | null> {
   try {
+    // OMDB API 키가 설정되어 있는지 확인
+    const omdbApiKey = process.env.REACT_APP_OMDB_API_KEY;
+
+    console.log("OMDB API 키 확인:", omdbApiKey);
+
+    if (!omdbApiKey || omdbApiKey === "YOUR_OMDB_API_KEY") {
+      console.log("OMDB API 키가 설정되지 않음");
+      return null;
+    }
+
     // OMDB API 호출
     const searchUrl = `http://www.omdbapi.com/?t=${encodeURIComponent(title)}${
       year ? `&y=${year}` : ""
-    }&apikey=YOUR_OMDB_API_KEY`;
+    }&apikey=${omdbApiKey}`;
+
+    console.log("OMDB API URL:", searchUrl);
 
     const response = await fetch(searchUrl);
     const data = await response.json();
+
+    console.log("OMDB API 응답:", data);
 
     if (data.Response === "True") {
       return {
@@ -343,7 +357,7 @@ export async function getRottenTomatoScore(
 
     return null;
   } catch (error) {
-    console.error("Error fetching Rotten Tomatoes data:", error);
+    console.error("OMDB API 에러:", error);
     return null;
   }
 }
@@ -360,7 +374,6 @@ export async function getRottenTomatoFromTMDB(
       : undefined;
     return await getRottenTomatoScore(movieTitle, year);
   } catch (error) {
-    console.error("Error fetching Rotten Tomatoes data from TMDB:", error);
     return null;
   }
 }
